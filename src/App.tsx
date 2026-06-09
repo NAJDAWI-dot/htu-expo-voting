@@ -139,7 +139,7 @@ function App() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5 }}
-            src="/favicon.png" 
+            src="favicon.png" 
             alt="HTU Logo" 
             className="splash-logo"
           />
@@ -163,7 +163,7 @@ function App() {
         <motion.img 
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          src="/favicon.png" 
+          src="favicon.png" 
           alt="HTU Logo" 
           className="htu-logo"
         />
