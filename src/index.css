@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
+
+:root {
+  --htu-red: #E8343F;
+  --htu-navy: #020B18;
+  --htu-navy-light: #0a192f;
+  --white: #ffffff;
+  --glass: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--htu-navy);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.glass-card {
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 24px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(232, 52, 63, 0.15);
+  border-color: rgba(232, 52, 63, 0.3);
+}
+
+.htu-button {
+  background-color: var(--htu-red);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.htu-button:hover:not(:disabled) {
+  background-color: #f1525d;
+  box-shadow: 0 0 20px rgba(232, 52, 63, 0.5);
+}
+
+.htu-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.htu-logo {
+  height: 60px;
+  margin-bottom: 20px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+header {
+  padding: 40px 20px;
+  text-align: center;
+  background: linear-gradient(180deg, var(--htu-navy-light) 0%, var(--htu-navy) 100%);
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 300;
+  margin-bottom: 30px;
+}
+
+.vote-badge {
+  background: var(--htu-red);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.voted-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: var(--htu-red);
+}
