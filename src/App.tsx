@@ -364,12 +364,17 @@ function App() {
       }
     }
 
-    if (!ip) {
-      alert("Unable to verify your connection IP. Please check your network connection.");
-      return;
+    let ipDocId: string;
+    if (ip) {
+      ipDocId = ip.replace(/[\.:]/g, '_');
+    } else {
+      let deviceId = localStorage.getItem('htu_device_id');
+      if (!deviceId) {
+        deviceId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+        localStorage.setItem('htu_device_id', deviceId);
+      }
+      ipDocId = 'dev_' + deviceId;
     }
-
-    const ipDocId = ip.replace(/[\.:]/g, '_');
 
     const prevData = { ...voterData };
     setVoterData(prev => ({ voteCount: prev.voteCount + 1, votedProjectIds: [...prev.votedProjectIds, projectId] }));
