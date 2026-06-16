@@ -142,7 +142,8 @@ function App() {
       ceremony_step_10: "THE 3RD PLACE - JUDGING AWARD",
       ceremony_step_11: "THE 2ND PLACE - JUDGING AWARD",
       ceremony_step_12: "THE GRAND CHAMPION 2026",
-      ceremony_step_13: "FAN FAVORITE",
+      ceremony_step_13: "VOTING PLATFORM ANALYTICS",
+      ceremony_step_14: "FAN FAVORITE",
       kiosk_live: "LIVE LEADERBOARD",
       kiosk_gallery: "EVENT PHOTO STREAM",
       credit_1_main: "AL-HUSSEIN TECHNICAL UNIVERSITY",
@@ -199,9 +200,10 @@ function App() {
       ceremony_step_9: "المركز الخامس - تصويت الجمهور",
       ceremony_step_10: "المركز الرابع - جائزة التحكيم",
       ceremony_step_11: "المركز الثالث - جائزة التحكيم",
-      ceremony_step_12: "المركز الثاني - جائزة التحكيم",
-      ceremony_step_13: "إعلان البطل الأول",
-      kiosk_live: "لوحة النتائج المباشرة",
+      ceremony_step_12: "المركز الأول - بطل المعرض",
+      ceremony_step_13: "إحصائيات منصة التصويت",
+      ceremony_step_14: "جائزة تصويت الجمهور",
+      kiosk_live: "لوحة المتصدرين المباشرة",
       kiosk_gallery: "بث صور المعرض",
       credit_1_main: "جامعة الحسين التقنية",
       credit_2_main: "رئاسة الجامعة",
@@ -754,8 +756,8 @@ function App() {
                                 </motion.div>
                             )}
 
-                            {/* Slides 9-13: Borderless Cinematic Winner Moments (Top 5) */}
-                            {!kioskConfig.isPaused && kioskConfig.revealStep >= 9 && (
+                            {/* Slides 9-12, 14: Borderless Cinematic Winner Moments */}
+                            {!kioskConfig.isPaused && (kioskConfig.revealStep >= 9 && kioskConfig.revealStep !== 13) && (
                                 <motion.div 
                                     key={`winner-min-${kioskConfig.revealStep}`}
                                     initial={{ opacity: 0 }}
@@ -767,7 +769,7 @@ function App() {
                                         {t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] as string}
                                     </div>
 
-                                    {revealProjects[kioskConfig.revealStep === 13 ? 4 : 12 - kioskConfig.revealStep] && (
+                                    {revealProjects[kioskConfig.revealStep === 14 ? 4 : 12 - kioskConfig.revealStep] && (
                                         <>
                                             <motion.div 
                                                 initial={{ scale: 0.9, opacity: 0 }} 
@@ -778,24 +780,24 @@ function App() {
                                                 <motion.img 
                                                     animate={{ scale: [1, 1.05, 1] }}
                                                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                                    src={revealProjects[kioskConfig.revealStep === 13 ? 4 : 12 - kioskConfig.revealStep]?.imageUrl || 'hero.png'} alt="Winner" 
+                                                    src={revealProjects[kioskConfig.revealStep === 14 ? 4 : 12 - kioskConfig.revealStep]?.imageUrl || 'hero.png'} alt="Winner" 
                                                 />
                                             </motion.div>
 
                                             <div className="winner-details-ultimate">
                                                 <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 0.6 }} transition={{ delay: 1.2, duration: 1.5 }} className="winner-rank-hologram">
-                                                    {kioskConfig.revealStep === 13 ? (
+                                                    {kioskConfig.revealStep === 14 ? (
                                                         <span style={{ fontSize: '0.4em', whiteSpace: 'nowrap' }}>FAN FAV</span>
                                                     ) : (
                                                         <span>#{13 - kioskConfig.revealStep}</span>
                                                     )}
                                                 </motion.div>
-                                                <motion.h3 initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 1.5 }} className="winner-name-ultimate">{revealProjects[kioskConfig.revealStep === 13 ? 4 : 12 - kioskConfig.revealStep]?.title}</motion.h3>
-                                                <motion.p initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 0.9 }} transition={{ delay: 1.8, duration: 1.5 }} className="winner-instructor-ultimate">{revealProjects[kioskConfig.revealStep === 13 ? 4 : 12 - kioskConfig.revealStep]?.team_members}</motion.p>
+                                                <motion.h3 initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 1.5 }} className="winner-name-ultimate">{revealProjects[kioskConfig.revealStep === 14 ? 4 : 12 - kioskConfig.revealStep]?.title}</motion.h3>
+                                                <motion.p initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 0.9 }} transition={{ delay: 1.8, duration: 1.5 }} className="winner-instructor-ultimate">{revealProjects[kioskConfig.revealStep === 14 ? 4 : 12 - kioskConfig.revealStep]?.team_members}</motion.p>
 
                                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5, duration: 1.5 }} className="winner-votes-ultimate">
-                                                    <strong>{kioskConfig.revealStep === 13 ? 'FAN FAV PROJECT' : 'JUDGING AWARD'}</strong>
-                                                    {kioskConfig.revealStep === 13 ? (
+                                                    <strong>{kioskConfig.revealStep === 14 ? 'FAN FAV PROJECT' : 'JUDGING AWARD'}</strong>
+                                                    {kioskConfig.revealStep === 14 ? (
                                                         <span style={{ color: '#FFD700', textShadow: '0 0 10px rgba(255,215,0,0.4)' }}>
                                                             {revealProjects[4]?.votes || 0} VOTES VERIFIED
                                                         </span>
@@ -806,6 +808,40 @@ function App() {
                                             </div>
                                         </>
                                     )}
+                                </motion.div>
+                            )}
+
+                            {/* Slide 13: Voting Platform Analytics */}
+                            {!kioskConfig.isPaused && kioskConfig.revealStep === 13 && (
+                                <motion.div 
+                                    key="analytics-slide"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ duration: 2 }}
+                                    className="winner-reveal-ultimate-moment"
+                                >
+                                    <div className="winner-title-ultimate">
+                                        {t[lang][`ceremony_step_13` as keyof typeof t['en']] as string}
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '80px', marginTop: '15vh', flexWrap: 'wrap', justifyContent: 'center', width: '100%', maxWidth: '1400px', zIndex: 10, position: 'relative' }}>
+                                        <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1, duration: 1.5 }} style={{ textAlign: 'center' }}>
+                                            <div style={{ fontSize: 'clamp(6rem, 12vh, 12rem)', color: '#FFD700', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 30px rgba(255,215,0,0.5)', lineHeight: 1 }}>
+                                                {globalVotes.toLocaleString()}
+                                            </div>
+                                            <div style={{ fontSize: 'clamp(1.5rem, 3vh, 2.5rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>TOTAL VOTES CAST</div>
+                                        </motion.div>
+                                        <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 1.5 }} style={{ textAlign: 'center' }}>
+                                            <div style={{ fontSize: 'clamp(6rem, 12vh, 12rem)', color: '#fff', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 30px rgba(255,255,255,0.4)', lineHeight: 1 }}>
+                                                {projects.length}
+                                            </div>
+                                            <div style={{ fontSize: 'clamp(1.5rem, 3vh, 2.5rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PROJECTS COMPETING</div>
+                                        </motion.div>
+                                        <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2, duration: 1.5 }} style={{ textAlign: 'center', width: '100%', marginTop: '5vh' }}>
+                                            <div style={{ fontSize: 'clamp(2rem, 4vh, 3.5rem)', letterSpacing: '0.2em', color: '#FFD700', textShadow: '0 0 15px rgba(255,215,0,0.4)', fontFamily: 'DM Sans, sans-serif', fontWeight: 700 }}>
+                                                {Math.floor(globalVotes / 3).toLocaleString()} UNIQUE VOTERS VERIFIED
+                                            </div>
+                                        </motion.div>
+                                    </div>
                                 </motion.div>
                             )}
                         </div>

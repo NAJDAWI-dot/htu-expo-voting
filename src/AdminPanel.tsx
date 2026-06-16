@@ -1091,7 +1091,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                             </div>
 
                             <div className="scene-selector-grid">
-                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(step => (
+                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(step => (
                                     <button key={step} onClick={() => updateKiosk({ revealStep: step, isPaused: false })} className={`scene-btn ${kioskConfig.revealStep === step ? 'active' : ''}`}>
                                         <div className="scene-number">{step}</div>
                                         <div className="scene-name">{t[lang][`ceremony_step_${step}` as keyof typeof t['ar']] as string}</div>
@@ -1101,7 +1101,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
 
                             <div className="ceremony-actions" style={{ marginTop: '20px' }}>
                                 <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.max(0, kioskConfig.revealStep - 1), isPaused: false })}><Rewind size={24} /></button>
-                                <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.min(13, kioskConfig.revealStep + 1), isPaused: false })}><SkipForward size={24} /></button>
+                                <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.min(14, kioskConfig.revealStep + 1), isPaused: false })}><SkipForward size={24} /></button>
                                 <button className="stage-reset-btn" onClick={() => updateKiosk({ revealStep: 0, isPaused: true })}><RotateCcw size={20} /> <span>{t[lang].reveal_reset}</span></button>
                             </div>
                         </motion.div>
