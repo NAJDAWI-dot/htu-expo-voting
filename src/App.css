@@ -635,11 +635,12 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .winner-title-ultimate {
   grid-column: 1 / -1;
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.6rem, 4vh, 3.6rem);
+  font-size: clamp(2.5rem, 5vh, 4.5rem);
   font-style: italic;
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: 0.14em;
-  background: linear-gradient(90deg, rgba(255,255,255,0.18), rgba(200,160,70,0.55), rgba(255,255,255,0.18));
+  background: linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,215,0,1), rgba(255,255,255,0.8));
+  filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.4));
   background-size: 280% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -725,13 +726,13 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
   line-height: 1.2;
 }
 .winner-votes-ultimate span {
-  font-family: 'DM Sans', 'Montserrat', sans-serif !important;
-  font-size: clamp(0.75rem, 1.4vh, 1.25rem) !important;
-  font-weight: 400 !important;
-  letter-spacing: 0.32em !important;
-  text-transform: uppercase !important;
-  color: rgba(255,255,255,0.28) !important;
-  opacity: 1 !important;
+  font-family: 'DM Sans', 'Montserrat', sans-serif;
+  font-size: clamp(1.4rem, 2.8vh, 2.5rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.9);
+  opacity: 1;
 }
 
 /* --- MOBILE & UTILITIES --- */

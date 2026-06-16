@@ -796,11 +796,11 @@ function App() {
                                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5, duration: 1.5 }} className="winner-votes-ultimate">
                                                     <strong>{kioskConfig.revealStep === 13 ? 'FAN FAV PROJECT' : 'JUDGING AWARD'}</strong>
                                                     {kioskConfig.revealStep === 13 ? (
-                                                        <span style={{ fontSize: '1.2rem', opacity: 0.9, color: '#FFD700', fontWeight: 'bold' }}>
+                                                        <span style={{ color: '#FFD700', textShadow: '0 0 10px rgba(255,215,0,0.4)' }}>
                                                             {revealProjects[4]?.votes || 0} VOTES VERIFIED
                                                         </span>
                                                     ) : (
-                                                        <span style={{ fontSize: '1.2rem', opacity: 0.6 }}>OFFICIAL JURY SELECTION</span>
+                                                        <span>OFFICIAL JURY SELECTION</span>
                                                     )}
                                                 </motion.div>
                                             </div>
