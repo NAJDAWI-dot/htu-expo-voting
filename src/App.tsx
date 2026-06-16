@@ -702,26 +702,26 @@ function App() {
                                             )}
                                         </div>
                                     ) : kioskConfig.revealStep === 4 ? (
-                                        /* ── Slide 4: Full-screen instructor stage names ── */
-                                        <motion.div
-                                            initial="hidden"
-                                            animate="visible"
-                                            variants={{ visible: { transition: { staggerChildren: 0.28, delayChildren: 0.7 } } }}
-                                            className="instructor-stage-list"
-                                        >
-                                            {kioskConfig.instructorNamesExtra?.split(',').map((name, i) => (
-                                                <motion.div
-                                                    key={name}
-                                                    variants={{
-                                                        hidden: { opacity: 0, x: i % 2 === 0 ? -60 : 60, filter: 'blur(12px)' },
-                                                        visible: { opacity: 1, x: 0, filter: 'blur(0px)', transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] } }
-                                                    }}
-                                                    className="instructor-stage-name"
-                                                >
-                                                    {name.trim()}
-                                                </motion.div>
-                                            ))}
-                                        </motion.div>
+                                        /* ── Slide 4: Matrix name backdrop ── */
+                                        <div className="instructor-matrix-bg">
+                                            {(() => {
+                                                const names = (kioskConfig.instructorNamesExtra || '')
+                                                    .split(',').map((n: string) => n.trim()).filter(Boolean);
+                                                if (!names.length) return null;
+                                                return Array.from({ length: 130 }, (_, i) => (
+                                                    <span
+                                                        key={i}
+                                                        className="instructor-matrix-name"
+                                                        style={{
+                                                            animationDelay: `${(i * 0.23) % 7}s`,
+                                                            animationDuration: `${2.8 + (i % 6) * 0.4}s`,
+                                                        }}
+                                                    >
+                                                        {names[i % names.length]}
+                                                    </span>
+                                                ));
+                                            })()}
+                                        </div>
                                     ) : kioskConfig.revealStep === 8 ? (
                                         <div className="general-org-ultimate">
                                             <motion.div 
