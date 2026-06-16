@@ -1054,7 +1054,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                                 {[0, 1, 2, 3, 4].map(idx => (
                                     <div key={idx}>
                                         <label style={{ fontSize: '0.7rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', marginBottom: '5px', display: 'block' }}>
-                                            {idx === 0 ? '1st Place (Champion)' : idx === 1 ? '2nd Place' : idx === 2 ? '3rd Place' : idx === 3 ? '4th Place' : '5th Place (Fan Fav)'}
+                                            {idx === 0 ? '1st Place (Champion)' : idx === 1 ? '2nd Place' : idx === 2 ? '3rd Place' : idx === 3 ? '4th Place' : 'Fan Favorite'}
                                         </label>
                                         <select
                                             value={(kioskConfig.ceremonySelection || [])[idx] || ""}

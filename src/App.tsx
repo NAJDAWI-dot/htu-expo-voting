@@ -138,11 +138,11 @@ function App() {
       ceremony_step_6: "THE HEAD ORGANIZERS",
       ceremony_step_7: "SPECIAL RECOGNITION",
       ceremony_step_8: "OUR VOLUNTEERS",
-      ceremony_step_9: "THE 5TH PLACE - FAN FAVORITE",
-      ceremony_step_10: "THE 4TH PLACE - JUDGING AWARD",
-      ceremony_step_11: "THE 3RD PLACE - JUDGING AWARD",
-      ceremony_step_12: "THE 2ND PLACE - JUDGING AWARD",
-      ceremony_step_13: "THE GRAND CHAMPION 2026",
+      ceremony_step_9: "THE 4TH PLACE - JUDGING AWARD",
+      ceremony_step_10: "THE 3RD PLACE - JUDGING AWARD",
+      ceremony_step_11: "THE 2ND PLACE - JUDGING AWARD",
+      ceremony_step_12: "THE GRAND CHAMPION 2026",
+      ceremony_step_13: "FAN FAVORITE",
       kiosk_live: "LIVE LEADERBOARD",
       kiosk_gallery: "EVENT PHOTO STREAM",
       credit_1_main: "AL-HUSSEIN TECHNICAL UNIVERSITY",
@@ -767,7 +767,7 @@ function App() {
                                         {t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] as string}
                                     </div>
 
-                                    {revealProjects[13 - kioskConfig.revealStep] && (
+                                    {revealProjects[kioskConfig.revealStep === 13 ? 4 : 12 - kioskConfig.revealStep] && (
                                         <>
                                             <motion.div 
                                                 initial={{ scale: 0.9, opacity: 0 }} 
@@ -778,20 +778,24 @@ function App() {
                                                 <motion.img 
                                                     animate={{ scale: [1, 1.05, 1] }}
                                                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                                    src={revealProjects[13 - kioskConfig.revealStep]?.imageUrl || 'hero.png'} alt="Winner" 
+                                                    src={revealProjects[kioskConfig.revealStep === 13 ? 4 : 12 - kioskConfig.revealStep]?.imageUrl || 'hero.png'} alt="Winner" 
                                                 />
                                             </motion.div>
 
                                             <div className="winner-details-ultimate">
                                                 <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 0.2 }} transition={{ delay: 1.2, duration: 1.5 }} className="winner-rank-hologram">
-                                                    <span>#{14 - kioskConfig.revealStep}</span>
+                                                    {kioskConfig.revealStep === 13 ? (
+                                                        <span style={{ fontSize: '0.4em', whiteSpace: 'nowrap' }}>FAN FAV</span>
+                                                    ) : (
+                                                        <span>#{13 - kioskConfig.revealStep}</span>
+                                                    )}
                                                 </motion.div>
-                                                <motion.h3 initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 1.5 }} className="winner-name-ultimate">{revealProjects[13 - kioskConfig.revealStep]?.title}</motion.h3>
-                                                <motion.p initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 0.4 }} transition={{ delay: 1.8, duration: 1.5 }} className="winner-instructor-ultimate">{revealProjects[13 - kioskConfig.revealStep]?.team_members}</motion.p>
+                                                <motion.h3 initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 1.5 }} className="winner-name-ultimate">{revealProjects[kioskConfig.revealStep === 13 ? 4 : 12 - kioskConfig.revealStep]?.title}</motion.h3>
+                                                <motion.p initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 0.4 }} transition={{ delay: 1.8, duration: 1.5 }} className="winner-instructor-ultimate">{revealProjects[kioskConfig.revealStep === 13 ? 4 : 12 - kioskConfig.revealStep]?.team_members}</motion.p>
 
                                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5, duration: 1.5 }} className="winner-votes-ultimate">
-                                                    <strong>{kioskConfig.revealStep === 9 ? 'FAN FAV PROJECT' : 'JUDGING AWARD'}</strong>
-                                                    <span style={{ fontSize: '1.2rem', opacity: 0.6 }}>{kioskConfig.revealStep === 9 ? 'MOST VOTED BY HTU COMMUNITY' : 'OFFICIAL JURY SELECTION'}</span>
+                                                    <strong>{kioskConfig.revealStep === 13 ? 'FAN FAV PROJECT' : 'JUDGING AWARD'}</strong>
+                                                    <span style={{ fontSize: '1.2rem', opacity: 0.6 }}>{kioskConfig.revealStep === 13 ? 'MOST VOTED BY HTU COMMUNITY' : 'OFFICIAL JURY SELECTION'}</span>
                                                 </motion.div>
                                             </div>
                                         </>
