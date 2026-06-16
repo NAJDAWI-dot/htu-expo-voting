@@ -53,8 +53,9 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .pulse-dot { width: 10px; height: 10px; background: var(--htu-red); border-radius: 50%; animation: dotPulse 2s infinite; }
 
 /* --- PREMIUM VOTE PROGRESS BAR --- */
-.header-controls-premium { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 30px; }
-.vote-progress-label-premium { font-size: 0.95rem; font-weight: 800; color: rgba(255,255,255,0.6); letter-spacing: 2px; }
+.sticky-vote-tracker { position: sticky; top: 20px; z-index: 1000; display: flex; justify-content: center; pointer-events: none; margin-bottom: 20px; margin-top: -20px; }
+.header-controls-premium { display: flex; flex-direction: column; align-items: center; gap: 12px; background: rgba(2, 11, 24, 0.85); backdrop-filter: blur(20px); padding: 15px 30px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); pointer-events: auto; }
+.vote-progress-label-premium { font-size: 0.95rem; font-weight: 800; color: rgba(255,255,255,0.6); letter-spacing: 2px; text-align: center; }
 .vote-progress-bar-premium { position: relative; width: 300px; height: 12px; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); }
 .vote-progress-fill { position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, #E8343F, #ff6b76); transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
 .vote-dots-premium { position: absolute; inset: 0; display: flex; justify-content: space-between; padding: 0 10%; align-items: center; z-index: 10; pointer-events: none; }
@@ -832,8 +833,10 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
     .subtitle { font-size: 1rem; }
     
     /* PROGRESS BAR MOBILE */
-    .header-controls-premium { width: 100%; max-width: 300px; margin-top: 20px; }
-    .vote-progress-bar-premium { width: 100% !important; max-width: 300px; }
+    .sticky-vote-tracker { top: 10px; margin-bottom: 10px; margin-top: -10px; }
+    .header-controls-premium { width: calc(100% - 30px); max-width: 400px; padding: 15px 20px; margin: 0 auto; align-items: center; text-align: center; }
+    .vote-progress-label-premium { text-align: center; display: block; width: 100%; font-size: 0.85rem !important; }
+    .vote-progress-bar-premium { width: 100% !important; margin: 0 auto; }
     .global-counter-pill { width: 100%; justify-content: center; font-size: 0.8rem; }
 
     /* ONBOARDING MODAL MOBILE */
@@ -892,6 +895,17 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
     .teams-header-flex { flex-direction: column; gap: 15px; }
     .teams-controls-grid { flex-direction: column; gap: 10px; }
     .teams-search-wrapper, .sort-wrapper { max-width: 100%; }
+
+    /* SCALE DOWN TEAM MANAGEMENT TABLE */
+    .elite-table th, .elite-table td { padding: 10px 8px !important; font-size: 0.75rem !important; white-space: nowrap; }
+    .elite-table td img { width: 30px !important; height: 30px !important; border-radius: 6px !important; }
+    .elite-table td strong { font-size: 0.8rem !important; }
+    .admin-project-actions { gap: 4px; }
+    .admin-project-actions button, .action-pill-btn { padding: 6px !important; font-size: 0.7rem !important; min-width: 0 !important; }
+    .admin-project-actions svg { width: 14px; height: 14px; }
+    .table-dept-tag { font-size: 0.65rem !important; padding: 4px 8px !important; }
+    .badge-title-pill { font-size: 0.65rem !important; padding: 4px 8px !important; }
+    .print-btn { padding: 4px 8px !important; font-size: 0.65rem !important; }
 
     /* SCALE DOWN ATTENDANCE SYSTEM */
     .attendance-btn { padding: 12px 15px; font-size: 0.8rem; width: 100%; justify-content: center; margin-top: 10px; }

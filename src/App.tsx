@@ -1189,6 +1189,10 @@ function App() {
           <motion.h1>{t[lang].title}</motion.h1>
           <motion.p className="subtitle">{t[lang].subtitle(3 - voterData.voteCount)}</motion.p>
           {globalVotes >= 0 && <div className="global-counter-pill"><span className="pulse-dot"></span><strong>{globalVotes.toLocaleString()}</strong> {t[lang].votes_cast}</div>}
+        </motion.div>
+      </header>
+
+      <div className="sticky-vote-tracker">
           <div className="header-controls-premium">
               <div className="vote-progress-label-premium">{t[lang].your_votes}: <span style={{ color: '#fff' }}>{voterData.voteCount} / 3</span></div>
               <div className="vote-progress-bar-premium">
@@ -1200,8 +1204,7 @@ function App() {
                   </div>
               </div>
           </div>
-        </motion.div>
-      </header>
+      </div>
 
       <main>
         <div className="tabs-container">
