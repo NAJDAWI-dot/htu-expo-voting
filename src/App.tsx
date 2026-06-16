@@ -414,7 +414,14 @@ function App() {
 
   const handleVote = async (projectId: string) => {
     if (!isVotingOpen) { alert("Voting is currently closed by the organizers."); return; }
-    if (!userId || voterData.voteCount >= 3) return;
+    
+    let currentUserId = userId;
+    if (!currentUserId) {
+        currentUserId = 'anon_' + Math.random().toString(36).substring(2);
+        setUserId(currentUserId);
+    }
+    
+    if (voterData.voteCount >= 3) { alert("You have reached your limit of 3 votes."); return; }
     if (voterData.votedProjectIds.includes(projectId)) return;
 
     // Try to fetch IP for secondary network-level check
@@ -439,7 +446,7 @@ function App() {
     setVoterData(prev => ({ voteCount: prev.voteCount + 1, votedProjectIds: [...prev.votedProjectIds, projectId] }));
     setVotingId(projectId);
     try {
-      const voterRef = doc(db, 'voters', userId);
+      const voterRef = doc(db, 'voters', currentUserId);
       const resultRef = doc(db, 'results', projectId);
       const statsRef = doc(db, 'stats', 'global');
       const deviceRef = doc(db, 'ips', deviceDocId);
