@@ -474,20 +474,35 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
   animation: pulse-dot 2s ease-in-out infinite;
 }
 
-/* ---- CREDITS SLIDES (1–8): CATEGORY LABEL (italic serif) ---- */
+/* ---- CREDITS SLIDES (1–8): WRAPPER ---- */
+.credits-container-ultimate {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* ---- CREDITS SLIDES (1–8): CATEGORY LABEL — pinned top center ---- */
 .credits-subtitle-ultimate {
+  position: absolute;
+  top: 8vh;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.6rem, 4.5vh, 3.4rem);
+  font-size: clamp(1.4rem, 3.8vh, 3rem);
   font-style: italic;
   font-weight: 400;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   background: linear-gradient(90deg, rgba(255,255,255,0.25), rgba(200,160,70,0.6), rgba(255,255,255,0.25));
   background-size: 280% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: shimmer-gold 5s linear infinite;
-  margin-bottom: 40px;
   text-align: center;
 }
 
