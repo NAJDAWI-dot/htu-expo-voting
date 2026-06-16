@@ -678,7 +678,7 @@ function App() {
                                 >
                                     <motion.span 
                                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 1 }}
-                                        className="credits-subtitle-ultimate"
+                                        className={`credits-subtitle-ultimate ${kioskConfig.revealStep === 4 ? 'instructor-title-huge' : ''}`}
                                     >
                                         {t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] as string}
                                     </motion.span>

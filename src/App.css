@@ -505,6 +505,10 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
   animation: shimmer-gold 5s linear infinite;
   text-align: center;
 }
+.instructor-title-huge {
+  font-size: clamp(3rem, 7.5vh, 6rem) !important;
+  top: 5vh !important;
+}
 
 /* ---- CREDITS SLIDES: MAIN DISPLAY NAME (Cinzel bold caps) ---- */
 .credits-main-ultimate {
@@ -561,13 +565,16 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 
 .instructor-matrix-bg {
   position: absolute;
-  inset: 0;
+  top: 18vh;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   flex-wrap: wrap;
   align-content: center;
   justify-content: center;
   gap: 25px 55px;
-  padding: 120px 50px 50px; /* top pad keeps clear of the title label */
+  padding: 0 50px 50px; /* text is contained securely below the title */
   overflow: hidden;
   pointer-events: none;
 }
