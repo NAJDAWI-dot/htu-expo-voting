@@ -347,6 +347,43 @@ function App() {
     }
   };
 
+  const getFingerprintHash = async (ipAddress: string | null): Promise<string> => {
+    let source: string;
+    if (ipAddress) {
+      const parts = [
+        ipAddress,
+        navigator.userAgent,
+        screen.width + 'x' + screen.height,
+        screen.colorDepth,
+        navigator.language,
+        navigator.hardwareConcurrency || 'unknown',
+        new Date().getTimezoneOffset()
+      ];
+      source = parts.join('||');
+    } else {
+      let deviceId = localStorage.getItem('htu_device_id');
+      if (!deviceId) {
+        deviceId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+        localStorage.setItem('htu_device_id', deviceId);
+      }
+      source = 'dev_' + deviceId;
+    }
+
+    try {
+      const msgBuffer = new TextEncoder().encode(source);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return 'sha_' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch (e) {
+      let hash = 0;
+      for (let i = 0; i < source.length; i++) {
+        hash = (hash << 5) - hash + source.charCodeAt(i);
+        hash |= 0;
+      }
+      return 'fb_' + Math.abs(hash).toString(36);
+    }
+  };
+
   const handleVote = async (projectId: string) => {
     if (!isVotingOpen) { alert("Voting is currently closed by the organizers."); return; }
     if (!userId || voterData.voteCount >= 3) return;
@@ -364,17 +401,7 @@ function App() {
       }
     }
 
-    let ipDocId: string;
-    if (ip) {
-      ipDocId = ip.replace(/[\.:]/g, '_');
-    } else {
-      let deviceId = localStorage.getItem('htu_device_id');
-      if (!deviceId) {
-        deviceId = Math.random().toString(36).substring(2) + Date.now().toString(36);
-        localStorage.setItem('htu_device_id', deviceId);
-      }
-      ipDocId = 'dev_' + deviceId;
-    }
+    const ipDocId = await getFingerprintHash(ip);
 
     const prevData = { ...voterData };
     setVoterData(prev => ({ voteCount: prev.voteCount + 1, votedProjectIds: [...prev.votedProjectIds, projectId] }));
