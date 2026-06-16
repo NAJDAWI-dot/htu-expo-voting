@@ -504,7 +504,7 @@ function App() {
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)'; ctx.lineWidth = 2; ctx.strokeRect(84, 84, 1752, 912);
 
     try {
-        const img = new Image(); img.crossOrigin = "anonymous"; img.src = 'favicon.png';
+        const img = new Image(); img.crossOrigin = "anonymous"; img.src = 'htu-logo.png';
         await new Promise((res) => { img.onload = res; img.onerror = res; });
         ctx.drawImage(img, 960 - 75, 120, 150, 150);
     } catch(e) {}
@@ -578,7 +578,7 @@ function App() {
           <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2, duration: 1.5 }} className="splash-branding-top">Reimagining HTU's EXPOs</motion.div>
           <div className="logo-container-premium">
               <div className="splash-ring ring-1" /><div className="splash-ring ring-2" /><div className="splash-ring ring-3" />
-              <motion.img initial={{ scale: 0.5, opacity: 0, rotate: -10 }} animate={{ scale: 1, opacity: 1, rotate: 0 }} transition={{ duration: 1.2, ease: "easeOut" }} src="favicon.png" alt="HTU Logo" className="splash-logo" />
+              <motion.img initial={{ scale: 0.5, opacity: 0, rotate: -10 }} animate={{ scale: 1, opacity: 1, rotate: 0 }} transition={{ duration: 1.2, ease: "easeOut" }} src="htu-logo.png" alt="HTU Logo" className="splash-logo" />
           </div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="splash-loader-container">
             <motion.div className="splash-loader" initial={{ width: 0 }} animate={{ width: '100%' }} transition={{ duration: 3.5, ease: "easeInOut" }} />
@@ -687,7 +687,7 @@ function App() {
                                         transition={{ duration: 1.5, delay: 1.9 }}
                                         className="logo-bottom-center"
                                     >
-                                        <img src="favicon.png" alt="HTU" style={{ height: '300px', filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.2))' }} />
+                                        <img src="htu-logo.png" alt="HTU" style={{ height: '300px', filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.2))' }} />
                                     </motion.div>
                                 </motion.div>
                             ) : null}
@@ -1163,7 +1163,7 @@ function App() {
                         <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>EN</button>
                         <button className={`lang-btn ${lang === 'ar' ? 'active' : ''}`} onClick={() => setLang('ar')}>العربية</button>
                     </div>
-                    <img src="favicon.png" alt="HTU Logo" className="onboarding-htu-logo" />
+                    <img src="htu-logo.png" alt="HTU Logo" className="onboarding-htu-logo" />
                     <h2>{t[lang].welcome}</h2>
                     <p className="subtitle">{t[lang].welcome_sub}</p>
                     <div className="feature-list-onboarding">
@@ -1185,7 +1185,7 @@ function App() {
         </div>
 
         <motion.div className="header-glass" initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.8 }}>
-          <motion.img initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} src="favicon.png" alt="HTU Logo" className="htu-logo" onClick={handleLogoClick} />
+          <motion.img initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} src="htu-logo.png" alt="HTU Logo" className="htu-logo" onClick={handleLogoClick} />
           <motion.h1>{t[lang].title}</motion.h1>
           <motion.p className="subtitle">{t[lang].subtitle(3 - voterData.voteCount)}</motion.p>
           {globalVotes >= 0 && <div className="global-counter-pill"><span className="pulse-dot"></span><strong>{globalVotes.toLocaleString()}</strong> {t[lang].votes_cast}</div>}
