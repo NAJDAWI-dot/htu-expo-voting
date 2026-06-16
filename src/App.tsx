@@ -37,8 +37,6 @@ function App() {
   const [globalVotes, setGlobalVotes] = useState(0);
   const [globalVisits, setGlobalVisits] = useState(0);
   const [globalProfileVisits, setGlobalProfileVisits] = useState(0);
-  const [liveVisitTick, setLiveVisitTick] = useState(0);
-  const [liveProfileTick, setLiveProfileTick] = useState(0);
   const [isVotingOpen, setIsVotingOpen] = useState(true);
   const [archiveMode, setArchiveMode] = useState(false);
   const [hofSelection, setHofSelection] = useState<string[]>(['', '', '', '', '']);
@@ -320,23 +318,17 @@ function App() {
     }
   }, []);
 
-  // Track Profile Views
-  useEffect(() => {
-    if (selectedProject) {
+  // Helper to log all platform interactions to make the real database grow massive
+  const handleInteraction = () => {
+    if (view !== 'kiosk') {
       setDoc(doc(db, 'stats', 'global'), { profileVisits: increment(1) }, { merge: true }).catch(console.error);
     }
-  }, [selectedProject]);
+  };
 
-  // Cinematic Live Ticker for Analytics Slide
+  // Track Profile Views
   useEffect(() => {
-    if (view === 'kiosk' && kioskConfig.revealStep === 13) {
-      const interval = setInterval(() => {
-        setLiveProfileTick(prev => prev + Math.floor(Math.random() * 3) + 1);
-        if (Math.random() > 0.4) setLiveVisitTick(prev => prev + 1);
-      }, 2000);
-      return () => clearInterval(interval);
-    }
-  }, [view, kioskConfig.revealStep]);
+    if (selectedProject) handleInteraction();
+  }, [selectedProject]);
 
   // Kiosk Auto-Rotation Timer
   useEffect(() => {
@@ -867,16 +859,16 @@ function App() {
                                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '15vw', width: '100%' }}>
                                             <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 1.5 }} style={{ textAlign: 'center' }}>
                                                 <div style={{ fontSize: 'clamp(5rem, 10vh, 10rem)', color: '#fff', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 30px rgba(255,255,255,0.4)', lineHeight: 1 }}>
-                                                    {(globalVisits + Math.floor(globalVotes * 2.5) + liveVisitTick).toLocaleString()}
+                                                    {(globalVisits + Math.floor(globalVotes * 2.5)).toLocaleString()}
                                                 </div>
                                                 <div style={{ fontSize: 'clamp(1.2rem, 2.5vh, 2rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PLATFORM VISITS</div>
                                             </motion.div>
                                             
                                             <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2, duration: 1.5 }} style={{ textAlign: 'center' }}>
                                                 <div style={{ fontSize: 'clamp(5rem, 10vh, 10rem)', color: '#FFD700', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 15px rgba(255,215,0,0.4)', lineHeight: 1 }}>
-                                                    {(globalProfileVisits + Math.floor(globalVotes * 4.2) + liveProfileTick).toLocaleString()}
+                                                    {(globalProfileVisits + Math.floor(globalVotes * 4.2)).toLocaleString()}
                                                 </div>
-                                                <div style={{ fontSize: 'clamp(1.2rem, 2.5vh, 2rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PROFILE VIEWS</div>
+                                                <div style={{ fontSize: 'clamp(1.2rem, 2.5vh, 2rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PLATFORM INTERACTIONS</div>
                                             </motion.div>
                                         </div>
 
@@ -1204,8 +1196,8 @@ function App() {
 
       <main>
         <div className="tabs-container">
-            <button className={`tab-btn ${activeTab === 'projects' ? 'active' : ''}`} onClick={() => setActiveTab('projects')}>{t[lang].tab_projects}</button>
-            <button className={`tab-btn ${activeTab === 'gallery' ? 'active' : ''}`} onClick={() => setActiveTab('gallery')}>{t[lang].tab_gallery}</button>
+            <button className={`tab-btn ${activeTab === 'projects' ? 'active' : ''}`} onClick={() => { setActiveTab('projects'); handleInteraction(); }}>{t[lang].tab_projects}</button>
+            <button className={`tab-btn ${activeTab === 'gallery' ? 'active' : ''}`} onClick={() => { setActiveTab('gallery'); handleInteraction(); }}>{t[lang].tab_gallery}</button>
         </div>
 
         {activeTab === 'projects' ? (
@@ -1319,7 +1311,7 @@ function App() {
                     <div className="section-header">
                         <div className="gallery-title-wrapper"><h2>{t[lang].gallery}</h2><div className="title-underline"></div></div>
                         <div className="count-badge"><span className="count-number">{displayProjects.length}</span><span className="count-text">{t[lang].expo_count}</span></div>
-                        <div className="search-container mt-4"><Search className="search-icon" size={20} /><input type="text" placeholder={t[lang].search} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="search-input" /></div>
+                        <div className="search-container mt-4"><Search className="search-icon" size={20} /><input type="text" placeholder={t[lang].search} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} onBlur={() => { if (searchTerm) handleInteraction(); }} className="search-input" /></div>
                     </div>
                     <div className="grid-container">
                         <AnimatePresence mode="popLayout">
@@ -1353,7 +1345,7 @@ function App() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.05 }}
                             className="gallery-item"
-                            onClick={() => setLightboxImage(img.imageUrl)}
+                            onClick={() => { setLightboxImage(img.imageUrl); handleInteraction(); }}
                         >
                             <img src={img.imageUrl} alt="Live Event" loading="lazy" />
                         </motion.div>
