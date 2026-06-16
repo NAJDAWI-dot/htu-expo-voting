@@ -623,19 +623,42 @@ function App() {
                                     transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
                                     className="ceremony-intro-ultimate"
                                 >
+                                    {/* "Closing Ceremony" — top elegant label */}
+                                    <motion.div
+                                        initial={{ y: -40, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ duration: 1.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                                        className="ceremony-closing-label"
+                                    >
+                                        Closing Ceremony
+                                    </motion.div>
+
+                                    {/* Main hero line */}
                                     <motion.div 
-                                        initial={{ y: 100, opacity: 0 }} 
+                                        initial={{ y: 80, opacity: 0 }} 
                                         animate={{ y: 0, opacity: 1 }} 
-                                        transition={{ duration: 1.5, delay: 0.5, ease: "circOut" }}
+                                        transition={{ duration: 1.6, delay: 0.7, ease: "circOut" }}
                                         className="ceremony-top-branding God-Text-V2 glow-text-extreme"
                                     >
                                         REIMAGINING HTU's EXPOs
                                     </motion.div>
 
+                                    {/* "Starting Soon" — animated badge */}
+                                    <motion.div
+                                        initial={{ y: 40, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ duration: 1.6, delay: 1.4, ease: [0.22, 1, 0.36, 1] }}
+                                        className="ceremony-starting-soon"
+                                    >
+                                        <span className="starting-soon-dot" />
+                                        Starting Soon
+                                    </motion.div>
+
+                                    {/* HTU Logo */}
                                     <motion.div 
                                         initial={{ y: 50, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
-                                        transition={{ duration: 1.5, delay: 1.2 }}
+                                        transition={{ duration: 1.5, delay: 1.9 }}
                                         className="logo-bottom-center"
                                     >
                                         <img src="favicon.png" alt="HTU" style={{ height: '120px' }} />
