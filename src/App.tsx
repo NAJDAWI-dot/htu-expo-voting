@@ -832,7 +832,7 @@ function App() {
                                     <div className="winner-title-ultimate">
                                         {t[lang][`ceremony_step_13` as keyof typeof t['en']] as string}
                                     </div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8vh', marginTop: '10vh', width: '100%', maxWidth: '1400px', zIndex: 10, position: 'relative' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8vh', marginTop: '10vh', width: '100%', maxWidth: '1400px', zIndex: 10, position: 'relative', gridColumn: '1 / -1', margin: '0 auto' }}>
                                         
                                         {/* Top point of the triangle */}
                                         <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1, duration: 1.5 }} style={{ textAlign: 'center' }}>
