@@ -552,11 +552,11 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 
 /* ---- SLIDE 4: MATRIX NAME BACKDROP ---- */
 @keyframes matrix-flicker {
-  0%   { opacity: 0.05; }
-  30%  { opacity: 0.55; }
-  60%  { opacity: 0.08; }
-  80%  { opacity: 0.4;  }
-  100% { opacity: 0.06; }
+  0%   { opacity: 0.22; }
+  25%  { opacity: 0.85; }
+  55%  { opacity: 0.28; }
+  80%  { opacity: 0.75; }
+  100% { opacity: 0.22; }
 }
 
 .instructor-matrix-bg {
@@ -564,24 +564,26 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
   inset: 0;
   display: flex;
   flex-wrap: wrap;
-  align-content: flex-start;
-  gap: 18px 44px;
-  padding: 100px 40px 40px; /* top pad keeps clear of the title label */
+  align-content: center;
+  justify-content: center;
+  gap: 22px 50px;
+  padding: 120px 50px 50px; /* top pad keeps clear of the title label */
   overflow: hidden;
   pointer-events: none;
 }
 .instructor-matrix-name {
   font-family: 'Cinzel', serif;
-  font-size: clamp(1.8rem, 3.2vh, 3.4rem);
+  font-size: clamp(2rem, 3.6vh, 3.8rem);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   white-space: nowrap;
+  text-align: center;
   background: linear-gradient(135deg, #ffffff 0%, #e8d09a 50%, #c9a84c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  opacity: 0.07;
+  opacity: 0.22;
   animation: matrix-flicker var(--dur, 3s) ease-in-out infinite;
 }
 
