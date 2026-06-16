@@ -100,6 +100,7 @@ function App() {
       title: "Engineering Design Expo",
       subtitle: (count: number) => `Choose your Fan Favorite projects. You have ${count} votes remaining.`,
       votes_cast: "TOTAL VOTES CAST",
+      your_votes: "YOUR VOTES",
       search: "Search projects or instructors...",
       gallery: "Project Gallery",
       expo_count: "Projects in the Expo",
@@ -159,6 +160,7 @@ function App() {
       title: "معرض التصميم الهندسي",
       subtitle: (count: number) => `اختر مشاريعك الهندسية المفضلة. متبقي لديك ${count} أصوات.`,
       votes_cast: "إجمالي الأصوات",
+      your_votes: "أصواتك",
       search: "ابحث عن المشاريع أو المشرفين...",
       gallery: "معرض المشاريع",
       expo_count: "مشروعاً في المعرض",
@@ -1086,7 +1088,7 @@ function App() {
       )}
       <motion.div className="level-slider-container" style={{ scaleY }} />
       <div className={`background-wrapper ${archiveMode ? 'archive-bg' : ''}`}>
-        <div className="bg-grid" /><div className="bg-mesh" />
+        <div className="bg-grid" /><div className="bg-mesh" /><div className="bg-stars" />
       </div>
 
       <AnimatePresence>
@@ -1187,7 +1189,8 @@ function App() {
           <motion.h1>{t[lang].title}</motion.h1>
           <motion.p className="subtitle">{t[lang].subtitle(3 - voterData.voteCount)}</motion.p>
           {globalVotes >= 0 && <div className="global-counter-pill"><span className="pulse-dot"></span><strong>{globalVotes.toLocaleString()}</strong> {t[lang].votes_cast}</div>}
-          <div className="header-controls">
+          <div className="header-controls-premium">
+              <div className="vote-progress-label-premium">{t[lang].your_votes}: <span style={{ color: '#fff' }}>{voterData.voteCount} / 3</span></div>
               <div className="vote-progress-bar-premium">
                   <div className="vote-progress-fill" style={{ width: `${(voterData.voteCount / 3) * 100}%` }} />
                   <div className="vote-dots-premium">
