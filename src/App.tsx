@@ -35,6 +35,7 @@ function App() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [globalVotes, setGlobalVotes] = useState(0);
+  const [globalVisits, setGlobalVisits] = useState(0);
   const [isVotingOpen, setIsVotingOpen] = useState(true);
   const [archiveMode, setArchiveMode] = useState(false);
   const [hofSelection, setHofSelection] = useState<string[]>(['', '', '', '', '']);
@@ -258,7 +259,7 @@ function App() {
           setGalleryImages(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as GalleryImage[]);
         });
 
-        unsubStats = onSnapshot(doc(db, 'stats', 'global'), (doc) => { if (doc.exists()) setGlobalVotes(doc.data().total || 0); });
+        unsubStats = onSnapshot(doc(db, 'stats', 'global'), (doc) => { if (doc.exists()) { setGlobalVotes(doc.data().total || 0); setGlobalVisits(doc.data().visits || 0); } });
         
         if (user.email?.includes('@htu.local')) {
           unsubscribeResults = onSnapshot(collection(db, 'results'), (snapshot) => {
@@ -307,6 +308,14 @@ function App() {
         unsubscribeResults(); 
     };
   }, [view]);
+
+  // Track Unique Platform Visits
+  useEffect(() => {
+    if (!localStorage.getItem('expo_visited')) {
+      localStorage.setItem('expo_visited', 'true');
+      setDoc(doc(db, 'stats', 'global'), { visits: increment(1) }, { merge: true }).catch(console.error);
+    }
+  }, []);
 
   // Kiosk Auto-Rotation Timer
   useEffect(() => {
@@ -838,7 +847,7 @@ function App() {
                                         </motion.div>
                                         <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2, duration: 1.5 }} style={{ textAlign: 'center', width: '100%', marginTop: '5vh' }}>
                                             <div style={{ fontSize: 'clamp(2rem, 4vh, 3.5rem)', letterSpacing: '0.2em', color: '#FFD700', textShadow: '0 0 15px rgba(255,215,0,0.4)', fontFamily: 'DM Sans, sans-serif', fontWeight: 700 }}>
-                                                {Math.floor(globalVotes / 3).toLocaleString()} UNIQUE VOTERS VERIFIED
+                                                {globalVisits.toLocaleString()} PLATFORM VISITS
                                             </div>
                                         </motion.div>
                                     </div>
