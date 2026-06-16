@@ -550,6 +550,44 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
   text-align: center;
 }
 
+/* ---- SLIDE 4: INSTRUCTOR STAGE NAMES ---- */
+.instructor-stage-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+  padding: 2vh 6vw;
+}
+.instructor-stage-name {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(3.2rem, 7.5vh, 8rem);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.15;
+  width: 100%;
+  background: linear-gradient(160deg, #ffffff 0%, #f0e0b0 45%, #c9a84c 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-gold 7s linear infinite;
+  position: relative;
+  padding: 2.5vh 0;
+}
+/* Gold hairline separator between names */
+.instructor-stage-name + .instructor-stage-name::before {
+  content: '';
+  display: block;
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.35), transparent);
+  margin: 0 auto 2.5vh;
+}
+
 /* ---- VOLUNTEER / INSTRUCTOR NAMES ---- */
 .volunteer-grid-fixed {
   display: flex; flex-wrap: wrap; gap: 35px 55px; justify-content: center;

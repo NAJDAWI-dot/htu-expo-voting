@@ -701,14 +701,35 @@ function App() {
                                                 </div>
                                             )}
                                         </div>
-                                    ) : (kioskConfig.revealStep === 8 || kioskConfig.revealStep === 4) ? (
+                                    ) : kioskConfig.revealStep === 4 ? (
+                                        /* ── Slide 4: Full-screen instructor stage names ── */
+                                        <motion.div
+                                            initial="hidden"
+                                            animate="visible"
+                                            variants={{ visible: { transition: { staggerChildren: 0.28, delayChildren: 0.7 } } }}
+                                            className="instructor-stage-list"
+                                        >
+                                            {kioskConfig.instructorNamesExtra?.split(',').map((name, i) => (
+                                                <motion.div
+                                                    key={name}
+                                                    variants={{
+                                                        hidden: { opacity: 0, x: i % 2 === 0 ? -60 : 60, filter: 'blur(12px)' },
+                                                        visible: { opacity: 1, x: 0, filter: 'blur(0px)', transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] } }
+                                                    }}
+                                                    className="instructor-stage-name"
+                                                >
+                                                    {name.trim()}
+                                                </motion.div>
+                                            ))}
+                                        </motion.div>
+                                    ) : kioskConfig.revealStep === 8 ? (
                                         <div className="general-org-ultimate">
                                             <motion.div 
                                                 initial="hidden" animate="visible" 
                                                 variants={{ visible: { transition: { staggerChildren: 0.08, delayChildren: 0.8 } } }} 
                                                 className="volunteer-grid-fixed"
                                             >
-                                                {(kioskConfig.revealStep === 8 ? kioskConfig.volunteerNames : kioskConfig.instructorNamesExtra)?.split(',').map((name) => (
+                                                {kioskConfig.volunteerNames?.split(',').map((name) => (
                                                     <motion.span 
                                                         key={name} 
                                                         variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }} 
