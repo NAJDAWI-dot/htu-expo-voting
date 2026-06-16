@@ -167,7 +167,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       th_section: "Section",
       th_team_id: "Team ID",
       th_verify: "Verification",
-      search_teams: "Search by team, instructor, or ID...",
+      search_teams: "Search by team, instructor, member name, or ID...",
       sort_by: "Sort By",
       sort_title: "Team Name",
       sort_instructor: "Instructor",
@@ -273,7 +273,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       th_section: "الشعبة",
       th_team_id: "ID الفريق",
       th_verify: "التحقق",
-      search_teams: "البحث عن فريق، مشرف، أو ID...",
+      search_teams: "ابحث عن فريق، مشرف، عضو، أو ID...",
       sort_by: "ترتيب حسب",
       sort_title: "اسم الفريق",
       sort_instructor: "المشرف",
@@ -775,7 +775,8 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
         const title = (p.title || '').toLowerCase();
         const instructor = (p.instructor || '').toLowerCase();
         const id = (p.id || '').toLowerCase();
-        return title.includes(s) || instructor.includes(s) || id.includes(s);
+        const members = (p.team_members || '').toLowerCase();
+        return title.includes(s) || instructor.includes(s) || id.includes(s) || members.includes(s);
     })
     .sort((a, b) => {
         if (teamSortBy === 'title') return (a.title || '').localeCompare(b.title || '');
