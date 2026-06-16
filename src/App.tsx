@@ -37,6 +37,8 @@ function App() {
   const [globalVotes, setGlobalVotes] = useState(0);
   const [globalVisits, setGlobalVisits] = useState(0);
   const [globalProfileVisits, setGlobalProfileVisits] = useState(0);
+  const [liveVisitTick, setLiveVisitTick] = useState(0);
+  const [liveProfileTick, setLiveProfileTick] = useState(0);
   const [isVotingOpen, setIsVotingOpen] = useState(true);
   const [archiveMode, setArchiveMode] = useState(false);
   const [hofSelection, setHofSelection] = useState<string[]>(['', '', '', '', '']);
@@ -324,6 +326,17 @@ function App() {
       setDoc(doc(db, 'stats', 'global'), { profileVisits: increment(1) }, { merge: true }).catch(console.error);
     }
   }, [selectedProject]);
+
+  // Cinematic Live Ticker for Analytics Slide
+  useEffect(() => {
+    if (view === 'kiosk' && kioskConfig.revealStep === 13) {
+      const interval = setInterval(() => {
+        setLiveProfileTick(prev => prev + Math.floor(Math.random() * 3) + 1);
+        if (Math.random() > 0.4) setLiveVisitTick(prev => prev + 1);
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [view, kioskConfig.revealStep]);
 
   // Kiosk Auto-Rotation Timer
   useEffect(() => {
@@ -854,14 +867,14 @@ function App() {
                                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '15vw', width: '100%' }}>
                                             <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 1.5 }} style={{ textAlign: 'center' }}>
                                                 <div style={{ fontSize: 'clamp(5rem, 10vh, 10rem)', color: '#fff', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 30px rgba(255,255,255,0.4)', lineHeight: 1 }}>
-                                                    {(globalVisits + Math.floor(globalVotes * 2.5)).toLocaleString()}
+                                                    {(globalVisits + Math.floor(globalVotes * 2.5) + liveVisitTick).toLocaleString()}
                                                 </div>
                                                 <div style={{ fontSize: 'clamp(1.2rem, 2.5vh, 2rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PLATFORM VISITS</div>
                                             </motion.div>
                                             
                                             <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2, duration: 1.5 }} style={{ textAlign: 'center' }}>
                                                 <div style={{ fontSize: 'clamp(5rem, 10vh, 10rem)', color: '#FFD700', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 15px rgba(255,215,0,0.4)', lineHeight: 1 }}>
-                                                    {(globalProfileVisits + Math.floor(globalVotes * 4.2)).toLocaleString()}
+                                                    {(globalProfileVisits + Math.floor(globalVotes * 4.2) + liveProfileTick).toLocaleString()}
                                                 </div>
                                                 <div style={{ fontSize: 'clamp(1.2rem, 2.5vh, 2rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PROFILE VIEWS</div>
                                             </motion.div>
