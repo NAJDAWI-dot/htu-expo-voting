@@ -347,42 +347,42 @@ function App() {
     }
   };
 
-  const getFingerprintHash = async (ipAddress: string | null): Promise<string> => {
-    // Build fingerprint from stable hardware/browser attributes.
-    // These are IDENTICAL between normal and incognito mode on the same device,
-    // so incognito cannot bypass the vote limit.
-    const deviceParts = [
-      navigator.userAgent,
-      screen.width + 'x' + screen.height,
+  // Computes a stable device fingerprint using ONLY OS/hardware-level attributes.
+  // These are IDENTICAL across ALL browsers (Chrome, Firefox, Edge, Safari)
+  // AND identical between normal and incognito/private mode on the same device.
+  // Excluded: userAgent (browser-specific), hardwareConcurrency (Firefox spoofs it),
+  //           platform (can differ), localStorage (empty in incognito).
+  const getDeviceFingerprint = async (): Promise<string> => {
+    const stable = [
+      screen.width,
+      screen.height,
       screen.colorDepth,
-      screen.pixelDepth || 'unknown',
       navigator.language,
-      navigator.languages ? navigator.languages.join(',') : navigator.language,
-      navigator.hardwareConcurrency || 'unknown',
       new Date().getTimezoneOffset(),
-      navigator.platform || 'unknown',
-    ];
-
-    // Prepend IP if available for stronger network-level binding.
-    // Without IP, device hardware attributes alone are used — still
-    // consistent across normal/incognito on the same physical device.
-    const source = ipAddress
-      ? [ipAddress, ...deviceParts].join('||')
-      : ['NO_IP', ...deviceParts].join('||');
+      Intl.DateTimeFormat().resolvedOptions().timeZone,
+    ].join('||');
 
     try {
-      const msgBuffer = new TextEncoder().encode(source);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      return 'sha_' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    } catch (e) {
-      // Fallback: simple djb2 hash of source string
-      let hash = 5381;
-      for (let i = 0; i < source.length; i++) {
-        hash = (hash << 5) + hash + source.charCodeAt(i);
-        hash |= 0;
-      }
-      return 'fb_' + Math.abs(hash).toString(36);
+      const buf = new TextEncoder().encode('DEVICE||' + stable);
+      const hash = await crypto.subtle.digest('SHA-256', buf);
+      return 'dev_' + Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch {
+      let h = 5381;
+      for (let i = 0; i < stable.length; i++) { h = ((h << 5) + h) + stable.charCodeAt(i); h |= 0; }
+      return 'devfb_' + Math.abs(h).toString(36);
+    }
+  };
+
+  // Computes a hash of the IP address alone, for network-level secondary tracking.
+  const getIpHash = async (ip: string): Promise<string> => {
+    try {
+      const buf = new TextEncoder().encode('IP||' + ip);
+      const hash = await crypto.subtle.digest('SHA-256', buf);
+      return 'ip_' + Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch {
+      let h = 5381;
+      for (let i = 0; i < ip.length; i++) { h = ((h << 5) + h) + ip.charCodeAt(i); h |= 0; }
+      return 'ipfb_' + Math.abs(h).toString(36);
     }
   };
 
@@ -391,6 +391,7 @@ function App() {
     if (!userId || voterData.voteCount >= 3) return;
     if (voterData.votedProjectIds.includes(projectId)) return;
 
+    // Try to fetch IP for secondary network-level check
     let ip = clientIp;
     if (!ip) {
       try {
@@ -399,11 +400,14 @@ function App() {
         ip = data.ip || null;
         if (ip) setClientIp(ip);
       } catch (e) {
-        console.error("Failed to fetch IP on demand:", e);
+        console.error("IP fetch failed, device-only fingerprint will be used:", e);
       }
     }
 
-    const ipDocId = await getFingerprintHash(ip);
+    // Primary: stable device fingerprint (cross-browser + incognito proof)
+    const deviceDocId = await getDeviceFingerprint();
+    // Secondary: IP-based hash (only used if IP is available)
+    const ipDocId = ip ? await getIpHash(ip) : null;
 
     const prevData = { ...voterData };
     setVoterData(prev => ({ voteCount: prev.voteCount + 1, votedProjectIds: [...prev.votedProjectIds, projectId] }));
@@ -412,29 +416,41 @@ function App() {
       const voterRef = doc(db, 'voters', userId);
       const resultRef = doc(db, 'results', projectId);
       const statsRef = doc(db, 'stats', 'global');
-      const ipRef = doc(db, 'ips', ipDocId);
+      const deviceRef = doc(db, 'ips', deviceDocId);
+      const ipRef = ipDocId ? doc(db, 'ips', ipDocId) : null;
 
       await runTransaction(db, async (transaction) => {
         const voterSnap = await transaction.get(voterRef);
         const currentVoterData = voterSnap.exists() ? voterSnap.data() : { voteCount: 0, votedProjectIds: [] };
         if (currentVoterData.voteCount >= 3 || currentVoterData.votedProjectIds.includes(projectId)) throw "LIMIT_REACHED";
 
-        const ipSnap = await transaction.get(ipRef);
-        const currentIpVotes = ipSnap.exists() ? ipSnap.data().voteCount || 0 : 0;
-        if (currentIpVotes >= 3) throw "IP_LIMIT_REACHED";
+        // Primary device check — always enforced
+        const deviceSnap = await transaction.get(deviceRef);
+        const currentDeviceVotes = deviceSnap.exists() ? deviceSnap.data().voteCount || 0 : 0;
+        if (currentDeviceVotes >= 3) throw "DEVICE_LIMIT_REACHED";
+
+        // Secondary IP check — enforced only when IP is available
+        // Allows up to 15 votes per IP so multiple real devices on same network can vote
+        if (ipRef) {
+          const ipSnap = await transaction.get(ipRef);
+          const currentIpVotes = ipSnap.exists() ? ipSnap.data().voteCount || 0 : 0;
+          if (currentIpVotes >= 15) throw "IP_LIMIT_REACHED";
+          transaction.set(ipRef, { voteCount: currentIpVotes + 1 }, { merge: true });
+        }
 
         const voteWeight = 3 - currentVoterData.voteCount;
         transaction.set(voterRef, { voteCount: currentVoterData.voteCount + 1, votedProjectIds: [...currentVoterData.votedProjectIds, projectId] }, { merge: true });
         transaction.set(resultRef, { votes: increment(voteWeight) }, { merge: true });
         transaction.set(statsRef, { total: increment(1) }, { merge: true });
-        transaction.set(ipRef, { voteCount: currentIpVotes + 1 }, { merge: true });
+        transaction.set(deviceRef, { voteCount: currentDeviceVotes + 1 }, { merge: true });
       });
+
       const isMobile = window.innerWidth <= 768;
       confetti({ particleCount: isMobile ? 50 : 150, spread: isMobile ? 50 : 80, origin: { y: 0.6 }, colors: ['#E8343F', '#FFFFFF', '#020B18', '#FFD700'] });
     } catch (error: any) {
       setVoterData(prevData);
-      if (error === "IP_LIMIT_REACHED") {
-        alert("This device or network has already cast the maximum number of votes (3). Multi-session voting is disallowed.");
+      if (error === "DEVICE_LIMIT_REACHED" || error === "IP_LIMIT_REACHED") {
+        alert("This device has already cast the maximum number of votes (3).");
       } else if (error !== "LIMIT_REACHED") {
         console.error('Voting Error:', error);
       }
