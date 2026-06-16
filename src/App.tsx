@@ -685,7 +685,7 @@ function App() {
                                         transition={{ duration: 1.5, delay: 1.9 }}
                                         className="logo-bottom-center"
                                     >
-                                        <img src="favicon.png" alt="HTU" style={{ height: '120px' }} />
+                                        <img src="favicon.png" alt="HTU" style={{ height: '300px', filter: 'drop-shadow(0 0 20px rgba(255,255,255,0.2))' }} />
                                     </motion.div>
                                 </motion.div>
                             ) : null}
