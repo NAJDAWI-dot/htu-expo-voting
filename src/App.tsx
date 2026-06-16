@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { CheckCircle2, Users, Search, Loader2, Settings, X, Share2, Info, Download, Trophy, Sparkles, Trophy as TrophyIcon, ShieldCheck, Award } from 'lucide-react';
+import { CheckCircle2, Users, Search, Loader2, Settings, X, Share2, Info, Download, Trophy, Trophy as TrophyIcon, ShieldCheck, Award } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { auth, db } from './firebase';
 import { signInAnonymously, onAuthStateChanged } from 'firebase/auth';
@@ -1156,12 +1156,12 @@ function App() {
 
         {showOnboarding && (
             <motion.div className="modal-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <div className="glass-card onboarding-card">
+                <div className="glass-card onboarding-card-premium">
                     <div className="lang-toggle-container mb-6" style={{ margin: '0 auto 30px', background: 'rgba(255,255,255,0.05)' }}>
                         <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>EN</button>
                         <button className={`lang-btn ${lang === 'ar' ? 'active' : ''}`} onClick={() => setLang('ar')}>العربية</button>
                     </div>
-                    <Sparkles size={48} color="#E8343F" className="mb-4" />
+                    <img src="favicon.png" alt="HTU Logo" className="onboarding-htu-logo" />
                     <h2>{t[lang].welcome}</h2>
                     <p className="subtitle">{t[lang].welcome_sub}</p>
                     <div className="feature-list-onboarding">
@@ -1171,7 +1171,6 @@ function App() {
                         <div className="f-item"><div className="f-dot"/><span>{t[lang].f4}</span></div>
                     </div>
                     <button className="htu-button w-full" onClick={closeOnboarding}>{t[lang].start}</button>    
-
                 </div>
             </motion.div>
         )}
@@ -1189,7 +1188,14 @@ function App() {
           <motion.p className="subtitle">{t[lang].subtitle(3 - voterData.voteCount)}</motion.p>
           {globalVotes >= 0 && <div className="global-counter-pill"><span className="pulse-dot"></span><strong>{globalVotes.toLocaleString()}</strong> {t[lang].votes_cast}</div>}
           <div className="header-controls">
-              <div className="vote-progress"><div className="vote-dots">{[1, 2, 3].map(i => (<motion.div key={i} className={`vote-dot ${i <= voterData.voteCount ? 'active' : ''}`} animate={i <= voterData.voteCount ? { scale: [1, 1.2, 1] } : {}} />))}</div></div>
+              <div className="vote-progress-bar-premium">
+                  <div className="vote-progress-fill" style={{ width: `${(voterData.voteCount / 3) * 100}%` }} />
+                  <div className="vote-dots-premium">
+                      {[1, 2, 3].map(i => (
+                          <motion.div key={i} className={`vote-dot-premium ${i <= voterData.voteCount ? 'active' : ''}`} animate={i <= voterData.voteCount ? { scale: [1, 1.3, 1], boxShadow: "0 0 20px rgba(232,52,63,0.8)" } : {}} />
+                      ))}
+                  </div>
+              </div>
           </div>
         </motion.div>
       </header>
