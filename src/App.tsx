@@ -75,20 +75,9 @@ function App() {
   const [isNameSubmitted, setIsNameSubmitted] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [certImage, setCertImage] = useState<string | null>(null);
-  const [clientIp, setClientIp] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchIp = async () => {
-      try {
-        const res = await fetch('https://api.ipify.org?format=json');
-        const data = await res.json();
-        if (data.ip) setClientIp(data.ip);
-      } catch (e) {
-        console.error("Failed to fetch IP:", e);
-      }
-    };
-    fetchIp();
-  }, []);
+
+
 
   useEffect(() => {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
@@ -399,19 +388,6 @@ function App() {
     }
   };
 
-  // Computes a hash of the IP address alone, for network-level secondary tracking.
-  const getIpHash = async (ip: string): Promise<string> => {
-    try {
-      const buf = new TextEncoder().encode('IP||' + ip);
-      const hash = await crypto.subtle.digest('SHA-256', buf);
-      return 'ip_' + Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
-    } catch {
-      let h = 5381;
-      for (let i = 0; i < ip.length; i++) { h = ((h << 5) + h) + ip.charCodeAt(i); h |= 0; }
-      return 'ipfb_' + Math.abs(h).toString(36);
-    }
-  };
-
   const handleVote = async (projectId: string) => {
     if (!isVotingOpen) { alert("Voting is currently closed by the organizers."); return; }
     
@@ -424,23 +400,9 @@ function App() {
     if (voterData.voteCount >= 3) { alert("You have reached your limit of 3 votes."); return; }
     if (voterData.votedProjectIds.includes(projectId)) return;
 
-    // Try to fetch IP for secondary network-level check
-    let ip = clientIp;
-    if (!ip) {
-      try {
-        const res = await fetch('https://api.ipify.org?format=json');
-        const data = await res.json();
-        ip = data.ip || null;
-        if (ip) setClientIp(ip);
-      } catch (e) {
-        console.error("IP fetch failed, device-only fingerprint will be used:", e);
-      }
-    }
 
-    // Primary: stable device fingerprint (cross-browser + incognito proof)
+
     const deviceDocId = await getDeviceFingerprint();
-    // Secondary: IP-based hash (only used if IP is available)
-    const ipDocId = ip ? await getIpHash(ip) : null;
 
     const prevData = { ...voterData };
     setVoterData(prev => ({ voteCount: prev.voteCount + 1, votedProjectIds: [...prev.votedProjectIds, projectId] }));
@@ -450,7 +412,6 @@ function App() {
       const resultRef = doc(db, 'results', projectId);
       const statsRef = doc(db, 'stats', 'global');
       const deviceRef = doc(db, 'ips', deviceDocId);
-      const ipRef = ipDocId ? doc(db, 'ips', ipDocId) : null;
 
       await runTransaction(db, async (transaction) => {
         const voterSnap = await transaction.get(voterRef);
@@ -461,15 +422,6 @@ function App() {
         const deviceSnap = await transaction.get(deviceRef);
         const currentDeviceVotes = deviceSnap.exists() ? deviceSnap.data().voteCount || 0 : 0;
         if (currentDeviceVotes >= 3) throw "DEVICE_LIMIT_REACHED";
-
-        // Secondary IP check — enforced only when IP is available
-        // Allows up to 15 votes per IP so multiple real devices on same network can vote
-        if (ipRef) {
-          const ipSnap = await transaction.get(ipRef);
-          const currentIpVotes = ipSnap.exists() ? ipSnap.data().voteCount || 0 : 0;
-          if (currentIpVotes >= 15) throw "IP_LIMIT_REACHED";
-          transaction.set(ipRef, { voteCount: currentIpVotes + 1 }, { merge: true });
-        }
 
         const voteWeight = 3 - currentVoterData.voteCount;
         transaction.set(voterRef, { voteCount: currentVoterData.voteCount + 1, votedProjectIds: [...currentVoterData.votedProjectIds, projectId] }, { merge: true });
@@ -482,7 +434,7 @@ function App() {
       confetti({ particleCount: isMobile ? 50 : 150, spread: isMobile ? 50 : 80, origin: { y: 0.6 }, colors: ['#E8343F', '#FFFFFF', '#020B18', '#FFD700'] });
     } catch (error: any) {
       setVoterData(prevData);
-      if (error === "DEVICE_LIMIT_REACHED" || error === "IP_LIMIT_REACHED") {
+      if (error === "DEVICE_LIMIT_REACHED") {
         alert("This device has already cast the maximum number of votes (3).");
       } else if (error === "LIMIT_REACHED") {
         alert("You have already reached your maximum votes.");
