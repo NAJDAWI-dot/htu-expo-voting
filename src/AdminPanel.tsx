@@ -130,6 +130,14 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     return 'partial';
   };
 
+  // Single-batch write for Mark All / Clear All
+  const setAllAttendance = async (projectId: string, members: string[], value: boolean) => {
+    const updated: Record<string, boolean> = {};
+    members.forEach(m => { updated[m] = value; });
+    setAttendance(prev => ({ ...prev, [projectId]: updated }));
+    await setDoc(doc(db, 'attendance', projectId), updated);
+  };
+
   // Elite Features State
   const [selectedPlacard, setSelectedPlacard] = useState<Project | null>(null);
   const [velocityMap, setVelocityMap] = useState<Record<string, number>>({});
@@ -1112,12 +1120,10 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                     </div>
 
                     <div className="attendance-modal-footer">
-                      <button onClick={() => {
-                        members.forEach(m => toggleAttendance(attendancePopout, m, true));
-                      }} className="attendance-action-btn btn-mark-all">✓ Mark All Present</button>
-                      <button onClick={() => {
-                        members.forEach(m => toggleAttendance(attendancePopout, m, false));
-                      }} className="attendance-action-btn btn-clear-all">✕ Clear All</button>
+                      <button onClick={() => setAllAttendance(attendancePopout, members, true)}
+                        className="attendance-action-btn btn-mark-all">✓ Mark All Present</button>
+                      <button onClick={() => setAllAttendance(attendancePopout, members, false)}
+                        className="attendance-action-btn btn-clear-all">✕ Clear All</button>
                       <button onClick={() => setAttendancePopout(null)} className="attendance-action-btn btn-close-modal">Close</button>
                     </div>
                   </motion.div>
