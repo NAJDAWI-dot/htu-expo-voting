@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;800;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;800;900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Cinzel:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500;600&display=swap');
 
 :root {
   --htu-red: #E8343F; --htu-red-glow: rgba(232, 52, 63, 0.4); --htu-navy-deep: #01060D; --htu-navy: #020B18; --htu-navy-light: #0a192f; --white: #FFFFFF; --text-muted: rgba(255, 255, 255, 0.6); --glass: rgba(255, 255, 255, 0.05); --glass-border: rgba(255, 255, 255, 0.1); --transition-smooth: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); --gold: #FFD700; --silver: #E0E0E0; --bronze: #CD7F32; --premium-shadow: 0 20px 50px rgba(0,0,0,0.5);
@@ -344,33 +344,264 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .title-year { font-size: 1.8rem; letter-spacing: 15px; font-weight: 900; opacity: 0.2; }
 
 /* --- CEREMONY SYSTEM: APPLE KEYNOTE MINIMALIST V6 --- */
-.victory-reveal-overlay { position: fixed; inset: 0; z-index: 11000; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; width: 100vw; height: 100vh; }
-.ceremony-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(at bottom center, rgba(232, 52, 63, 0.1) 0%, transparent 70%); }
-.spotlight-god-v2 { position: absolute; top: 50%; left: 50%; width: 200vw; height: 200vh; background: radial-gradient(circle at center, rgba(232, 52, 63, 0.05) 0%, transparent 60%); transform: translate(-50%, -50%); animation: slowDrift 30s ease-in-out infinite alternate; }
-.ceremony-content-ultimate { position: relative; z-index: 10; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; }
-.ceremony-intro-ultimate { display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; width: 100%; height: 75vh; padding: 5vh 0; }
-.glow-text-extreme { font-size: clamp(3rem, 12vw, 10rem) !important; font-weight: 1000; letter-spacing: 15px; color: #fff; text-shadow: 0 0 40px rgba(255, 255, 255, 0.3); text-transform: uppercase; line-height: 0.9; }
-.logo-bottom-center { order: 2; margin-top: auto; opacity: 0.9; filter: grayscale(1) brightness(2); }
+/* =============================================
+   VICTORY REVEAL — PREMIUM CINEMATIC TYPOGRAPHY
+   ============================================= */
 
-.credits-subtitle-ultimate { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 5vh, 3.5rem); font-style: italic; font-weight: 500; color: rgba(255, 255, 255, 0.4); margin-bottom: 35px; }
-.credits-main-ultimate { font-size: clamp(3.5rem, 11vh, 11rem); font-weight: 1000; letter-spacing: -3px; color: #fff; max-width: 95%; line-height: 0.9; }
-.god-line-ultimate { width: 120px; height: 3px; background: var(--htu-red); margin: 70px auto; opacity: 0.6; }
+@keyframes shimmer-gold {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes line-grow {
+  from { width: 0; opacity: 0; }
+  to   { width: 180px; opacity: 1; }
+}
 
-.organizer-cloud-ultimate { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 50px; }
-.head-org-grid-ultimate { display: flex; flex-wrap: wrap; gap: 50px 100px; justify-content: center; max-width: 95%; }
-.head-name-ultimate { font-size: clamp(3rem, 7vh, 7rem); font-weight: 1000; color: #fff; display: flex; align-items: center; text-shadow: 0 15px 50px rgba(0,0,0,0.6); }
+.victory-reveal-overlay {
+  position: fixed; inset: 0; z-index: 11000;
+  background: #04080f;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; width: 100vw; height: 100vh;
+}
+.ceremony-bg {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(232, 52, 63, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 20%, rgba(180, 140, 60, 0.06) 0%, transparent 55%);
+}
+.spotlight-god-v2 {
+  position: absolute; top: 50%; left: 50%; width: 200vw; height: 200vh;
+  background: radial-gradient(circle at center, rgba(232, 52, 63, 0.04) 0%, transparent 60%);
+  transform: translate(-50%, -50%);
+}
+.ceremony-content-ultimate {
+  position: relative; z-index: 10; width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+}
 
-.volunteer-grid-fixed { display: flex; flex-wrap: wrap; gap: 40px 60px; justify-content: center; max-width: 1600px; padding: 0 50px; }
-.volunteer-name-elegant { font-size: clamp(1.6rem, 3vh, 3rem); font-weight: 800; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; letter-spacing: 3px; transition: 0.5s; }
+/* ---- INTRO SLIDE ---- */
+.ceremony-intro-ultimate {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: space-between; text-align: center;
+  width: 100%; height: 75vh; padding: 5vh 0;
+}
+.glow-text-extreme {
+  font-family: 'Cinzel', serif !important;
+  font-size: clamp(2.4rem, 8vw, 8rem) !important;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #ffffff 0%, #e8c97a 35%, #ffffff 55%, #c9a84c 100%);
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-gold 7s linear infinite;
+  text-shadow: none;
+}
+.logo-bottom-center {
+  order: 2; margin-top: auto; opacity: 0.85;
+  filter: grayscale(1) brightness(2);
+}
 
-.winner-reveal-ultimate-moment { display: grid; grid-template-columns: 1.1fr 1fr; width: 95vw; max-width: 1900px; gap: 120px; align-items: center; text-align: left; }
-.winner-title-ultimate { grid-column: 1 / -1; font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vh, 5rem); font-style: italic; color: rgba(255,255,255,0.3); margin-bottom: -60px; text-align: center; }
-.winner-photo-wrapper-ultimate { width: 100%; aspect-ratio: 1; border-radius: 30px; overflow: hidden; background: #000; box-shadow: 0 60px 120px rgba(0,0,0,0.9); }
+/* ---- CREDITS SLIDES (1–8): CATEGORY LABEL (italic serif) ---- */
+.credits-subtitle-ultimate {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 4.5vh, 3.4rem);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  background: linear-gradient(90deg, rgba(255,255,255,0.25), rgba(200,160,70,0.6), rgba(255,255,255,0.25));
+  background-size: 280% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-gold 5s linear infinite;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+/* ---- CREDITS SLIDES: MAIN DISPLAY NAME (Cinzel bold caps) ---- */
+.credits-main-ultimate {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(3rem, 9vh, 9.5rem);
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1;
+  max-width: 95%;
+  text-align: center;
+  color: #fff;
+  text-shadow:
+    0 0 80px rgba(255, 255, 255, 0.06),
+    0 4px 80px rgba(0, 0, 0, 0.5);
+}
+.god-line-ultimate {
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+  margin: 55px auto 0;
+  opacity: 0;
+  animation: line-grow 1.3s cubic-bezier(0.22,1,0.36,1) 1.4s forwards;
+}
+
+/* ---- ORGANIZERS / HEAD NAMES ---- */
+.organizer-cloud-ultimate {
+  width: 100%; display: flex; flex-direction: column; align-items: center; gap: 50px;
+}
+.head-org-grid-ultimate {
+  display: flex; flex-wrap: wrap; gap: 50px 90px; justify-content: center; max-width: 95%;
+}
+.head-name-ultimate {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.2rem, 5vh, 5.5rem);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: linear-gradient(160deg, #fff 20%, #e8d09a 60%, #c9a84c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+
+/* ---- VOLUNTEER / INSTRUCTOR NAMES ---- */
+.volunteer-grid-fixed {
+  display: flex; flex-wrap: wrap; gap: 35px 55px; justify-content: center;
+  max-width: 1600px; padding: 0 50px;
+}
+.volunteer-name-elegant {
+  font-family: 'DM Sans', 'Montserrat', sans-serif;
+  font-size: clamp(1.2rem, 2.3vh, 2.4rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  position: relative;
+  padding-bottom: 5px;
+  transition: color 0.4s;
+}
+.volunteer-name-elegant::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 0; height: 1px;
+  background: #c9a84c;
+  transition: width 0.5s ease;
+}
+.volunteer-name-elegant:hover { color: #fff; }
+.volunteer-name-elegant:hover::after { width: 100%; }
+
+/* ---- WINNER SLIDES (9–13) LAYOUT ---- */
+.winner-reveal-ultimate-moment {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  width: 95vw; max-width: 1900px;
+  gap: 100px; align-items: center; text-align: left;
+}
+
+/* Placement label: e.g. "Reveal 3rd Place" */
+.winner-title-ultimate {
+  grid-column: 1 / -1;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.6rem, 4vh, 3.6rem);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  background: linear-gradient(90deg, rgba(255,255,255,0.18), rgba(200,160,70,0.55), rgba(255,255,255,0.18));
+  background-size: 280% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer-gold 5s linear infinite;
+  margin-bottom: -50px;
+  text-align: center;
+}
+
+/* Project photo */
+.winner-photo-wrapper-ultimate {
+  width: 100%; aspect-ratio: 1;
+  border-radius: 20px; overflow: hidden; background: #000;
+  box-shadow:
+    0 0 0 1px rgba(201, 168, 76, 0.12),
+    0 40px 100px rgba(0,0,0,0.85),
+    0 0 80px rgba(232,52,63,0.05);
+}
 .winner-photo-wrapper-ultimate img { width: 100%; height: 100%; object-fit: cover; }
-.winner-name-ultimate { font-size: clamp(5rem, 14vh, 12rem); font-weight: 1000; letter-spacing: -6px; line-height: 0.85; color: #fff; margin: 0; }
-.winner-instructor-ultimate { font-size: 3rem; font-weight: 600; color: rgba(255,255,255,0.4); letter-spacing: 6px; text-transform: uppercase; }
-.winner-votes-ultimate { margin-top: 70px; border-left: 6px solid var(--htu-red); padding-left: 50px; }
-.winner-votes-ultimate strong { font-size: 7rem; font-weight: 1000; color: #fff; line-height: 1; }
+
+/* Rank ghost number: #1 / #2 / etc. */
+.winner-rank-hologram {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(4rem, 13vh, 13rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  user-select: none;
+  margin-bottom: -15px;
+}
+
+/* Project / Team name — the HERO text */
+.winner-name-ultimate {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(3rem, 9.5vh, 9rem);
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  line-height: 0.95;
+  margin: 0;
+  background: linear-gradient(160deg, #ffffff 0%, #ecdfa8 50%, #c9a84c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  word-break: break-word;
+}
+
+/* Team members subtitle */
+.winner-instructor-ultimate {
+  font-family: 'DM Sans', 'Montserrat', sans-serif;
+  font-size: clamp(0.9rem, 2vh, 2rem);
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.32);
+  margin-top: 20px;
+  line-height: 1.7;
+}
+
+/* Award badge block */
+.winner-votes-ultimate {
+  margin-top: 55px;
+  padding-left: 38px;
+  border-left: 2px solid rgba(201,168,76,0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.winner-votes-ultimate strong {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.2rem, 3vh, 2.8rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #fff 30%, #d4a84b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+.winner-votes-ultimate span {
+  font-family: 'DM Sans', 'Montserrat', sans-serif !important;
+  font-size: clamp(0.75rem, 1.4vh, 1.25rem) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.32em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,0.28) !important;
+  opacity: 1 !important;
+}
 
 /* --- MOBILE & UTILITIES --- */
 @media (max-width: 768px) {
