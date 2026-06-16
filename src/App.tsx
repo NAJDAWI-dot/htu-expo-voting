@@ -574,7 +574,7 @@ function App() {
 
     // Map Kiosk/Ceremony Selection Projects
     const ceremonySelection = kioskConfig.ceremonySelection || ['', '', '', '', ''];
-    const revealProjects = ceremonySelection.map(id => projects.find(p => p.id === id) || null);
+    const revealProjects = ceremonySelection.map(id => topProjects.find(p => p.id === id) || null);
     
     return (
         <div className={`kiosk-mode ${kioskConfig.revealStep === 13 ? 'champion-active' : ''}`}>
@@ -795,7 +795,13 @@ function App() {
 
                                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5, duration: 1.5 }} className="winner-votes-ultimate">
                                                     <strong>{kioskConfig.revealStep === 13 ? 'FAN FAV PROJECT' : 'JUDGING AWARD'}</strong>
-                                                    <span style={{ fontSize: '1.2rem', opacity: 0.6 }}>{kioskConfig.revealStep === 13 ? 'MOST VOTED BY HTU COMMUNITY' : 'OFFICIAL JURY SELECTION'}</span>
+                                                    {kioskConfig.revealStep === 13 ? (
+                                                        <span style={{ fontSize: '1.2rem', opacity: 0.9, color: '#FFD700', fontWeight: 'bold' }}>
+                                                            {revealProjects[4]?.votes || 0} VOTES VERIFIED
+                                                        </span>
+                                                    ) : (
+                                                        <span style={{ fontSize: '1.2rem', opacity: 0.6 }}>OFFICIAL JURY SELECTION</span>
+                                                    )}
                                                 </motion.div>
                                             </div>
                                         </>
