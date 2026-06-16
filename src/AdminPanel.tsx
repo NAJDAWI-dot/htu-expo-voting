@@ -533,10 +533,15 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
         const batch = writeBatch(db);
         results.forEach(r => { batch.update(doc(db, 'results', r.id), { votes: 0 }); });
         batch.set(doc(db, 'stats', 'global'), { total: 0 });
+        
         const votersSnap = await getDocs(collection(db, 'voters'));
         votersSnap.forEach((voterDoc) => { batch.delete(voterDoc.ref); });
+
+        const ipsSnap = await getDocs(collection(db, 'ips'));
+        ipsSnap.forEach((ipDoc) => { batch.delete(ipDoc.ref); });
+
         await batch.commit();
-        alert('Votes purged.');
+        alert('Votes and device/network limits purged.');
     } catch (e: any) {
         alert(`Failed: ${e.message}`);
     } finally {
@@ -554,12 +559,14 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
           const resultsSnap = await getDocs(collection(db, 'results'));
           const gallerySnap = await getDocs(collection(db, 'gallery'));
           const votersSnap = await getDocs(collection(db, 'voters'));
+          const ipsSnap = await getDocs(collection(db, 'ips'));
 
           const batch = writeBatch(db);
           projectsSnap.forEach(d => batch.delete(d.ref));
           resultsSnap.forEach(d => batch.delete(d.ref));
           gallerySnap.forEach(d => batch.delete(d.ref));
           votersSnap.forEach(d => batch.delete(d.ref));
+          ipsSnap.forEach(d => batch.delete(d.ref));
           batch.set(doc(db, 'stats', 'global'), { total: 0 });
           batch.update(doc(db, 'config', 'voting'), { archiveMode: false });
 
