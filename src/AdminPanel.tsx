@@ -584,7 +584,9 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
         ipsSnap.forEach((ipDoc) => { batch.delete(ipDoc.ref); });
 
         await batch.commit();
-        alert('Votes and device/network limits purged.');
+        localStorage.removeItem('htu_badge_shown');
+        localStorage.removeItem('htu_voter_data');
+        alert('Votes and device/network limits purged. Local certificate limit reset.');
     } catch (e: any) {
         alert(`Failed: ${e.message}`);
     } finally {
@@ -614,7 +616,9 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
           batch.update(doc(db, 'config', 'voting'), { archiveMode: false });
 
           await batch.commit();
-          alert('SYSTEM WIPE COMPLETE. ALL DATA DELETED.');
+          localStorage.removeItem('htu_badge_shown');
+          localStorage.removeItem('htu_voter_data');
+          alert('SYSTEM WIPE COMPLETE. ALL DATA DELETED. Local limits reset.');
       } catch (e: any) {
           alert(`Hard Reset Failed: ${e.message}`);
       } finally {
