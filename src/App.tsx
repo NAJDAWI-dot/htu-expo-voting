@@ -348,26 +348,27 @@ function App() {
   };
 
   const getFingerprintHash = async (ipAddress: string | null): Promise<string> => {
-    let source: string;
-    if (ipAddress) {
-      const parts = [
-        ipAddress,
-        navigator.userAgent,
-        screen.width + 'x' + screen.height,
-        screen.colorDepth,
-        navigator.language,
-        navigator.hardwareConcurrency || 'unknown',
-        new Date().getTimezoneOffset()
-      ];
-      source = parts.join('||');
-    } else {
-      let deviceId = localStorage.getItem('htu_device_id');
-      if (!deviceId) {
-        deviceId = Math.random().toString(36).substring(2) + Date.now().toString(36);
-        localStorage.setItem('htu_device_id', deviceId);
-      }
-      source = 'dev_' + deviceId;
-    }
+    // Build fingerprint from stable hardware/browser attributes.
+    // These are IDENTICAL between normal and incognito mode on the same device,
+    // so incognito cannot bypass the vote limit.
+    const deviceParts = [
+      navigator.userAgent,
+      screen.width + 'x' + screen.height,
+      screen.colorDepth,
+      screen.pixelDepth || 'unknown',
+      navigator.language,
+      navigator.languages ? navigator.languages.join(',') : navigator.language,
+      navigator.hardwareConcurrency || 'unknown',
+      new Date().getTimezoneOffset(),
+      navigator.platform || 'unknown',
+    ];
+
+    // Prepend IP if available for stronger network-level binding.
+    // Without IP, device hardware attributes alone are used — still
+    // consistent across normal/incognito on the same physical device.
+    const source = ipAddress
+      ? [ipAddress, ...deviceParts].join('||')
+      : ['NO_IP', ...deviceParts].join('||');
 
     try {
       const msgBuffer = new TextEncoder().encode(source);
@@ -375,9 +376,10 @@ function App() {
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       return 'sha_' + hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     } catch (e) {
-      let hash = 0;
+      // Fallback: simple djb2 hash of source string
+      let hash = 5381;
       for (let i = 0; i < source.length; i++) {
-        hash = (hash << 5) - hash + source.charCodeAt(i);
+        hash = (hash << 5) + hash + source.charCodeAt(i);
         hash |= 0;
       }
       return 'fb_' + Math.abs(hash).toString(36);
