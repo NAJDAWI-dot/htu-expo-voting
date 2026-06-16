@@ -691,3 +691,48 @@ footer { padding: 80px 0; text-align: center; border-top: 1px solid var(--glass-
     color: rgba(255,255,255,0.8);
     line-height: 1.4;
 }
+
+/* Onboarding Modal Responsiveness for Mobile Devices */
+@media (max-width: 576px) {
+    .modal-overlay {
+        align-items: flex-start;
+        padding: 20px 12px;
+        overflow-y: auto;
+    }
+    .onboarding-card {
+        margin: auto 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 30px 20px;
+        border-radius: 20px;
+    }
+    .onboarding-card h2 {
+        font-size: 1.6rem;
+        margin-top: 10px;
+    }
+    .onboarding-card p.subtitle {
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+    }
+    .feature-list-onboarding {
+        margin: 20px 0;
+        gap: 10px;
+    }
+    .f-item {
+        padding: 10px 14px;
+        border-radius: 12px;
+        gap: 10px;
+    }
+    .f-item span {
+        font-size: 0.8rem;
+    }
+    .onboarding-card svg {
+        width: 36px;
+        height: 36px;
+        margin-bottom: 10px;
+    }
+    .lang-toggle-container {
+        margin-bottom: 15px !important;
+    }
+}
+
