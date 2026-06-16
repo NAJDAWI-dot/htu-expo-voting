@@ -20,7 +20,7 @@ import {
   updateDoc
 } from './firebase';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogOut, Plus, Trash2, Trophy, Users, ShieldCheck, UserCog, Upload, Image as ImageIcon, Loader2, Download, Power, PowerOff, ArrowLeft, BarChart3, LayoutDashboard, AlertTriangle, ListChecks, X, RotateCcw, Search, Filter, Bomb, Eye, EyeOff, Play, SkipForward, Rewind, Megaphone, Repeat, Printer, Activity } from 'lucide-react';
+import { LogOut, Plus, Trash2, Trophy, Users, ShieldCheck, UserCog, Upload, Image as ImageIcon, Loader2, Download, Power, PowerOff, ArrowLeft, BarChart3, LayoutDashboard, AlertTriangle, ListChecks, X, RotateCcw, Search, Filter, Bomb, Eye, EyeOff, Play, SkipForward, Rewind, Megaphone, Repeat, Printer, Activity, ClipboardCheck } from 'lucide-react';
 import QRCodeStyling from 'qr-code-styling';
 
 interface Project {
@@ -101,6 +101,34 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   // Search and Sort State
   const [teamSearchTerm, setTeamSearchTerm] = useState('');
   const [teamSortBy, setTeamSortBy] = useState<'title' | 'instructor' | 'section' | 'status'>('title');
+
+  // Attendance State
+  const [attendancePopout, setAttendancePopout] = useState<string | null>(null); // project id
+  const [attendance, setAttendance] = useState<Record<string, Record<string, boolean>>>({}); // { projectId: { memberName: true/false } }
+
+  // Load attendance from Firestore on mount
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, 'attendance'), (snap) => {
+      const data: Record<string, Record<string, boolean>> = {};
+      snap.forEach(d => { data[d.id] = d.data() as Record<string, boolean>; });
+      setAttendance(data);
+    });
+    return () => unsub();
+  }, []);
+
+  const toggleAttendance = async (projectId: string, member: string, checked: boolean) => {
+    const updated = { ...(attendance[projectId] || {}), [member]: checked };
+    setAttendance(prev => ({ ...prev, [projectId]: updated }));
+    await setDoc(doc(db, 'attendance', projectId), updated, { merge: true });
+  };
+
+  const getAttendanceStatus = (projectId: string, members: string[]) => {
+    const a = attendance[projectId] || {};
+    const checked = members.filter(m => a[m.trim()]);
+    if (checked.length === 0) return 'none';
+    if (checked.length === members.length) return 'full';
+    return 'partial';
+  };
 
   // Elite Features State
   const [selectedPlacard, setSelectedPlacard] = useState<Project | null>(null);
@@ -973,7 +1001,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                   </div>
                   <div className="elite-table-wrapper">
                       <table className="elite-table">
-                          <thead><tr><th>{t[lang].p_title}</th><th>{t[lang].p_inst}</th><th>{t[lang].th_members}</th><th>{t[lang].th_section}</th><th>{t[lang].th_team_id}</th><th className="text-right">{t[lang].th_verify}</th></tr></thead>
+                          <thead><tr><th>{t[lang].p_title}</th><th>{t[lang].p_inst}</th><th>{t[lang].th_members}</th><th>{t[lang].th_section}</th><th>{t[lang].th_team_id}</th><th className="text-right">Attendance</th><th className="text-right">{t[lang].th_verify}</th></tr></thead>
                           <tbody>
                               {filteredAndSortedTeams.map(p => (
                                   <tr key={p.id} className={`status-row-${p.status || 'none'}`}>
@@ -991,6 +1019,23 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                                             <code style={{ fontSize: '0.7rem', opacity: 0.5 }}>{p.id}</code>
                                             <button onClick={() => setSelectedPlacard(p)} className="print-btn"><Printer size={12}/> {t[lang].print_placard}</button>
                                           </div>
+                                      </td>
+                                      <td className="text-right">
+                                          {/* Attendance Button */}
+                                          {(() => {
+                                            const members = (p.team_members || '').split(',').map(m => m.trim()).filter(Boolean);
+                                            const status = getAttendanceStatus(p.id, members);
+                                            return (
+                                              <button
+                                                onClick={() => setAttendancePopout(attendancePopout === p.id ? null : p.id)}
+                                                className={`attendance-btn attendance-${status}`}
+                                                title="Take Attendance"
+                                              >
+                                                <ClipboardCheck size={14} />
+                                                <span>Attendance</span>
+                                              </button>
+                                            );
+                                          })()}
                                       </td>
                                       <td className="text-right">
                                               <div className="admin-project-actions">
@@ -1013,7 +1058,74 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                       </table>
                   </div>
               </div>
-          </motion.div>
+          {/* Attendance Popout Modal */}
+          <AnimatePresence>
+            {attendancePopout && (() => {
+              const project = projects.find(p => p.id === attendancePopout);
+              if (!project) return null;
+              const members = (project.team_members || '').split(',').map(m => m.trim()).filter(Boolean);
+              const a = attendance[attendancePopout] || {};
+              const checkedCount = members.filter(m => a[m]).length;
+              const status = checkedCount === 0 ? 'none' : checkedCount === members.length ? 'full' : 'partial';
+              return (
+                <motion.div
+                  key="attendance-modal"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="attendance-modal-overlay"
+                  onClick={() => setAttendancePopout(null)}
+                >
+                  <motion.div
+                    initial={{ scale: 0.9, y: 30 }}
+                    animate={{ scale: 1, y: 0 }}
+                    exit={{ scale: 0.9, y: 30 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                    className="attendance-modal-card"
+                    onClick={e => e.stopPropagation()}
+                  >
+                    <div className="attendance-modal-header">
+                      <div>
+                        <h3 className="attendance-modal-title"><ClipboardCheck size={20} /> Attendance</h3>
+                        <p className="attendance-modal-subtitle">{project.title}</p>
+                      </div>
+                      <div className={`attendance-status-badge attendance-badge-${status}`}>
+                        {checkedCount}/{members.length} Present
+                      </div>
+                    </div>
+
+                    <div className="attendance-member-list">
+                      {members.length === 0 ? (
+                        <p style={{ opacity: 0.5, textAlign: 'center', padding: '20px' }}>No team members listed.</p>
+                      ) : members.map((member, i) => (
+                        <label key={i} className={`attendance-member-row ${a[member] ? 'member-present' : ''}`}>
+                          <input
+                            type="checkbox"
+                            checked={!!a[member]}
+                            onChange={e => toggleAttendance(attendancePopout, member, e.target.checked)}
+                            className="attendance-checkbox"
+                          />
+                          <span className="attendance-member-name">{member}</span>
+                          <span className={`attendance-dot ${a[member] ? 'dot-present' : 'dot-absent'}`} />
+                        </label>
+                      ))}
+                    </div>
+
+                    <div className="attendance-modal-footer">
+                      <button onClick={() => {
+                        members.forEach(m => toggleAttendance(attendancePopout, m, true));
+                      }} className="attendance-action-btn btn-mark-all">✓ Mark All Present</button>
+                      <button onClick={() => {
+                        members.forEach(m => toggleAttendance(attendancePopout, m, false));
+                      }} className="attendance-action-btn btn-clear-all">✕ Clear All</button>
+                      <button onClick={() => setAttendancePopout(null)} className="attendance-action-btn btn-close-modal">Close</button>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              );
+            })()}
+          </AnimatePresence>
+      </motion.div>
         )}
 
         {activeTab === 'stage' && (
