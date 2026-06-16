@@ -484,8 +484,11 @@ function App() {
       setVoterData(prevData);
       if (error === "DEVICE_LIMIT_REACHED" || error === "IP_LIMIT_REACHED") {
         alert("This device has already cast the maximum number of votes (3).");
-      } else if (error !== "LIMIT_REACHED") {
+      } else if (error === "LIMIT_REACHED") {
+        alert("You have already reached your maximum votes.");
+      } else {
         console.error('Voting Error:', error);
+        alert(`Voting failed: ${error.message || error}`);
       }
     } finally {
       setVotingId(null);
