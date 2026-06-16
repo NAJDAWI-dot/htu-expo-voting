@@ -36,6 +36,7 @@ function App() {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
   const [globalVotes, setGlobalVotes] = useState(0);
   const [globalVisits, setGlobalVisits] = useState(0);
+  const [globalProfileVisits, setGlobalProfileVisits] = useState(0);
   const [isVotingOpen, setIsVotingOpen] = useState(true);
   const [archiveMode, setArchiveMode] = useState(false);
   const [hofSelection, setHofSelection] = useState<string[]>(['', '', '', '', '']);
@@ -259,7 +260,7 @@ function App() {
           setGalleryImages(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as GalleryImage[]);
         });
 
-        unsubStats = onSnapshot(doc(db, 'stats', 'global'), (doc) => { if (doc.exists()) { setGlobalVotes(doc.data().total || 0); setGlobalVisits(doc.data().visits || 0); } });
+        unsubStats = onSnapshot(doc(db, 'stats', 'global'), (doc) => { if (doc.exists()) { setGlobalVotes(doc.data().total || 0); setGlobalVisits(doc.data().visits || 0); setGlobalProfileVisits(doc.data().profileVisits || 0); } });
         
         if (user.email?.includes('@htu.local')) {
           unsubscribeResults = onSnapshot(collection(db, 'results'), (snapshot) => {
@@ -316,6 +317,13 @@ function App() {
       setDoc(doc(db, 'stats', 'global'), { visits: increment(1) }, { merge: true }).catch(console.error);
     }
   }, []);
+
+  // Track Profile Views
+  useEffect(() => {
+    if (selectedProject) {
+      setDoc(doc(db, 'stats', 'global'), { profileVisits: increment(1) }, { merge: true }).catch(console.error);
+    }
+  }, [selectedProject]);
 
   // Kiosk Auto-Rotation Timer
   useEffect(() => {
@@ -832,9 +840,9 @@ function App() {
                                     <div className="winner-title-ultimate">
                                         {t[lang][`ceremony_step_13` as keyof typeof t['en']] as string}
                                     </div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8vh', marginTop: '10vh', width: '100%', maxWidth: '1400px', zIndex: 10, position: 'relative', gridColumn: '1 / -1', margin: '0 auto' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6vh', marginTop: '5vh', width: '100%', maxWidth: '1400px', zIndex: 10, position: 'relative', gridColumn: '1 / -1', margin: '0 auto' }}>
                                         
-                                        {/* Top point of the triangle */}
+                                        {/* Top point of the diamond */}
                                         <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1, duration: 1.5 }} style={{ textAlign: 'center' }}>
                                             <div style={{ fontSize: 'clamp(6rem, 12vh, 12rem)', color: '#FFD700', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 30px rgba(255,215,0,0.5)', lineHeight: 1 }}>
                                                 {globalVotes.toLocaleString()}
@@ -842,22 +850,30 @@ function App() {
                                             <div style={{ fontSize: 'clamp(1.5rem, 3vh, 2.5rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>TOTAL VOTES CAST</div>
                                         </motion.div>
 
-                                        {/* Bottom base of the triangle */}
+                                        {/* Middle row of the diamond */}
                                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '15vw', width: '100%' }}>
                                             <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 1.5 }} style={{ textAlign: 'center' }}>
                                                 <div style={{ fontSize: 'clamp(5rem, 10vh, 10rem)', color: '#fff', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 30px rgba(255,255,255,0.4)', lineHeight: 1 }}>
-                                                    {projects.length}
-                                                </div>
-                                                <div style={{ fontSize: 'clamp(1.2rem, 2.5vh, 2rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PROJECTS COMPETING</div>
-                                            </motion.div>
-                                            
-                                            <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2, duration: 1.5 }} style={{ textAlign: 'center' }}>
-                                                <div style={{ fontSize: 'clamp(5rem, 10vh, 10rem)', color: '#FFD700', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 15px rgba(255,215,0,0.4)', lineHeight: 1 }}>
                                                     {(globalVisits + Math.floor(globalVotes * 2.5)).toLocaleString()}
                                                 </div>
                                                 <div style={{ fontSize: 'clamp(1.2rem, 2.5vh, 2rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PLATFORM VISITS</div>
                                             </motion.div>
+                                            
+                                            <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2, duration: 1.5 }} style={{ textAlign: 'center' }}>
+                                                <div style={{ fontSize: 'clamp(5rem, 10vh, 10rem)', color: '#FFD700', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 15px rgba(255,215,0,0.4)', lineHeight: 1 }}>
+                                                    {(globalProfileVisits + Math.floor(globalVotes * 4.2)).toLocaleString()}
+                                                </div>
+                                                <div style={{ fontSize: 'clamp(1.2rem, 2.5vh, 2rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PROFILE VIEWS</div>
+                                            </motion.div>
                                         </div>
+
+                                        {/* Bottom point of the diamond */}
+                                        <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2.5, duration: 1.5 }} style={{ textAlign: 'center' }}>
+                                            <div style={{ fontSize: 'clamp(4rem, 8vh, 8rem)', color: '#fff', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 20px rgba(255,255,255,0.3)', lineHeight: 1 }}>
+                                                {projects.length}
+                                            </div>
+                                            <div style={{ fontSize: 'clamp(1rem, 2vh, 1.5rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PROJECTS COMPETING</div>
+                                        </motion.div>
                                         
                                     </div>
                                 </motion.div>
