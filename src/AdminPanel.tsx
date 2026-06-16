@@ -20,8 +20,8 @@ import {
   updateDoc
 } from './firebase';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogOut, Plus, Trash2, Trophy, Users, ShieldCheck, UserCog, Upload, Image as ImageIcon, Loader2, Download, Power, PowerOff, ArrowLeft, BarChart3, LayoutDashboard, AlertTriangle, ListChecks, CheckCircle2, X, RotateCcw, Search, Filter, Bomb, Eye, EyeOff, Play, Pause, SkipForward, Rewind, Megaphone, Repeat, Printer, Activity, Volume2 } from 'lucide-react';
-import { QRCodeCanvas } from 'qrcode.react';
+import { LogOut, Plus, Trash2, Trophy, Users, ShieldCheck, UserCog, Upload, Image as ImageIcon, Loader2, Download, Power, PowerOff, ArrowLeft, BarChart3, LayoutDashboard, AlertTriangle, ListChecks, X, RotateCcw, Search, Filter, Bomb, Eye, EyeOff, Play, SkipForward, Rewind, Megaphone, Repeat, Printer, Activity } from 'lucide-react';
+import QRCodeStyling from 'qr-code-styling';
 
 interface Project {
   id: string;
@@ -49,8 +49,8 @@ interface AdminPanelProps {
 
 export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   const [user, setUser] = useState<any>(null);
-  const [role, setRole] = useState<'master' | 'organizer' | null>(null);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'teams' | 'gallery' | 'stage'>('dashboard');
+  const [role, setRole] = useState<'master' | 'organizer' | 'media' | null>(null);
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'teams' | 'gallery' | 'stage' | 'media'>('dashboard');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -70,8 +70,9 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       tickerText: string;
       organizerNames: string;
       headOrganizerNames: string;
-      audioStatus: 'playing' | 'stopped';
-      activeAudio: string;
+      volunteerNames: string;
+      instructorNamesExtra: string;
+      ceremonySelection?: string[];
   }>({
       hideResults: false,
       victoryMode: false,
@@ -81,8 +82,9 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       tickerText: "",
       organizerNames: "",
       headOrganizerNames: "",
-      audioStatus: 'stopped',
-      activeAudio: 'none'
+      volunteerNames: "",
+      instructorNamesExtra: "",
+      ceremonySelection: ['', '', '', '', '']
   });
 
   const [newProject, setNewProject] = useState({
@@ -160,6 +162,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       tab_teams: "Teams Management",
       tab_gallery: "Gallery",
       tab_stage: "Stage Control",
+      tab_media: "Media Upload",
       th_members: "Team Members",
       th_section: "Section",
       th_team_id: "Team ID",
@@ -182,21 +185,31 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       ceremony_step_1: "Special Thanks - Uni",
       ceremony_step_2: "Special Thanks - Presidency",
       ceremony_step_3: "Special Thanks - Instructors",
-      ceremony_step_4: "Special Thanks - Organizers",
-      ceremony_step_5: "Organizers Roll Call",
-      ceremony_step_6: "Reveal 3rd Place",
-      ceremony_step_7: "Reveal 2nd Place",
-      ceremony_step_8: "THE GRAND CHAMPION",
+      ceremony_step_4: "Extra Instructors List",
+      ceremony_step_5: "Special Thanks - Organizers",
+      ceremony_step_6: "Head Organizers Roll Call",
+      ceremony_step_7: "Thanking Our Volunteers",
+      ceremony_step_8: "Volunteers Names",
+      ceremony_step_9: "Reveal 3rd Place",
+      ceremony_step_10: "Reveal 2nd Place",
+      ceremony_step_11: "THE GRAND CHAMPION",
       auto_rotate_on: "Auto-Rotate Active",
       auto_rotate_off: "Static Display",
       ticker_label: "Live News Ticker Announcement",
       ticker_placeholder: "Type a public announcement...",
+      inst_extra_label: "Extra Instructor Names (Comma separated)",
       head_org_names_label: "Head Organizers (e.g. John, Jane)",
       org_names_label: "Organizers Names (Comma separated)",
       org_names_placeholder: "John Doe, Jane Doe, etc...",
+      vol_names_label: "Volunteer Names (Comma separated)",
       print_placard: "Print",
       security_title: "Anti-Bot & Velocity Dashboard",
-      audio_soundboard: "Kiosk Audio Soundboard"
+      media_title: "Media Team Cloud Portal",
+      media_desc: "Capture and beam live event moments directly to the main expo screens.",
+      drop_images: "Drop your masterpieces here or click to browse",
+      files_selected: "Images ready for upload",
+      upload_to_cloud: "Beam to Cloud",
+      recent_uploads: "Your Recent Captures"
     },
     ar: {
       back: "العودة للمعرض",
@@ -252,6 +265,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       tab_teams: "إدارة الفرق",
       tab_gallery: "المعرض",
       tab_stage: "التحكم بالمسرح",
+      tab_media: "بوابة الفريق الإعلامي",
       th_members: "أعضاء الفريق",
       th_section: "الشعبة",
       th_team_id: "ID الفريق",
@@ -275,20 +289,29 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       ceremony_step_2: "شكر خاص - الرئاسة",
       ceremony_step_3: "شكر خاص - المشرفين",
       ceremony_step_4: "شكر خاص - المنظمين",
-      ceremony_step_5: "أسماء فريق التنظيم",
-      ceremony_step_6: "كشف المركز الثالث",
-      ceremony_step_7: "كشف المركز الثاني",
-      ceremony_step_8: "إعلان البطل الأول",
+      ceremony_step_5: "رؤساء اللجنة المنظمة",
+      ceremony_step_6: "تقدير خاص للمتطوعين",
+      ceremony_step_7: "فريق المتطوعين",
+      ceremony_step_8: "كشف المركز الثالث",
+      ceremony_step_9: "كشف المركز الثاني",
+      ceremony_step_10: "إعلان البطل الأول",
       auto_rotate_on: "التدوير التلقائي مفعّل",
       auto_rotate_off: "عرض ثابت",
       ticker_label: "شريط الأخبار المباشر",
       ticker_placeholder: "اكتب إعلاناً عاماً للجمهور...",
+      inst_extra_label: "أسماء المشرفين الإضافيين (مفصولين بفاصلة)",
       head_org_names_label: "رؤساء التنظيم (مثال: أحمد، سارة)",
       org_names_label: "أسماء المنظمين (مفصولين بفاصلة)",
       org_names_placeholder: "أحمد، سارة، إلخ...",
+      vol_names_label: "أسماء المتطوعين (مفصولين بفاصلة)",
       print_placard: "طباعة",
       security_title: "لوحة المراقبة والحماية من البوتات",
-      audio_soundboard: "لوحة المؤثرات الصوتية (المسرح)"
+      media_title: "بوابة الفريق الإعلامي السحابية",
+      media_desc: "التقط وابث لحظات المعرض المباشرة مباشرة إلى الشاشات الرئيسية.",
+      drop_images: "اسحب روائعك هنا أو اضغط للتصفح",
+      files_selected: "صور جاهزة للرفع",
+      upload_to_cloud: "بث إلى السحابة",
+      recent_uploads: "آخر اللقطات المرفوعة"
     }
   };
 
@@ -296,8 +319,9 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     const unsubAuth = auth.onAuthStateChanged((u) => {
       setUser(u);
       if (u) {
-        if (u.email === 'master@htu.local') setRole('master');
-        else if (u.email === 'organizer@htu.local') setRole('organizer');
+        if (u.email === 'master@htu.local') { setRole('master'); setActiveTab('dashboard'); }
+        else if (u.email === 'organizer@htu.local') { setRole('organizer'); setActiveTab('dashboard'); }
+        else if (u.email === 'media@htu.local') { setRole('media'); setActiveTab('media'); }
         else setRole(null);
       } else {
         setRole(null);
@@ -400,28 +424,6 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     } catch (e) {
         alert("Failed to toggle voting.");
     }
-  };
-
-  const activateArchiveMode = async () => {
-      if (role !== 'master') return;
-      const confirmation = window.prompt(t[lang].archive_prompt);
-      if (confirmation !== 'ARCHIVE') return;
-
-      setUploading(true);
-      try {
-          const batch = writeBatch(db);
-          // Bake results into public projects collection
-          results.forEach(r => {
-              batch.update(doc(db, 'projects', r.id), { finalVotes: r.votes });
-          });
-          batch.update(doc(db, 'config', 'voting'), { isOpen: false, archiveMode: true });
-          await batch.commit();
-          alert('Archive Mode Activated successfully.');
-      } catch (e: any) {
-          alert(`Archive failed: ${e.message}`);
-      } finally {
-          setUploading(false);
-      }
   };
 
   const updateKiosk = async (updates: Partial<typeof kioskConfig>) => {
@@ -606,6 +608,152 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       }
   };
 
+  const qrRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+      if (selectedPlacard && qrRef.current) {
+          qrRef.current.innerHTML = ''; // Clear previous
+          const qrCode = new QRCodeStyling({
+              width: 450,
+              height: 450,
+              data: `${window.location.origin}${window.location.pathname}?project=${selectedPlacard.id}`,
+              image: "favicon.png",
+              dotsOptions: {
+                  color: "#E8343F",
+                  type: "rounded"
+              },
+              cornersSquareOptions: {
+                  type: "extra-rounded",
+                  color: "#01060D"
+              },
+              cornersDotOptions: {
+                  type: "dot",
+                  color: "#E8343F"
+              },
+              backgroundOptions: {
+                  color: "transparent",
+              },
+              imageOptions: {
+                  crossOrigin: "anonymous",
+                  margin: 20
+              }
+          });
+          qrCode.append(qrRef.current);
+      }
+  }, [selectedPlacard]);
+
+  const downloadPlacardNative = async () => {
+    if (!selectedPlacard) return;
+    
+    // Create the QR Code blob natively
+    const qrCode = new QRCodeStyling({
+        width: 500,
+        height: 500,
+        data: `${window.location.origin}${window.location.pathname}?project=${selectedPlacard.id}`,
+        image: "favicon.png",
+        dotsOptions: { color: "#E8343F", type: "rounded" },
+        cornersSquareOptions: { type: "extra-rounded", color: "#01060D" },
+        cornersDotOptions: { type: "dot", color: "#E8343F" },
+        backgroundOptions: { color: "#FFFFFF" },
+        imageOptions: { crossOrigin: "anonymous", margin: 20 }
+    });
+
+    const qrBlob = await qrCode.getRawData("png");
+    if (!qrBlob) return;
+
+    const qrImage = new Image();
+    qrImage.src = URL.createObjectURL(qrBlob);
+    await new Promise((res) => { qrImage.onload = res; qrImage.onerror = res; });
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080;
+    canvas.height = 1920;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Background
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, 1080, 1920);
+
+    // Border
+    ctx.strokeStyle = '#E8343F';
+    ctx.lineWidth = 20;
+    ctx.strokeRect(40, 40, 1000, 1840);
+
+    // Header Logo
+    try {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = 'favicon.png';
+        await new Promise((res) => { img.onload = res; img.onerror = res; });
+        ctx.drawImage(img, 1080 / 2 - 100, 120, 200, 200);
+    } catch(e) {}
+
+    // Expo Badge
+    ctx.fillStyle = '#01060D';
+    ctx.font = 'bold 35px Montserrat, Tajawal, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('HTU ENGINEERING DESIGN EXPO 2026', 1080 / 2, 380);
+
+    // Title, Meta & Wrap Logic
+    const wrapText = (text: string, y: number, maxWidth: number, lineHeight: number) => {
+        const words = text.split(' ');
+        let line = '';
+        let currentY = y;
+        for (let n = 0; n < words.length; n++) {
+            const testLine = line + words[n] + ' ';
+            if (ctx.measureText(testLine).width > maxWidth && n > 0) {
+                ctx.fillText(line.trim(), 1080 / 2, currentY);
+                line = words[n] + ' ';
+                currentY += lineHeight;
+            } else {
+                line = testLine;
+            }
+        }
+        ctx.fillText(line.trim(), 1080 / 2, currentY);
+        return currentY + lineHeight;
+    };
+
+    // Clean up team members string for better wrapping (add space after commas)
+    const safeTeamMembers = selectedPlacard.team_members.replace(/,/g, ', ').replace(/\s+/g, ' ').trim();
+
+    // 1. Draw Title
+    ctx.fillStyle = '#E8343F';
+    ctx.font = '900 70px Montserrat, Tajawal, sans-serif';
+    let currentY = wrapText(selectedPlacard.title.toUpperCase(), 520, 900, 80);
+
+    // 2. Draw Team Members
+    currentY += 20;
+    ctx.fillStyle = '#222';
+    ctx.font = '700 45px Montserrat, Tajawal, sans-serif';
+    currentY = wrapText(safeTeamMembers, currentY, 900, 60);
+    
+    // 3. Draw Instructor
+    currentY += 10;
+    ctx.fillStyle = '#555';
+    ctx.font = '600 35px Montserrat, Tajawal, sans-serif';
+    currentY = wrapText(`Instructor: ${selectedPlacard.instructor}`, currentY, 900, 45);
+
+    // 4. Draw QR Code (Dynamic Y-Position based on text block height)
+    const qrStartY = Math.max(currentY + 50, 750); // Ensure minimal spacing, but keep it balanced
+    ctx.drawImage(qrImage, 1080 / 2 - 250, qrStartY, 500, 500);
+
+    // 5. Draw Scan Prompt
+    ctx.fillStyle = '#01060D';
+    ctx.font = '900 50px Montserrat, Tajawal, sans-serif';
+    ctx.fillText('SCAN TO VOTE FOR THIS TEAM', 1080 / 2, qrStartY + 580);
+
+    // 6. Draw Footer
+    ctx.fillStyle = '#888';
+    ctx.font = '800 24px Montserrat, Tajawal, sans-serif';
+    ctx.fillText('MADE BY NAJDAWI • POWERED BY HTU', 1080 / 2, 1820);
+
+    const link = document.createElement('a');
+    link.download = `HTU_Placard_${selectedPlacard.title.replace(/\s+/g, '_')}.png`;
+    link.href = canvas.toDataURL('image/png', 1.0);
+    link.click();
+  };
+
   const filteredAndSortedTeams = projects
     .filter(p => {
         const s = teamSearchTerm.toLowerCase().trim();
@@ -635,10 +783,10 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
           <div className="login-header-elite">
             <div className="security-icon-wrapper"><ShieldCheck size={60} color="#E8343F" className="pulsing-icon" /></div>
             <h2>{t[lang].login_title}</h2>
-            <p>{t[lang].authorized}</p>
+            <p>Master / Organizer / Media Access</p>
           </div>
           <form onSubmit={handleLogin} className="elite-form">
-            <div className="input-group-elite"><label>{t[lang].sys_user}</label><div className="input-wrapper"><UserCog size={20} className="field-icon" /><input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Master / Organizer" required /></div></div>
+            <div className="input-group-elite"><label>{t[lang].sys_user}</label><div className="input-wrapper"><UserCog size={20} className="field-icon" /><input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required /></div></div>
             <div className="input-group-elite"><label>{t[lang].sys_pass}</label><div className="input-wrapper"><BarChart3 size={20} className="field-icon" /><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required /></div></div>
             {error && <p className="error-text-elite"><AlertTriangle size={14} /> {error}</p>}
             <button type="submit" className="htu-button w-full login-btn-elite">{t[lang].init}</button>
@@ -654,7 +802,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       
       {selectedPlacard && (
           <div className="placard-overlay">
-              <div className="placard-preview elite-placard-v2">
+              <div id="placard-preview-node" className="placard-preview elite-placard-v2">
                   <div className="placard-header-premium">
                       <img src="favicon.png" alt="HTU Logo" className="placard-htu-logo-giant" />
                       <div className="placard-expo-badge">HTU ENGINEERING DESIGN EXPO 2026</div>
@@ -669,22 +817,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                   </div>
 
                   <div className="placard-qr-zone">
-                      <div className="qr-box-premium">
-                          <QRCodeCanvas 
-                            value={`${window.location.origin}${window.location.pathname}?project=${selectedPlacard.id}`} 
-                            size={450} 
-                            level="H" 
-                            includeMargin={false}
-                            imageSettings={{
-                                src: "favicon.png",
-                                x: undefined,
-                                y: undefined,
-                                height: 120,
-                                width: 120,
-                                excavate: true,
-                            }}
-                          />
-                      </div>
+                      <div className="qr-box-premium" ref={qrRef}></div>
                       <div className="placard-scan-prompt">
                           <span>SCAN TO VOTE FOR THIS TEAM</span>
                       </div>
@@ -695,7 +828,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                   </div>
               </div>
               <div className="placard-controls">
-                  <button className="htu-button print-action-btn" onClick={() => window.print()}><Printer size={20}/> Send to Printer</button>
+                  <button className="htu-button print-action-btn" onClick={downloadPlacardNative}><Download size={20}/> Save as PNG</button>
                   <button className="htu-button outline-btn placard-close" onClick={() => setSelectedPlacard(null)}>Exit Preview</button>
               </div>
           </div>
@@ -706,14 +839,21 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
             <button className="back-btn-elite" onClick={onBack}><ArrowLeft size={18} className={lang === 'ar' ? 'rotate-180' : ''} /> {t[lang].back}</button>
             <div className="lang-toggle-container admin-lang-fix">
                 <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>EN</button>
-                <button className={`lang-btn ${lang === 'ar' ? 'active' : ''}`} onClick={() => setLang('ar')}>AR</button>
+                <button className={`lang-btn ${lang === 'ar' ? 'active' : ''}`} onClick={() => setLang('ar')}>العربية</button>
             </div>
-            <div className="role-badge"><div className={`status-dot ${role === 'master' ? 'master-dot' : 'organizer-dot'}`} /><span>{t[lang].sys} <strong>{role.toUpperCase()}</strong></span></div>
+            <div className="role-badge"><div className={`status-dot ${role === 'master' ? 'master-dot' : role === 'organizer' ? 'organizer-dot' : 'media-dot'}`} /><span>{t[lang].sys} <strong>{role.toUpperCase()}</strong></span></div>
         </div>
         <div className="admin-tabs">
-            <button className={`admin-tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}><LayoutDashboard size={18} /><span>{t[lang].tab_dashboard}</span></button>
-            <button className={`admin-tab-btn ${activeTab === 'teams' ? 'active' : ''}`} onClick={() => setActiveTab('teams')}><ListChecks size={18} /><span>{t[lang].tab_teams}</span></button>
-            <button className={`admin-tab-btn ${activeTab === 'gallery' ? 'active' : ''}`} onClick={() => setActiveTab('gallery')}><ImageIcon size={18} /><span>{t[lang].tab_gallery}</span></button>
+            {role !== 'media' && (
+                <>
+                    <button className={`admin-tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}><LayoutDashboard size={18} /><span>{t[lang].tab_dashboard}</span></button>
+                    <button className={`admin-tab-btn ${activeTab === 'teams' ? 'active' : ''}`} onClick={() => setActiveTab('teams')}><ListChecks size={18} /><span>{t[lang].tab_teams}</span></button>
+                    <button className={`admin-tab-btn ${activeTab === 'gallery' ? 'active' : ''}`} onClick={() => setActiveTab('gallery')}><ImageIcon size={18} /><span>{t[lang].tab_gallery}</span></button>
+                </>
+            )}
+            {role === 'media' && (
+                <button className={`admin-tab-btn active`} onClick={() => setActiveTab('media')}><ImageIcon size={18} /><span>{t[lang].tab_media}</span></button>
+            )}
             {role === 'master' && <button className={`admin-tab-btn ${activeTab === 'stage' ? 'active' : ''}`} onClick={() => setActiveTab('stage')}><Play size={18} /><span>{t[lang].tab_stage}</span></button>}
         </div>
         <div className="nav-right">
@@ -792,10 +932,6 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
             {role === 'master' && (
               <>
                 <section className="danger-zone-elite">
-                    <div className="danger-content"><AlertTriangle size={30} /><div className="text"><h3>{t[lang].archive_mode}</h3><p>{t[lang].archive_desc}</p></div></div>
-                    <button onClick={activateArchiveMode} className="htu-button reset-btn-elite" disabled={uploading} style={{ background: '#f59e0b' }}>{uploading ? <Loader2 className="animate-spin" size={20} /> : t[lang].archive_btn}</button>
-                </section>
-                <section className="danger-zone-elite">
                     <div className="danger-content"><AlertTriangle size={30} /><div className="text"><h3>{t[lang].critical}</h3><p>{t[lang].critical_desc}</p></div></div>
                     <button onClick={handleResetData} className="htu-button reset-btn-elite" disabled={uploading}>{uploading ? <Loader2 className="animate-spin" size={20} /> : t[lang].purge}</button>
                 </section>
@@ -842,17 +978,19 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                                           </div>
                                       </td>
                                       <td className="text-right">
-                                          <div className="verification-actions">
-                                              <button onClick={() => handleUpdateStatus(p.id, 'verified')} className={`verify-btn ${p.status === 'verified' ? 'active' : ''}`}><CheckCircle2 size={18} /></button>
-                                              <button onClick={() => handleUpdateStatus(p.id, 'rejected')} className={`reject-btn ${p.status === 'rejected' ? 'active' : ''}`}><X size={18} /></button>
-                                              <button onClick={() => handleUpdateStatus(p.id, 'none')} className="reset-status-btn"><RotateCcw size={14} /></button>
-                                              {role === 'master' && (
-                                                <button onClick={() => handleDeleteProject(p.id)} className="elite-delete-btn" style={{ marginLeft: '10px' }}><Trash2 size={18} /></button>
-                                              )}
-                                              {role === 'master' && (
-                                                <label className="action-pill-btn" style={{ marginLeft: '10px' }}><Upload size={14} /><span>{t[lang].update}</span><input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleUpdateImage(p.id, f); }} className="hidden-file-input" /></label>
-                                              )}
-                                          </div>
+                                              <div className="admin-project-actions">
+                                                <button onClick={() => handleUpdateStatus(p.id, 'verified')} className={`verify-btn ${p.status === 'verified' ? 'active' : ''}`} title="Verify"><ShieldCheck size={16} /></button>
+                                                <button onClick={() => handleUpdateStatus(p.id, 'rejected')} className={`reject-btn ${p.status === 'rejected' ? 'active' : ''}`} title="Reject"><X size={16} /></button>
+                                                <button onClick={() => handleUpdateStatus(p.id, 'none')} className="reset-status-btn" title="Reset Status"><RotateCcw size={14} /></button>
+                                                <label className="action-pill-btn photo-upload-pill">
+                                                    <Upload size={14} />
+                                                    <span>{t[lang].update}</span>
+                                                    <input type="file" accept="image/*" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleUpdateImage(p.id, f); }} className="hidden-file-input" />
+                                                </label>
+                                                {role === 'master' && (
+                                                    <button onClick={() => handleDeleteProject(p.id)} className="elite-delete-btn" title="Delete Project"><Trash2 size={18} /></button>
+                                                )}
+                                              </div>
                                       </td>
                                   </tr>
                               ))}
@@ -884,29 +1022,6 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                             </button>
                         </div>
                         
-                        {/* Audio Soundboard */}
-                        <div className="stage-control-item glass-card" style={{ gridColumn: 'span 2' }}>
-                            <div className="item-label"><Volume2 size={20} color="#FFD700" /> <span>{t[lang].audio_soundboard}</span></div>
-                            <div className="soundboard-grid">
-                                {['drumroll', 'heartbeat', 'applause', 'swoosh'].map(effect => (
-                                    <button 
-                                        key={effect}
-                                        className={`sound-btn ${kioskConfig.activeAudio === effect ? 'active-audio' : ''}`} 
-                                        onClick={() => updateKiosk({ activeAudio: effect })}
-                                    >
-                                        {effect === 'drumroll' && '🥁 Drumroll'}
-                                        {effect === 'heartbeat' && '💓 Heartbeat'}
-                                        {effect === 'applause' && '👏 Applause'}
-                                        {effect === 'swoosh' && '💨 Swoosh'}
-                                    </button>
-                                ))}
-                            </div>
-                            <div className="audio-controls-row">
-                                <button className="audio-play-btn" onClick={() => updateKiosk({ audioStatus: 'playing' })}><Play size={20}/> Play Loop</button>
-                                <button className="audio-stop-btn" onClick={() => updateKiosk({ audioStatus: 'stopped' })}><X size={20}/> Stop Sound</button>
-                            </div>
-                        </div>
-
                         <div className="stage-control-item glass-card" style={{ gridColumn: 'span 2' }}>
                             <div className="item-label"><Megaphone size={20} /> <span>{t[lang].ticker_label}</span></div>
                             <div className="ticker-input-wrapper">
@@ -920,18 +1035,48 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                             <div className="ticker-input-wrapper"><input type="text" placeholder={t[lang].org_names_placeholder} value={kioskConfig.headOrganizerNames || ""} onChange={(e) => updateKiosk({ headOrganizerNames: e.target.value })} className="ticker-admin-input" /></div>
                             <div className="item-label" style={{ marginTop: '15px' }}><Users size={20} /> <span>{t[lang].org_names_label}</span></div>
                             <div className="ticker-input-wrapper"><input type="text" placeholder={t[lang].org_names_placeholder} value={kioskConfig.organizerNames || ""} onChange={(e) => updateKiosk({ organizerNames: e.target.value })} className="ticker-admin-input" /></div>
+                            <div className="item-label" style={{ marginTop: '15px' }}><Users size={20} /> <span>{t[lang].inst_extra_label}</span></div>
+                            <div className="ticker-input-wrapper"><input type="text" placeholder={t[lang].org_names_placeholder} value={kioskConfig.instructorNamesExtra || ""} onChange={(e) => updateKiosk({ instructorNamesExtra: e.target.value })} className="ticker-admin-input" /></div>
+                            <div className="item-label" style={{ marginTop: '15px' }}><Users size={20} /> <span>{t[lang].vol_names_label}</span></div>
+                            <div className="ticker-input-wrapper"><input type="text" placeholder={t[lang].org_names_placeholder} value={kioskConfig.volunteerNames || ""} onChange={(e) => updateKiosk({ volunteerNames: e.target.value })} className="ticker-admin-input" /></div>
                         </div>
 
                         <div className="stage-control-item glass-card" style={{ gridColumn: 'span 2' }}>
+                            <div className="item-label"><Trophy size={20} color="#FFD700" /> <span>Ceremony Winner Selection</span></div>
+                            <div className="ceremony-selection-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginTop: '15px' }}>
+                                {[0, 1, 2, 3, 4].map(idx => (
+                                    <div key={idx}>
+                                        <label style={{ fontSize: '0.7rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', marginBottom: '5px', display: 'block' }}>
+                                            {idx === 0 ? '1st Place (Champion)' : idx === 1 ? '2nd Place' : idx === 2 ? '3rd Place' : idx === 3 ? '4th Place' : '5th Place (Fan Fav)'}
+                                        </label>
+                                        <select
+                                            value={(kioskConfig.ceremonySelection || [])[idx] || ""}
+                                            onChange={(e) => {
+                                                const current = [...(kioskConfig.ceremonySelection || ['', '', '', '', ''])];
+                                                current[idx] = e.target.value;
+                                                updateKiosk({ ceremonySelection: current });
+                                            }}
+                                            className="ticker-admin-input"
+                                            style={{ fontSize: '0.8rem', padding: '12px' }}
+                                        >
+                                            <option value="">-- Select --</option>
+                                            {projects.map(p => <option key={p.id} value={p.id}>{p.title}</option>)}
+                                        </select>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="stage-control-item glass-card" style={{ gridColumn: 'span 2' }}>        
                             <div className="item-label"><Trophy size={20} color="#FFD700" /> <span>Victory Reveal Mode</span></div>
-                            <button onClick={() => updateKiosk({ victoryMode: !kioskConfig.victoryMode, revealStep: 0, isPaused: true })} className={`stage-btn ${kioskConfig.victoryMode ? 'btn-active-glow' : ''} w-full`}>
+                            <button onClick={() => updateKiosk({ victoryMode: !kioskConfig.victoryMode, revealStep: 0, isPaused: true })} className={`stage-btn ${kioskConfig.victoryMode ? 'btn-active-glow' : ''} w-full`}>   
                                 {kioskConfig.victoryMode ? <X size={20} /> : <Play size={20} />}
                                 <span>{kioskConfig.victoryMode ? t[lang].victory_stop : t[lang].victory_start}</span>
                             </button>
                         </div>
-                    </div>
+                        </div>
 
-                    {kioskConfig.victoryMode && (
+                        {kioskConfig.victoryMode && (
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="ceremony-orchestrator glass-card mt-8">
                             <div className="ceremony-status" style={{ marginBottom: '20px' }}>
                                 <span className="status-label">Live Scene:</span>
@@ -939,8 +1084,8 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                             </div>
 
                             <div className="scene-selector-grid">
-                                {[0, 1, 2, 3, 4, 5, 6, 7, 8].map(step => (
-                                    <button key={step} onClick={() => updateKiosk({ revealStep: step, isPaused: true })} className={`scene-btn ${kioskConfig.revealStep === step ? 'active' : ''}`}>
+                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(step => (
+                                    <button key={step} onClick={() => updateKiosk({ revealStep: step, isPaused: false })} className={`scene-btn ${kioskConfig.revealStep === step ? 'active' : ''}`}>
                                         <div className="scene-number">{step}</div>
                                         <div className="scene-name">{t[lang][`ceremony_step_${step}` as keyof typeof t['ar']] as string}</div>
                                     </button>
@@ -948,13 +1093,12 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                             </div>
 
                             <div className="ceremony-actions" style={{ marginTop: '20px' }}>
-                                <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.max(0, kioskConfig.revealStep - 1), isPaused: true })}><Rewind size={24} /></button>
-                                <button className="stage-play-pause-btn" onClick={() => updateKiosk({ isPaused: !kioskConfig.isPaused })}>{kioskConfig.isPaused ? <Play size={32} /> : <Pause size={32} />}</button>
-                                <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.min(8, kioskConfig.revealStep + 1), isPaused: true })}><SkipForward size={24} /></button>
+                                <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.max(0, kioskConfig.revealStep - 1), isPaused: false })}><Rewind size={24} /></button>
+                                <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.min(13, kioskConfig.revealStep + 1), isPaused: false })}><SkipForward size={24} /></button>
                                 <button className="stage-reset-btn" onClick={() => updateKiosk({ revealStep: 0, isPaused: true })}><RotateCcw size={20} /> <span>{t[lang].reveal_reset}</span></button>
                             </div>
                         </motion.div>
-                    )}
+                        )}
                 </div>
             </motion.div>
         )}
@@ -976,6 +1120,81 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
               </div>
             </section>
           </motion.div>
+        )}
+
+        {activeTab === 'media' && (
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="media-portal-container">
+                <div className="glass-card elite-admin-card" style={{ textAlign: 'center', maxWidth: '1000px', margin: '0 auto' }}>
+                    <div className="card-header-elite" style={{ justifyContent: 'center', border: 'none' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }}>
+                            <div className="security-icon-wrapper" style={{ margin: 0 }}><ImageIcon size={40} color="#E8343F" className="pulsing-icon" /></div>
+                            <h2 style={{ fontSize: '2.5rem', fontWeight: 1000 }}>{t[lang].media_title}</h2>
+                            <p style={{ opacity: 0.6, fontSize: '1.1rem', letterSpacing: '1px' }}>{t[lang].media_desc}</p>
+                        </div>
+                    </div>
+
+                    <div style={{ marginTop: '50px' }}>
+                        <label className="file-label-elite" style={{ padding: '80px 40px', border: '3px dashed rgba(232, 52, 63, 0.3)', borderRadius: '40px', background: 'rgba(232, 52, 63, 0.03)', transition: '0.5s' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+                                <Upload size={60} color="#E8343F" />
+                                <span style={{ fontSize: '1.4rem', color: '#fff' }}>{t[lang].drop_images}</span>
+                                {selectedGalleryImages && selectedGalleryImages.length > 0 && (
+                                    <div style={{ background: '#10b981', color: '#fff', padding: '10px 25px', borderRadius: '50px', fontWeight: 900 }}>
+                                        {selectedGalleryImages.length} {t[lang].files_selected}
+                                    </div>
+                                )}
+                            </div>
+                            <input type="file" accept="image/*" multiple onChange={e => setSelectedGalleryImages(e.target.files)} className="hidden-file-input" />
+                        </label>
+
+                        <button 
+                            className="htu-button w-full" 
+                            style={{ marginTop: '30px', padding: '30px', fontSize: '1.5rem', borderRadius: '24px', letterSpacing: '4px' }}
+                            onClick={handleUploadGalleryImage} 
+                            disabled={!selectedGalleryImages || uploadingGallery}
+                        >
+                            {uploadingGallery ? (
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+                                    <Loader2 className="animate-spin" size={30} />
+                                    <span>BEAMING...</span>
+                                </div>
+                            ) : (
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+                                    <Megaphone size={30} />
+                                    <span>{t[lang].upload_to_cloud}</span>
+                                </div>
+                            )}
+                        </button>
+                    </div>
+
+                    <div style={{ marginTop: '80px', textAlign: 'left' }}>
+                        <h3 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '30px', textTransform: 'uppercase', letterSpacing: '2px', color: 'rgba(255,255,255,0.4)' }}>
+                            {t[lang].recent_uploads}
+                        </h3>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '20px' }}>
+                            <AnimatePresence>
+                                {galleryImages.slice(0, 10).map((img, i) => (
+                                    <motion.div 
+                                        key={img.id} 
+                                        initial={{ opacity: 0, scale: 0.8 }} 
+                                        animate={{ opacity: 1, scale: 1 }} 
+                                        transition={{ delay: i * 0.1 }}
+                                        style={{ aspectRatio: '1', borderRadius: '20px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', position: 'relative' }}
+                                    >
+                                        <img src={img.imageUrl} alt="Recent" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        <button 
+                                            onClick={() => handleDeleteGalleryImage(img.id)}
+                                            style={{ position: 'absolute', top: '10px', right: '10px', background: 'rgba(239, 68, 68, 0.8)', border: 'none', color: '#fff', width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        >
+                                            <Trash2 size={14} />
+                                        </button>
+                                    </motion.div>
+                                ))}
+                            </AnimatePresence>
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
         )}
       </main>
       <footer className="admin-footer-elite"><p>&copy; 2026 Al-Hussein Technical University.</p><p className="credits">{t[lang].footer_text}</p></footer>
