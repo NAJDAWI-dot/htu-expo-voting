@@ -783,7 +783,7 @@ function App() {
                                             </motion.div>
 
                                             <div className="winner-details-ultimate">
-                                                <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 0.2 }} transition={{ delay: 1.2, duration: 1.5 }} className="winner-rank-hologram">
+                                                <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 0.6 }} transition={{ delay: 1.2, duration: 1.5 }} className="winner-rank-hologram">
                                                     {kioskConfig.revealStep === 13 ? (
                                                         <span style={{ fontSize: '0.4em', whiteSpace: 'nowrap' }}>FAN FAV</span>
                                                     ) : (
@@ -791,7 +791,7 @@ function App() {
                                                     )}
                                                 </motion.div>
                                                 <motion.h3 initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 1.5 }} className="winner-name-ultimate">{revealProjects[kioskConfig.revealStep === 13 ? 4 : 12 - kioskConfig.revealStep]?.title}</motion.h3>
-                                                <motion.p initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 0.4 }} transition={{ delay: 1.8, duration: 1.5 }} className="winner-instructor-ultimate">{revealProjects[kioskConfig.revealStep === 13 ? 4 : 12 - kioskConfig.revealStep]?.team_members}</motion.p>
+                                                <motion.p initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 0.9 }} transition={{ delay: 1.8, duration: 1.5 }} className="winner-instructor-ultimate">{revealProjects[kioskConfig.revealStep === 13 ? 4 : 12 - kioskConfig.revealStep]?.team_members}</motion.p>
 
                                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5, duration: 1.5 }} className="winner-votes-ultimate">
                                                     <strong>{kioskConfig.revealStep === 13 ? 'FAN FAV PROJECT' : 'JUDGING AWARD'}</strong>
