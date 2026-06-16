@@ -505,7 +505,7 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
   animation: shimmer-gold 5s linear infinite;
   text-align: center;
 }
-.instructor-title-huge {
+.title-huge {
   font-size: clamp(3rem, 7.5vh, 6rem) !important;
   top: 5vh !important;
 }
@@ -599,10 +599,11 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .volunteer-grid-fixed {
   display: flex; flex-wrap: wrap; gap: 35px 55px; justify-content: center;
   max-width: 1600px; padding: 0 50px;
+  margin-top: 18vh; /* Keeps grid clear of the massive title */
 }
 .volunteer-name-elegant {
   font-family: 'DM Sans', 'Montserrat', sans-serif;
-  font-size: clamp(1.2rem, 2.3vh, 2.4rem);
+  font-size: clamp(1.6rem, 3.2vh, 3.4rem);
   font-weight: 400;
   color: rgba(255, 255, 255, 0.65);
   letter-spacing: 0.2em;
