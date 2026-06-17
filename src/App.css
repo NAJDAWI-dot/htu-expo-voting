@@ -151,6 +151,18 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .voted-overlay { position: absolute; top: 25px; right: 25px; background: #10b981; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 20; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.4); }      
 .card-content { padding: 35px 35px 15px; display: flex; flex-direction: column; flex: 0 0 auto; z-index: 10; position: relative; }
 .card-footer { padding: 0 35px 35px; flex: 0 0 auto; z-index: 10; position: relative; }
+.danger-content .text h3 { margin: 0 0 5px 0; color: white; font-size: 1.1rem; }
+.danger-content .text p { margin: 0; color: rgba(255,255,255,0.6); font-size: 0.85rem; }
+.reset-btn-elite { background: var(--htu-red); width: auto; padding: 10px 20px; font-size: 0.9rem; }
+
+/* --- ARCHIVE SECTION --- */
+.archive-section { border-color: rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.05); }
+.archive-active { border-color: #FFD700; background: rgba(255, 215, 0, 0.1); box-shadow: 0 0 30px rgba(255, 215, 0, 0.2); }
+.archive-btn { background: rgba(255, 215, 0, 0.2); color: #FFD700; border: 1px solid rgba(255, 215, 0, 0.5); width: auto; padding: 10px 20px; font-size: 0.9rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+.archive-btn:hover { background: rgba(255, 215, 0, 0.4); }
+.active-archive-btn { background: #FFD700; color: #000; font-weight: bold; border: 1px solid #FFD700; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); width: auto; padding: 10px 20px; font-size: 0.9rem; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+
+/* --- ARCHIVE BANNER --- */
 .team-info { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.6); font-weight: 600; font-size: 0.9rem; margin-top: 10px; }
 
 .htu-button { background: var(--htu-red); color: white; border: none; padding: 16px 32px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background 0.2s ease-out; text-transform: uppercase; width: 100%; }

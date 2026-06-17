@@ -538,6 +538,26 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     }
   };
 
+  const handleArchiveMode = async () => {
+    if (role !== 'master') return;
+    if (!archiveMode) {
+      const confirmText = prompt(t[lang].archive_prompt);
+      if (confirmText !== 'ARCHIVE') return;
+    }
+    
+    setUploading(true);
+    try {
+      await setDoc(doc(db, 'config', 'voting'), { 
+         isOpen: false,
+         archiveMode: !archiveMode 
+      }, { merge: true });
+    } catch (e) {
+      console.error(e);
+      alert("Failed to toggle Archive Mode.");
+    }
+    setUploading(false);
+  };
+
   const updateKiosk = async (updates: Partial<typeof kioskConfig>) => {
       if (role !== 'master') return;
       try {
@@ -1099,6 +1119,18 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                 <section className="danger-zone-elite hard-reset-section" style={{ borderStyle: 'dashed', borderColor: '#ff0000' }}>
                     <div className="danger-content"><Bomb size={30} /><div className="text"><h3>{t[lang].hard_reset}</h3><p>{t[lang].hard_reset_desc}</p></div></div>
                     <button onClick={handleHardReset} className="htu-button reset-btn-elite" disabled={uploading} style={{ background: '#000' }}>{uploading ? <Loader2 className="animate-spin" size={20} /> : t[lang].hard_reset_btn}</button>
+                </section>
+                <section className={`danger-zone-elite archive-section ${archiveMode ? 'archive-active' : ''}`}>
+                    <div className="danger-content">
+                        <Printer size={30} className={archiveMode ? "pulsing-icon" : ""} color={archiveMode ? "#FFD700" : "white"} />
+                        <div className="text">
+                            <h3>{t[lang].archive_mode}</h3>
+                            <p>{t[lang].archive_desc}</p>
+                        </div>
+                    </div>
+                    <button onClick={handleArchiveMode} className={`htu-button ${archiveMode ? 'active-archive-btn' : 'archive-btn'}`} disabled={uploading}>
+                        {uploading ? <Loader2 className="animate-spin" size={20} /> : (archiveMode ? "Deactivate Archive" : t[lang].archive_btn)}
+                    </button>
                 </section>
               </>
             )}
