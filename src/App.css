@@ -1501,3 +1501,25 @@ footer { padding: 80px 0; text-align: center; border-top: 1px solid var(--glass-
 .runner-title-group { flex: 1; display: flex; flex-direction: column; text-align: left; }
 .runner-title-group strong { font-family: 'Crimson Text', serif; font-size: 1.3rem; color: white; }
 .runner-votes-badge { padding: 5px 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); font-size: 0.75rem; font-weight: 800; }
+
+/* --- ARCHIVE CONTROL STANDALONE PAGE --- */
+.archive-control-standalone { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; padding: 40px 20px; z-index: 10; font-family: 'Inter', sans-serif; }
+.archive-admin-card { background: rgba(10, 15, 25, 0.85); backdrop-filter: blur(25px); border: 1px solid rgba(255,215,0,0.2); border-radius: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 0 40px rgba(255,215,0,0.05); overflow: hidden; position: relative; }
+.archive-admin-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, #FFD700, transparent); }
+.archive-admin-card h1 { font-family: 'Crimson Text', serif; font-size: 2.8rem; color: #FFD700; margin-bottom: 10px; text-shadow: 0 0 20px rgba(255,215,0,0.3); text-align: center; }
+.archive-admin-card p { color: rgba(255,255,255,0.7); text-align: center; font-size: 1.1rem; margin-bottom: 30px; }
+.archive-status-indicator { display: inline-block; padding: 10px 25px; border-radius: 30px; font-weight: 800; letter-spacing: 2px; font-size: 0.9rem; margin: 0 auto 30px; }
+.archive-status-indicator.active { background: rgba(255,215,0,0.15); color: #FFD700; border: 1px solid rgba(255,215,0,0.5); box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+.archive-status-indicator.idle { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1); }
+.archive-select-row { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.02); border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; }
+.archive-select-row:hover { background: rgba(255,215,0,0.05); border-color: rgba(255,215,0,0.2); transform: translateX(5px); }
+.archive-rank-label { width: 140px; font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+.archive-rank-label.gold { color: #FFD700; }
+.archive-rank-label.silver { color: #E2E8F0; }
+.archive-rank-label.bronze { color: #FDBA74; }
+.archive-select-input { flex: 1; padding: 15px 20px; border-radius: 12px; background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.1); outline: none; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; appearance: none; }
+.archive-select-input:focus { border-color: #FFD700; box-shadow: 0 0 15px rgba(255,215,0,0.2); }
+.outline-btn { background: transparent !important; border: 2px solid #FFD700 !important; color: #FFD700 !important; }
+.outline-btn:hover { background: rgba(255,215,0,0.1) !important; }
+.back-to-site-inline { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: color 0.3s ease; display: block; margin: 0 auto; text-transform: uppercase; letter-spacing: 1px; }
+.back-to-site-inline:hover { color: white; }

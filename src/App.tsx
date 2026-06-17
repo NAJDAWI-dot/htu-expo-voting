@@ -1047,35 +1047,42 @@ function App() {
     return (
         <div className="archive-control-standalone">
             <div className="background-wrapper"><div className="bg-grid" /><div className="bg-mesh" /></div>        
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="glass-card archive-admin-card" style={{ maxWidth: '800px', padding: '60px' }}>
-                <ShieldCheck size={64} color="#FFD700" className="mb-6 mx-auto" style={{ display: 'block', margin: '0 auto 20px' }} />
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="archive-admin-card" style={{ maxWidth: '800px', margin: '0 auto', padding: '50px', width: '100%' }}>
+                <ShieldCheck size={64} color="#FFD700" className="mx-auto" style={{ display: 'block', margin: '0 auto 20px' }} />
                 <h1>Archive Control Center</h1>
                 <p>Configure and toggle the HTU Expo 2026 Hall of Fame.</p>
-                <div className={`archive-status-indicator ${archiveMode ? 'active' : 'idle'}`}>
-                    {archiveMode ? 'SYSTEM ARCHIVED' : 'SYSTEM LIVE'}
+                <div style={{ textAlign: 'center' }}>
+                    <div className={`archive-status-indicator ${archiveMode ? 'active' : 'idle'}`}>
+                        {archiveMode ? 'SYSTEM ARCHIVED' : 'SYSTEM LIVE'}
+                    </div>
                 </div>
 
-                <div className="hof-selection-container" style={{ margin: '30px 0', textAlign: 'left', background: 'rgba(0,0,0,0.3)', padding: '30px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <h3 style={{ color: 'white', marginBottom: '20px', fontSize: '1.2rem', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '2px' }}>Set Top 5 Projects</h3>
-                    {[0, 1, 2, 3, 4].map(idx => (
-                        <div key={idx} style={{ marginBottom: '15px' }}>
-                            <label style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem', display: 'block', marginBottom: '8px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                                {idx === 0 ? '1st Place (Judging)' : idx === 1 ? '2nd Place (Judging)' : idx === 2 ? '3rd Place (Judging)' : idx === 3 ? '4th Place (Judging)' : '5th Place (Fan Fav)'}
-                            </label>
-                            <select
-                                value={hofSelection[idx] || ''}
-                                onChange={(e) => {
-                                    const newSelection = [...hofSelection];
-                                    newSelection[idx] = e.target.value;
-                                    setHofSelection(newSelection);
-                                }}
-                                style={{ width: '100%', padding: '15px 20px', borderRadius: '16px', background: 'rgba(0,0,0,0.6)', color: 'white', border: '1px solid rgba(255,255,255,0.1)', outline: 'none', fontSize: '1rem', fontWeight: 600, cursor: 'pointer' }}
-                            >
-                                <option value="" style={{ color: '#888' }}>-- Select Project --</option>
-                                {projects.map(p => <option key={p.id} value={p.id}>{p.title} ({p.instructor})</option>)}
-                            </select>
-                        </div>
-                    ))}
+                <div className="hof-selection-container" style={{ margin: '30px 0', textAlign: 'left', background: 'rgba(0,0,0,0.4)', padding: '30px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <h3 style={{ color: 'white', marginBottom: '25px', fontSize: '1.2rem', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '2px' }}>Set Top 5 Projects</h3>
+                    {[0, 1, 2, 3, 4].map(idx => {
+                        const isGold = idx === 0;
+                        const isSilver = idx === 1;
+                        const isBronze = idx === 2;
+                        return (
+                            <div key={idx} className="archive-select-row">
+                                <div className={`archive-rank-label ${isGold ? 'gold' : isSilver ? 'silver' : isBronze ? 'bronze' : ''}`}>
+                                    {idx === 0 ? '1st Place (Champion)' : idx === 1 ? '2nd Place' : idx === 2 ? '3rd Place' : idx === 3 ? '4th Place' : '5th Place (Fan Fav)'}
+                                </div>
+                                <select
+                                    value={hofSelection[idx] || ''}
+                                    onChange={(e) => {
+                                        const newSelection = [...hofSelection];
+                                        newSelection[idx] = e.target.value;
+                                        setHofSelection(newSelection);
+                                    }}
+                                    className="archive-select-input"
+                                >
+                                    <option value="" style={{ color: '#888' }}>-- Select Project --</option>
+                                    {projects.map(p => <option key={p.id} value={p.id}>{p.title} ({p.instructor})</option>)}
+                                </select>
+                            </div>
+                        );
+                    })}
                 </div>
 
                 <button
@@ -1085,6 +1092,8 @@ function App() {
                         if (confirmation) {
                             const votingRef = doc(db, 'config', 'voting');
                             await setDoc(votingRef, { archiveMode: !archiveMode, isOpen: archiveMode, hofSelection }, { merge: true });
+                            // Also sync to kiosk for backward compatibility if needed
+                            await setDoc(doc(db, 'config', 'kiosk'), { hofSelection }, { merge: true });
                         }
                     }}
                 >
