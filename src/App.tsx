@@ -1090,10 +1090,17 @@ function App() {
                     onClick={async () => {
                         const confirmation = window.confirm("Save configuration and Toggle Archive Mode?");
                         if (confirmation) {
-                            const votingRef = doc(db, 'config', 'voting');
-                            await setDoc(votingRef, { archiveMode: !archiveMode, isOpen: archiveMode, hofSelection }, { merge: true });
-                            // Also sync to kiosk for backward compatibility if needed
-                            await setDoc(doc(db, 'config', 'kiosk'), { hofSelection }, { merge: true });
+                            try {
+                                const cleanHof = [0, 1, 2, 3, 4].map(i => hofSelection[i] || '');
+                                const votingRef = doc(db, 'config', 'voting');
+                                await setDoc(votingRef, { archiveMode: !archiveMode, isOpen: archiveMode, hofSelection: cleanHof }, { merge: true });
+                                // Also sync to kiosk for backward compatibility if needed
+                                await setDoc(doc(db, 'config', 'kiosk'), { hofSelection: cleanHof }, { merge: true });
+                                alert(`Success: Archive Mode has been ${!archiveMode ? 'Activated' : 'Disabled'}!`);
+                            } catch (e: any) {
+                                console.error(e);
+                                alert("Failed to save: " + e.message);
+                            }
                         }
                     }}
                 >
