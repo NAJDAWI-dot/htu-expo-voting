@@ -1194,11 +1194,12 @@ function App() {
                         {hofProjects[1] && (
                             <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4, type: "spring", damping: 15 }} className="podium-item rank-2" onClick={() => setSelectedProject(hofProjects[1]!)}>
                                 <div className="podium-rank-label white-text">2ND PLACE - SILVER</div>
-                                <div className="podium-card-elite cinematic-poster">
+                                <div className="podium-card-elite">
                                     <div className="podium-badge silver">JUDGING AWARD</div>
-                                    <img src={hofProjects[1].imageUrl} alt="2nd" className="cinematic-bg-img" />
-                                    <div className="cinematic-gradient-overlay" />
-                                    <div className="podium-info cinematic-info">
+                                    <div className="podium-landscape-img">
+                                        <img src={hofProjects[1].imageUrl} alt="2nd" />
+                                    </div>
+                                    <div className="podium-info">
                                         <h3>{hofProjects[1].title}</h3>
                                         <p>{hofProjects[1].team_members}</p>
                                     </div>
@@ -1211,11 +1212,12 @@ function App() {
                         {hofProjects[0] && (
                             <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2, type: "spring", damping: 12 }} className="podium-item rank-1" onClick={() => setSelectedProject(hofProjects[0]!)}>
                                 <div className="podium-rank-label white-text gold-text">1ST PLACE - GRAND CHAMPION</div>
-                                <div className="podium-card-elite cinematic-poster gold-poster-border">
+                                <div className="podium-card-elite gold-poster-border">
                                     <div className="podium-badge gold"><TrophyIcon size={18} /> JUDGING AWARD</div>   
-                                    <img src={hofProjects[0].imageUrl} alt="1st" className="cinematic-bg-img" />
-                                    <div className="cinematic-gradient-overlay" />
-                                    <div className="podium-info cinematic-info">
+                                    <div className="podium-landscape-img gold-img-border">
+                                        <img src={hofProjects[0].imageUrl} alt="1st" />
+                                    </div>
+                                    <div className="podium-info">
                                         <h3>{hofProjects[0].title}</h3>
                                         <p className="champion-team">{hofProjects[0].team_members}</p>
                                     </div>
@@ -1228,11 +1230,12 @@ function App() {
                         {hofProjects[2] && (
                             <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6, type: "spring", damping: 18 }} className="podium-item rank-3" onClick={() => setSelectedProject(hofProjects[2]!)}>
                                 <div className="podium-rank-label white-text">3RD PLACE - BRONZE</div>
-                                <div className="podium-card-elite cinematic-poster">
+                                <div className="podium-card-elite">
                                     <div className="podium-badge bronze">JUDGING AWARD</div>
-                                    <img src={hofProjects[2].imageUrl} alt="3rd" className="cinematic-bg-img" />
-                                    <div className="cinematic-gradient-overlay" />
-                                    <div className="podium-info cinematic-info">
+                                    <div className="podium-landscape-img">
+                                        <img src={hofProjects[2].imageUrl} alt="3rd" />
+                                    </div>
+                                    <div className="podium-info">
                                         <h3>{hofProjects[2].title}</h3>
                                         <p>{hofProjects[2].team_members}</p>
                                     </div>
