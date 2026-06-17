@@ -1329,9 +1329,10 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                                             onChange={(e) => {
                                                 const current = [...(kioskConfig.hofSelection || ['', '', '', '', ''])];
                                                 current[idx] = e.target.value;
-                                                updateKiosk({ hofSelection: current, ceremonySelection: current });
+                                                const cleanHof = [0, 1, 2, 3, 4].map(i => current[i] || '');
+                                                updateKiosk({ hofSelection: cleanHof, ceremonySelection: cleanHof });
                                                 // Sync to voting config as well for the public display
-                                                setDoc(doc(db, 'config', 'voting'), { hofSelection: current }, { merge: true });
+                                                setDoc(doc(db, 'config', 'voting'), { hofSelection: cleanHof }, { merge: true }).catch(err => alert("Failed to save selection: " + err.message));
                                             }}
                                             className="ticker-admin-input"
                                             style={{ fontSize: '0.8rem', padding: '12px' }}
