@@ -110,6 +110,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       volunteerNames: string;
       instructorNamesExtra: string;
       ceremonySelection?: string[];
+      hofSelection?: string[];
   }>({
       hideResults: false,
       victoryMode: false,
@@ -1316,7 +1317,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                         </div>
 
                         <div className="stage-control-item glass-card" style={{ gridColumn: 'span 2' }}>
-                            <div className="item-label"><Trophy size={20} color="#FFD700" /> <span>Ceremony Winner Selection</span></div>
+                            <div className="item-label"><Trophy size={20} color="#FFD700" /> <span>Hall of Fame & Ceremony Selection</span></div>
                             <div className="ceremony-selection-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginTop: '15px' }}>
                                 {[0, 1, 2, 3, 4].map(idx => (
                                     <div key={idx}>
@@ -1324,11 +1325,13 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                                             {idx === 0 ? '1st Place (Champion)' : idx === 1 ? '2nd Place' : idx === 2 ? '3rd Place' : idx === 3 ? '4th Place' : 'Fan Favorite'}
                                         </label>
                                         <select
-                                            value={(kioskConfig.ceremonySelection || [])[idx] || ""}
+                                            value={(kioskConfig.hofSelection || [])[idx] || ""}
                                             onChange={(e) => {
-                                                const current = [...(kioskConfig.ceremonySelection || ['', '', '', '', ''])];
+                                                const current = [...(kioskConfig.hofSelection || ['', '', '', '', ''])];
                                                 current[idx] = e.target.value;
-                                                updateKiosk({ ceremonySelection: current });
+                                                updateKiosk({ hofSelection: current, ceremonySelection: current });
+                                                // Sync to voting config as well for the public display
+                                                setDoc(doc(db, 'config', 'voting'), { hofSelection: current }, { merge: true });
                                             }}
                                             className="ticker-admin-input"
                                             style={{ fontSize: '0.8rem', padding: '12px' }}

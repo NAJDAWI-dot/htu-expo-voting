@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { CheckCircle2, Users, Search, Loader2, Settings, X, Share2, Info, Download, Trophy, Trophy as TrophyIcon, ShieldCheck, Award, AlertTriangle } from 'lucide-react';
+import { CheckCircle2, Users, Search, Loader2, Settings, X, Share2, Info, Download, Trophy, Trophy as TrophyIcon, Award, AlertTriangle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { auth, db } from './firebase';
 import { signInAnonymously, onAuthStateChanged } from 'firebase/auth';
@@ -262,8 +262,8 @@ function App() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    if (params.get('admin') === 'true') setView('admin');
     if (params.get('kiosk') === 'true') setView('kiosk');
-    if (params.get('archive-control') === 'true') setView('archive-control');
     const hasSeen = localStorage.getItem('htu_onboarding_seen');
     if (!hasSeen && params.get('kiosk') !== 'true') setTimeout(() => setShowOnboarding(true), 3500);
 
@@ -1040,75 +1040,6 @@ function App() {
       <div className="admin-view-wrapper">
         <AdminPanel lang={lang} setLang={setLang} onBack={() => setView('public')} />
       </div>
-    );
-  }
-
-  if (view === 'archive-control') {
-    return (
-        <div className="archive-control-standalone">
-            <div className="background-wrapper"><div className="bg-grid" /><div className="bg-mesh" /></div>        
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="archive-admin-card" style={{ maxWidth: '800px', margin: '0 auto', padding: '50px', width: '100%' }}>
-                <ShieldCheck size={64} color="#FFD700" className="mx-auto" style={{ display: 'block', margin: '0 auto 20px' }} />
-                <h1>Archive Control Center</h1>
-                <p>Configure and toggle the HTU Expo 2026 Hall of Fame.</p>
-                <div style={{ textAlign: 'center' }}>
-                    <div className={`archive-status-indicator ${archiveMode ? 'active' : 'idle'}`}>
-                        {archiveMode ? 'SYSTEM ARCHIVED' : 'SYSTEM LIVE'}
-                    </div>
-                </div>
-
-                <div className="hof-selection-container" style={{ margin: '30px 0', textAlign: 'left', background: 'rgba(0,0,0,0.4)', padding: '30px', borderRadius: '24px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <h3 style={{ color: 'white', marginBottom: '25px', fontSize: '1.2rem', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '2px' }}>Set Top 5 Projects</h3>
-                    {[0, 1, 2, 3, 4].map(idx => {
-                        const isGold = idx === 0;
-                        const isSilver = idx === 1;
-                        const isBronze = idx === 2;
-                        return (
-                            <div key={idx} className="archive-select-row">
-                                <div className={`archive-rank-label ${isGold ? 'gold' : isSilver ? 'silver' : isBronze ? 'bronze' : ''}`}>
-                                    {idx === 0 ? '1st Place (Champion)' : idx === 1 ? '2nd Place' : idx === 2 ? '3rd Place' : idx === 3 ? '4th Place' : '5th Place (Fan Fav)'}
-                                </div>
-                                <select
-                                    value={hofSelection[idx] || ''}
-                                    onChange={(e) => {
-                                        const newSelection = [...hofSelection];
-                                        newSelection[idx] = e.target.value;
-                                        setHofSelection(newSelection);
-                                    }}
-                                    className="archive-select-input"
-                                >
-                                    <option value="" style={{ color: '#888' }}>-- Select Project --</option>
-                                    {projects.map(p => <option key={p.id} value={p.id}>{p.title} ({p.instructor})</option>)}
-                                </select>
-                            </div>
-                        );
-                    })}
-                </div>
-
-                <button
-                    className={`htu-button w-full ${archiveMode ? 'outline-btn' : ''}`}
-                    onClick={async () => {
-                        const confirmation = window.confirm("Save configuration and Toggle Archive Mode?");
-                        if (confirmation) {
-                            try {
-                                const cleanHof = [0, 1, 2, 3, 4].map(i => hofSelection[i] || '');
-                                const votingRef = doc(db, 'config', 'voting');
-                                await setDoc(votingRef, { archiveMode: !archiveMode, isOpen: archiveMode, hofSelection: cleanHof }, { merge: true });
-                                // Also sync to kiosk for backward compatibility if needed
-                                await setDoc(doc(db, 'config', 'kiosk'), { hofSelection: cleanHof }, { merge: true });
-                                alert(`Success: Archive Mode has been ${!archiveMode ? 'Activated' : 'Disabled'}!`);
-                            } catch (e: any) {
-                                console.error(e);
-                                alert("Failed to save: " + e.message);
-                            }
-                        }
-                    }}
-                >
-                    {archiveMode ? 'Disable Archive Mode' : 'SAVE & ACTIVATE HALL OF FAME'}
-                </button>
-                <button className="back-to-site-inline mt-8" onClick={() => setView('public')}>Return to Public Site</button>
-            </motion.div>
-        </div>
     );
   }
 
