@@ -1249,9 +1249,10 @@ function App() {
                             {hofProjects[3] && (
                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="runner-up-row glass-card" onClick={() => setSelectedProject(hofProjects[3]!)}>
                                     <div className="runner-rank">4TH</div>
+                                    <img src={hofProjects[3].imageUrl} alt="4th" className="runner-image" />
                                     <div className="runner-title-group">
                                         <strong>{hofProjects[3].title}</strong>
-                                        <span style={{ fontSize: '0.8rem', textTransform: 'none', letterSpacing: '0' }}>{hofProjects[3].team_members}</span>
+                                        <span style={{ fontSize: '1rem', textTransform: 'none', letterSpacing: '0', color: 'rgba(255,255,255,0.8)' }}>{hofProjects[3].team_members}</span>
                                     </div>
                                     <div className="runner-votes-badge" style={{ borderColor: '#FFD700', color: '#FFD700' }}>JUDGING AWARD</div>
                                 </motion.div>
@@ -1259,9 +1260,10 @@ function App() {
                             {hofProjects[4] && (
                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="runner-up-row glass-card" onClick={() => setSelectedProject(hofProjects[4]!)}>
                                     <div className="runner-rank">5TH</div>       
+                                    <img src={hofProjects[4].imageUrl} alt="5th" className="runner-image" />
                                     <div className="runner-title-group">
                                         <strong>{hofProjects[4].title}</strong>
-                                        <span style={{ fontSize: '0.8rem', textTransform: 'none', letterSpacing: '0' }}>{hofProjects[4].team_members}</span>
+                                        <span style={{ fontSize: '1rem', textTransform: 'none', letterSpacing: '0', color: 'rgba(255,255,255,0.8)' }}>{hofProjects[4].team_members}</span>
                                     </div>
                                     <div className="runner-votes-badge" style={{ borderColor: '#E8343F', color: '#E8343F', background: 'rgba(232, 52, 63, 0.1)' }}>FAN FAV AWARD</div>
                                 </motion.div>
