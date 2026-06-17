@@ -1,12 +1,61 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { CheckCircle2, Users, Search, Loader2, Settings, X, Share2, Info, Download, Trophy, Trophy as TrophyIcon, ShieldCheck, Award } from 'lucide-react';
+import { CheckCircle2, Users, Search, Loader2, Settings, X, Share2, Info, Download, Trophy, Trophy as TrophyIcon, ShieldCheck, Award, AlertTriangle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { auth, db } from './firebase';
 import { signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 import { collection, doc, runTransaction, query, orderBy, onSnapshot, increment, setDoc } from 'firebase/firestore';
 import AdminPanel from './AdminPanel';
 import './App.css';
+
+const VotingCountdownBanner = ({ lang, t }: { lang: 'en'|'ar', t: any }) => {
+  const [timeLeft, setTimeLeft] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null);
+
+  useEffect(() => {
+    const targetDate = new Date(2026, 5, 21, 0, 0, 0).getTime();
+    
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+      
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((difference % (1000 * 60)) / 1000)
+        });
+      } else {
+        setTimeLeft(null);
+      }
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!timeLeft) return null;
+
+  return (
+    <motion.div initial={{ y: -100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="voting-countdown-banner">
+      <div className="banner-content">
+        <AlertTriangle size={24} className="banner-icon pulse-dot-banner" />
+        <div className="banner-text">
+            <strong>{t[lang].voting_disabled_banner}</strong>
+            <span className="banner-sub">{t[lang].opens_in}</span>
+        </div>
+        <div className="countdown-timer">
+            <div className="time-block"><span>{String(timeLeft.days).padStart(2, '0')}</span><small>D</small></div>
+            <span className="time-colon">:</span>
+            <div className="time-block"><span>{String(timeLeft.hours).padStart(2, '0')}</span><small>H</small></div>
+            <span className="time-colon">:</span>
+            <div className="time-block"><span>{String(timeLeft.minutes).padStart(2, '0')}</span><small>M</small></div>
+            <span className="time-colon">:</span>
+            <div className="time-block"><span>{String(timeLeft.seconds).padStart(2, '0')}</span><small>S</small></div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 interface Project {
   id: string; title: string; instructor: string; team_members: string; section_number?: string; status?: 'none' | 'verified' | 'rejected'; imageUrl?: string; finalVotes?: number;
@@ -93,6 +142,8 @@ function App() {
       search: "Search projects or instructors...",
       gallery: "Project Gallery",
       expo_count: "Projects in the Expo",
+      voting_disabled_banner: "Voting is currently disabled",
+      opens_in: "Opens in:",
       vote: "Vote",
       voted: "Voted",
       cast_vote: "Cast Vote",
@@ -153,6 +204,8 @@ function App() {
       search: "ابحث عن المشاريع أو المشرفين...",
       gallery: "معرض المشاريع",
       expo_count: "مشروعاً في المعرض",
+      voting_disabled_banner: "التصويت معطل حالياً",
+      opens_in: "يفتح خلال:",
       vote: "تصويت",
       voted: "تم التصويت",
       cast_vote: "تأكيد التصويت",
@@ -1045,6 +1098,7 @@ function App() {
 
   return (
     <div className="app-container" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      {!isVotingOpen && <VotingCountdownBanner lang={lang as any} t={t} />}
       {archiveMode && (
           <div className="archive-banner">{t[lang].archived_title}</div>
       )}

@@ -42,6 +42,21 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .splash-loader { height: 100%; background: var(--htu-red); box-shadow: 0 0 20px var(--htu-red); }
 .splash-text { font-weight: 900; letter-spacing: 12px; text-transform: uppercase; color: white; font-size: 1.2rem; }
 
+/* --- COUNTDOWN BANNER --- */
+.voting-countdown-banner { width: 100%; background: linear-gradient(90deg, rgba(232,52,63,0.1), rgba(2,11,24,0.95), rgba(232,52,63,0.1)); border-bottom: 1px solid rgba(232,52,63,0.3); padding: 15px 0; display: flex; justify-content: center; position: sticky; top: 0; z-index: 2000; backdrop-filter: blur(10px); }
+.banner-content { display: flex; align-items: center; gap: 20px; max-width: 1200px; width: 100%; padding: 0 20px; flex-wrap: wrap; justify-content: center; }
+.banner-icon { color: var(--htu-red); }
+.banner-text { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; color: #fff; }
+.banner-text strong { font-weight: 800; letter-spacing: 1px; }
+.banner-sub { opacity: 0.8; font-size: 0.95rem; font-weight: 500; }
+.countdown-timer { display: flex; align-items: center; gap: 10px; }
+.time-block { display: flex; align-items: baseline; gap: 4px; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+.time-block span { font-size: 1.4rem; font-weight: 900; color: #fff; font-family: monospace; }
+.time-block small { font-size: 0.7rem; color: var(--htu-red); font-weight: 800; }
+.time-colon { font-size: 1.2rem; font-weight: 900; color: rgba(255,255,255,0.5); }
+.pulse-dot-banner { animation: pulseWarning 2s infinite; }
+@keyframes pulseWarning { 0% { opacity: 1; filter: drop-shadow(0 0 5px var(--htu-red)); } 50% { opacity: 0.5; filter: drop-shadow(0 0 15px var(--htu-red)); } 100% { opacity: 1; filter: drop-shadow(0 0 5px var(--htu-red)); } }
+
 /* --- HEADER & NAVIGATION --- */
 .app-container { z-index: 1; min-height: 100vh; padding: 0 6%; display: flex; flex-direction: column; position: relative; }
 .main-header { padding: 64px 0 24px; display: flex; flex-direction: column; align-items: center; background: transparent !important; border: none !important; }
@@ -832,6 +847,13 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
     .main-header h1 { font-size: 2.2rem !important; letter-spacing: -1px !important; margin-bottom: 15px; }
     .subtitle { font-size: 1rem; }
     
+    /* COUNTDOWN BANNER MOBILE */
+    .banner-content { gap: 10px; flex-direction: column; text-align: center; }
+    .banner-text { flex-direction: column; gap: 4px; font-size: 0.9rem; }
+    .time-block { padding: 6px 8px; }
+    .time-block span { font-size: 1.1rem; }
+    .voting-countdown-banner { padding: 10px 0; }
+
     /* PROGRESS BAR MOBILE */
     .sticky-vote-tracker { top: 10px; margin-bottom: 10px; margin-top: -10px; }
     .header-controls-premium { width: calc(100% - 30px); max-width: 400px; padding: 15px 20px; margin: 0 auto; align-items: center; text-align: center; }
