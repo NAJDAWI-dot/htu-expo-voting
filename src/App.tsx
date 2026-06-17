@@ -1098,9 +1098,13 @@ function App() {
 
   return (
     <div className="app-container" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-      {!isVotingOpen && <VotingCountdownBanner lang={lang as any} t={t} />}
+      {!isVotingOpen && !archiveMode && <VotingCountdownBanner lang={lang as any} t={t} />}
       {archiveMode && (
-          <div className="archive-banner">{t[lang].archived_title}</div>
+          <div className="archive-banner-premium">
+              <span className="sparkle">✨</span>
+              {t[lang].archived_title}
+              <span className="sparkle">✨</span>
+          </div>
       )}
       <motion.div className="level-slider-container" style={{ scaleY }} />
       <div className={`background-wrapper ${archiveMode ? 'archive-bg' : ''}`}>
