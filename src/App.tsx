@@ -1192,17 +1192,12 @@ function App() {
                     <div className="hof-podium-container">
                         {/* 2nd Place */}
                         {hofProjects[1] && (
-                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4, type: "spring", damping: 15 }} className="holo-podium-item rank-2" onClick={() => setSelectedProject(hofProjects[1]!)}>
-                                <div className="holo-avatar-container">
-                                    <div className="holo-glow glow-silver" />
-                                    <img src={hofProjects[1].imageUrl} alt="2nd" className="holo-avatar-img border-silver" />
-                                    <div className="holo-rank-badge badge-silver">2ND PLACE</div>
+                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4, type: "spring", damping: 15 }} className="hof-minimal-item rank-2" onClick={() => setSelectedProject(hofProjects[1]!)}>
+                                <div className="hof-minimal-img-container">
+                                    <div className="hof-minimal-badge badge-silver">2ND PLACE</div>
+                                    <img src={hofProjects[1].imageUrl} alt="2nd" className="hof-minimal-img border-silver" />
                                 </div>
-                                <div className="holo-pedestal-3d base-silver">
-                                    <div className="holo-pedestal-top"></div>
-                                    <div className="holo-pedestal-pillar"></div>
-                                </div>
-                                <div className="holo-info">
+                                <div className="hof-minimal-info">
                                     <h3>{hofProjects[1].title}</h3>
                                     <p>{hofProjects[1].team_members}</p>
                                 </div>
@@ -1211,17 +1206,12 @@ function App() {
 
                         {/* 1st Place */}
                         {hofProjects[0] && (
-                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2, type: "spring", damping: 12 }} className="holo-podium-item rank-1" onClick={() => setSelectedProject(hofProjects[0]!)}>
-                                <div className="holo-avatar-container champion-avatar">
-                                    <div className="holo-glow glow-gold" />
-                                    <img src={hofProjects[0].imageUrl} alt="1st" className="holo-avatar-img border-gold" />
-                                    <div className="holo-rank-badge badge-gold"><TrophyIcon size={18} /> GRAND CHAMPION</div>
+                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2, type: "spring", damping: 12 }} className="hof-minimal-item rank-1" onClick={() => setSelectedProject(hofProjects[0]!)}>
+                                <div className="hof-minimal-img-container">
+                                    <div className="hof-minimal-badge badge-gold"><TrophyIcon size={16} /> GRAND CHAMPION</div>
+                                    <img src={hofProjects[0].imageUrl} alt="1st" className="hof-minimal-img border-gold" />
                                 </div>
-                                <div className="holo-pedestal-3d base-gold">
-                                    <div className="holo-pedestal-top"></div>
-                                    <div className="holo-pedestal-pillar"></div>
-                                </div>
-                                <div className="holo-info champion-info">
+                                <div className="hof-minimal-info">
                                     <h3>{hofProjects[0].title}</h3>
                                     <p>{hofProjects[0].team_members}</p>
                                 </div>
@@ -1230,17 +1220,12 @@ function App() {
 
                         {/* 3rd Place */}
                         {hofProjects[2] && (
-                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6, type: "spring", damping: 18 }} className="holo-podium-item rank-3" onClick={() => setSelectedProject(hofProjects[2]!)}>
-                                <div className="holo-avatar-container">
-                                    <div className="holo-glow glow-bronze" />
-                                    <img src={hofProjects[2].imageUrl} alt="3rd" className="holo-avatar-img border-bronze" />
-                                    <div className="holo-rank-badge badge-bronze">3RD PLACE</div>
+                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6, type: "spring", damping: 18 }} className="hof-minimal-item rank-3" onClick={() => setSelectedProject(hofProjects[2]!)}>
+                                <div className="hof-minimal-img-container">
+                                    <div className="hof-minimal-badge badge-bronze">3RD PLACE</div>
+                                    <img src={hofProjects[2].imageUrl} alt="3rd" className="hof-minimal-img border-bronze" />
                                 </div>
-                                <div className="holo-pedestal-3d base-bronze">
-                                    <div className="holo-pedestal-top"></div>
-                                    <div className="holo-pedestal-pillar"></div>
-                                </div>
-                                <div className="holo-info">
+                                <div className="hof-minimal-info">
                                     <h3>{hofProjects[2].title}</h3>
                                     <p>{hofProjects[2].team_members}</p>
                                 </div>

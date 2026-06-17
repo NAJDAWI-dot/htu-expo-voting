@@ -1461,45 +1461,30 @@ footer { padding: 80px 0; text-align: center; border-top: 1px solid var(--glass-
 .hof-main-title { font-family: 'Crimson Text', serif; font-size: 3rem; color: #FFD700; margin: 15px 0 0; text-shadow: 0 0 20px rgba(255,215,0,0.4); letter-spacing: 4px; }
 .hof-divider-glow { width: 150px; height: 2px; background: linear-gradient(90deg, transparent, #FFD700, transparent); margin: 15px auto; box-shadow: 0 0 10px #FFD700; }
 .hof-subtitle { font-family: 'Inter', sans-serif; font-size: 0.9rem; color: rgba(255,255,255,0.7); letter-spacing: 6px; }
-.hof-podium-container { display: flex; justify-content: center; align-items: flex-end; gap: 40px; margin-top: 80px; min-height: 500px; }
-.holo-podium-item { display: flex; flex-direction: column; align-items: center; width: 32%; position: relative; z-index: 2; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin-top: auto; }
-.holo-podium-item:hover { transform: translateY(-30px) scale(1.05); z-index: 20; }
+.hof-minimal-item { display: flex; flex-direction: column; align-items: center; width: 32%; position: relative; z-index: 2; transition: all 0.4s ease; margin-top: auto; cursor: pointer; }
+.hof-minimal-item:hover { transform: translateY(-15px); }
 
-.holo-avatar-container { position: relative; width: 180px; height: 180px; margin-bottom: 40px; animation: float 6s ease-in-out infinite; display: flex; align-items: center; justify-content: center; z-index: 5; }
-.rank-1 .holo-avatar-container { width: 240px; height: 240px; }
-.holo-avatar-img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid rgba(255,255,255,0.2); position: relative; z-index: 2; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-.border-gold { border-color: #FFD700; box-shadow: 0 0 40px rgba(255,215,0,0.5); }
-.border-silver { border-color: #E2E8F0; box-shadow: 0 0 30px rgba(226,232,240,0.3); }
-.border-bronze { border-color: #FDBA74; box-shadow: 0 0 30px rgba(253,186,116,0.3); }
+.hof-minimal-img-container { position: relative; width: 100%; aspect-ratio: 16/9; margin-bottom: 25px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.rank-1 .hof-minimal-img-container { transform: scale(1.15); margin-bottom: 35px; box-shadow: 0 25px 50px rgba(0,0,0,0.8); z-index: 10; }
 
-.holo-glow { position: absolute; inset: -30px; border-radius: 50%; opacity: 0.5; filter: blur(30px); z-index: 1; animation: pulse 4s infinite alternate; }
-.glow-gold { background: radial-gradient(circle, rgba(255,215,0,0.8) 0%, transparent 70%); }
-.glow-silver { background: radial-gradient(circle, rgba(226,232,240,0.6) 0%, transparent 70%); }
-.glow-bronze { background: radial-gradient(circle, rgba(253,186,116,0.6) 0%, transparent 70%); }
+.hof-minimal-img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; border: 2px solid rgba(255,255,255,0.1); }
+.border-gold { border: 3px solid #FFD700; box-shadow: 0 0 40px rgba(255,215,0,0.3); }
+.border-silver { border: 2px solid #E2E8F0; }
+.border-bronze { border: 2px solid #FDBA74; }
 
-.holo-rank-badge { position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); padding: 8px 30px; font-weight: 900; font-size: 0.9rem; letter-spacing: 2px; border-radius: 30px; z-index: 10; white-space: nowrap; box-shadow: 0 10px 20px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.3); }
-.badge-gold { background: linear-gradient(135deg, #FFD700, #CA8A04); color: #000; font-size: 1.1rem; padding: 10px 40px; border-color: #FFF; }
+.hof-minimal-item:hover .hof-minimal-img-container { transform: scale(1.05); }
+.rank-1.hof-minimal-item:hover .hof-minimal-img-container { transform: scale(1.2); }
+
+.hof-minimal-badge { position: absolute; top: -15px; right: -20px; padding: 8px 25px; font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; border-radius: 30px; z-index: 10; white-space: nowrap; box-shadow: 0 10px 20px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; gap: 5px; }
+.badge-gold { background: linear-gradient(135deg, #FFD700, #CA8A04); color: #000; font-size: 1rem; padding: 10px 30px; border-color: #FFF; top: -20px; right: -25px; }
 .badge-silver { background: linear-gradient(135deg, #E2E8F0, #94A3B8); color: #000; }
 .badge-bronze { background: linear-gradient(135deg, #FDBA74, #C2410C); color: #FFF; }
 
-.holo-pedestal-3d { width: 160px; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
-.rank-1 .holo-pedestal-3d { width: 200px; }
-.holo-pedestal-top { width: 100%; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 -10px 30px rgba(255,255,255,0.1), inset 0 0 20px rgba(255,255,255,0.1); position: relative; z-index: 2; margin-bottom: -20px; backdrop-filter: blur(10px); }
-.holo-pedestal-pillar { width: 80%; height: 80px; background: linear-gradient(to bottom, rgba(255,255,255,0.05), transparent); border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1); }
-.rank-1 .holo-pedestal-pillar { height: 120px; }
-.base-gold .holo-pedestal-top { border-color: #FFD700; box-shadow: 0 -20px 50px rgba(255,215,0,0.3), inset 0 0 20px rgba(255,215,0,0.5); }
-.base-gold .holo-pedestal-pillar { background: linear-gradient(to bottom, rgba(255,215,0,0.15), transparent); border-color: rgba(255,215,0,0.4); }
-.base-silver .holo-pedestal-top { border-color: #E2E8F0; box-shadow: 0 -15px 40px rgba(226,232,240,0.2), inset 0 0 15px rgba(226,232,240,0.3); }
-.base-silver .holo-pedestal-pillar { background: linear-gradient(to bottom, rgba(226,232,240,0.1), transparent); border-color: rgba(226,232,240,0.3); }
-
-.holo-info { text-align: center; margin-top: 30px; width: 100%; padding: 0 20px; }
-.holo-info h3 { font-family: 'Crimson Text', serif; font-size: 2rem; color: white; margin: 0 0 10px 0; text-shadow: 0 5px 15px rgba(0,0,0,0.8); line-height: 1.2; }
-.champion-info h3 { font-size: 2.8rem; color: #FFD700; text-shadow: 0 0 30px rgba(255,215,0,0.5); }
-.holo-info p { margin: 0; color: rgba(255,255,255,0.7); font-size: 1.1rem; letter-spacing: 1px; }
-.champion-info p { font-size: 1.4rem; color: white; font-weight: 700; }
-
-@keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-20px); } 100% { transform: translateY(0px); } }
-@keyframes pulse { 0% { opacity: 0.4; transform: scale(0.95); } 100% { opacity: 0.7; transform: scale(1.1); } }
+.hof-minimal-info { text-align: center; width: 100%; padding: 0 10px; }
+.hof-minimal-info h3 { font-family: 'Crimson Text', serif; font-size: 1.8rem; color: white; margin: 0 0 10px 0; text-shadow: 0 2px 10px rgba(0,0,0,0.8); line-height: 1.2; }
+.rank-1 .hof-minimal-info h3 { font-size: 2.4rem; color: #FFD700; text-shadow: 0 2px 15px rgba(0,0,0,0.9); }
+.hof-minimal-info p { margin: 0; color: #FFD700; font-size: 1.1rem; font-family: 'Crimson Text', serif; font-style: italic; letter-spacing: 1px; }
+.rank-1 .hof-minimal-info p { font-size: 1.3rem; }
 
 .runners-up-section { margin-top: 80px; }
 .runners-up-header { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 40px; }
