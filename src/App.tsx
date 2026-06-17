@@ -1192,43 +1192,55 @@ function App() {
                     <div className="hof-podium-container">
                         {/* 2nd Place */}
                         {hofProjects[1] && (
-                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4, type: "spring", damping: 15 }} className="hof-minimal-item rank-2" onClick={() => setSelectedProject(hofProjects[1]!)}>
-                                <div className="hof-minimal-img-container">
-                                    <div className="hof-minimal-badge badge-silver">2ND PLACE</div>
-                                    <img src={hofProjects[1].imageUrl} alt="2nd" className="hof-minimal-img border-silver" />
+                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4, type: "spring", damping: 15 }} className="podium-item rank-2" onClick={() => setSelectedProject(hofProjects[1]!)}>
+                                <div className="podium-rank-label white-text">2ND PLACE - SILVER</div>
+                                <div className="podium-card-elite">
+                                    <div className="podium-badge silver">JUDGING AWARD</div>
+                                    <div className="podium-image-wrapper">
+                                        <img src={hofProjects[1].imageUrl} alt="2nd" />
+                                    </div>
+                                    <div className="podium-info">
+                                        <h3>{hofProjects[1].title}</h3>
+                                        <p>{hofProjects[1].team_members}</p>
+                                    </div>
                                 </div>
-                                <div className="hof-minimal-info">
-                                    <h3>{hofProjects[1].title}</h3>
-                                    <p>{hofProjects[1].team_members}</p>
-                                </div>
+                                <div className="podium-base base-silver" />
                             </motion.div>
                         )}
 
                         {/* 1st Place */}
                         {hofProjects[0] && (
-                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2, type: "spring", damping: 12 }} className="hof-minimal-item rank-1" onClick={() => setSelectedProject(hofProjects[0]!)}>
-                                <div className="hof-minimal-img-container">
-                                    <div className="hof-minimal-badge badge-gold"><TrophyIcon size={16} /> GRAND CHAMPION</div>
-                                    <img src={hofProjects[0].imageUrl} alt="1st" className="hof-minimal-img border-gold" />
+                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2, type: "spring", damping: 12 }} className="podium-item rank-1" onClick={() => setSelectedProject(hofProjects[0]!)}>
+                                <div className="podium-rank-label white-text gold-text">1ST PLACE - GRAND CHAMPION</div>
+                                <div className="podium-card-elite gold-poster-border">
+                                    <div className="podium-badge gold"><TrophyIcon size={18} /> JUDGING AWARD</div>   
+                                    <div className="podium-image-wrapper gold-border">
+                                        <img src={hofProjects[0].imageUrl} alt="1st" />
+                                    </div>
+                                    <div className="podium-info">
+                                        <h3>{hofProjects[0].title}</h3>
+                                        <p className="champion-team">{hofProjects[0].team_members}</p>
+                                    </div>
                                 </div>
-                                <div className="hof-minimal-info">
-                                    <h3>{hofProjects[0].title}</h3>
-                                    <p>{hofProjects[0].team_members}</p>
-                                </div>
+                                <div className="podium-base base-gold" />
                             </motion.div>
                         )}
 
                         {/* 3rd Place */}
                         {hofProjects[2] && (
-                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6, type: "spring", damping: 18 }} className="hof-minimal-item rank-3" onClick={() => setSelectedProject(hofProjects[2]!)}>
-                                <div className="hof-minimal-img-container">
-                                    <div className="hof-minimal-badge badge-bronze">3RD PLACE</div>
-                                    <img src={hofProjects[2].imageUrl} alt="3rd" className="hof-minimal-img border-bronze" />
+                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6, type: "spring", damping: 18 }} className="podium-item rank-3" onClick={() => setSelectedProject(hofProjects[2]!)}>
+                                <div className="podium-rank-label white-text">3RD PLACE - BRONZE</div>
+                                <div className="podium-card-elite">
+                                    <div className="podium-badge bronze">JUDGING AWARD</div>
+                                    <div className="podium-image-wrapper">
+                                        <img src={hofProjects[2].imageUrl} alt="3rd" />
+                                    </div>
+                                    <div className="podium-info">
+                                        <h3>{hofProjects[2].title}</h3>
+                                        <p>{hofProjects[2].team_members}</p>
+                                    </div>
                                 </div>
-                                <div className="hof-minimal-info">
-                                    <h3>{hofProjects[2].title}</h3>
-                                    <p>{hofProjects[2].team_members}</p>
-                                </div>
+                                <div className="podium-base base-bronze" />
                             </motion.div>
                         )}
                     </div>
