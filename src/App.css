@@ -42,7 +42,25 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .splash-loader { height: 100%; background: var(--htu-red); box-shadow: 0 0 20px var(--htu-red); }
 .splash-text { font-weight: 900; letter-spacing: 12px; text-transform: uppercase; color: white; font-size: 1.2rem; }
 
-/* --- COUNTDOWN BANNER --- */
+/* --- VAULT PIN SCREEN --- */
+.vault-bg { background: radial-gradient(circle at center, rgba(2,11,24,0.95), #000); }
+.vault-lock-container { max-width: 320px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; padding: 40px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(20px); }
+.vault-icon { color: rgba(255,255,255,0.8); margin-bottom: 20px; }
+.vault-lock-container h2 { font-size: 1.5rem; letter-spacing: 4px; color: #fff; margin: 0 0 5px; font-weight: 800; }
+.vault-subtitle { color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-bottom: 30px; letter-spacing: 1px; }
+.pin-dots { display: flex; gap: 15px; margin-bottom: 40px; }
+.pin-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); transition: all 0.2s ease; }
+.pin-dot.filled { background: #fff; border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+.pin-dot.error-dot { background: var(--htu-red); border-color: var(--htu-red); box-shadow: 0 0 15px var(--htu-red); }
+.numpad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.numpad-btn { width: 70px; height: 70px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; font-size: 1.8rem; font-weight: 500; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.1s ease; }
+.numpad-btn:active { background: rgba(255,255,255,0.2); transform: scale(0.95); }
+.action-btn { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 1.2rem; }
+.action-btn:active { background: transparent; color: rgba(255,255,255,0.8); }
+.shake-animation { animation: pinShake 0.4s ease-in-out; }
+@keyframes pinShake { 0% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-10px); } 80% { transform: translateX(10px); } 100% { transform: translateX(0); } }
+
+/* --- ARCHIVE BANNER --- */
 .voting-countdown-banner { width: 100%; background: linear-gradient(90deg, rgba(232,52,63,0.1), rgba(2,11,24,0.95), rgba(232,52,63,0.1)); border-bottom: 1px solid rgba(232,52,63,0.3); padding: 15px 0; display: flex; justify-content: center; position: sticky; top: 0; z-index: 2000; backdrop-filter: blur(10px); }
 .banner-content { display: flex; align-items: center; gap: 20px; max-width: 1200px; width: 100%; padding: 0 20px; flex-wrap: wrap; justify-content: center; }
 .banner-icon { color: var(--htu-red); }

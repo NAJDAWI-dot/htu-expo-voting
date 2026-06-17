@@ -20,7 +20,7 @@ import {
   updateDoc
 } from './firebase';
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogOut, Plus, Trash2, Trophy, Users, ShieldCheck, UserCog, Upload, Image as ImageIcon, Loader2, Download, Power, PowerOff, ArrowLeft, BarChart3, LayoutDashboard, AlertTriangle, ListChecks, X, RotateCcw, Search, Filter, Bomb, Eye, EyeOff, Play, SkipForward, Rewind, Megaphone, Repeat, Printer, Activity, ClipboardCheck } from 'lucide-react';
+import { LogOut, Plus, Trash2, Trophy, Users, ShieldCheck, UserCog, Upload, Image as ImageIcon, Loader2, Download, Power, PowerOff, ArrowLeft, BarChart3, LayoutDashboard, AlertTriangle, ListChecks, X, RotateCcw, Search, Filter, Bomb, Eye, EyeOff, Play, SkipForward, Rewind, Megaphone, Repeat, Printer, Activity, ClipboardCheck, Lock, Delete } from 'lucide-react';
 import QRCodeStyling from 'qr-code-styling';
 
 interface Project {
@@ -50,6 +50,31 @@ interface AdminPanelProps {
 export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   const [user, setUser] = useState<any>(null);
   const [role, setRole] = useState<'master' | 'organizer' | 'media' | null>(null);
+
+  // Vault PIN Security State
+  const [pin, setPin] = useState('');
+  const [pinError, setPinError] = useState(false);
+  const [isLocked, setIsLocked] = useState(true);
+  const CORRECT_PIN = '2026';
+
+  const handlePinPress = (digit: string) => {
+    if (pin.length < 4) {
+      const newPin = pin + digit;
+      setPin(newPin);
+      if (newPin.length === 4) {
+        if (newPin === CORRECT_PIN) {
+          setIsLocked(false);
+        } else {
+          setPinError(true);
+          setTimeout(() => { setPin(''); setPinError(false); }, 500);
+        }
+      }
+    }
+  };
+
+  const handlePinDelete = () => {
+    setPin(prev => prev.slice(0, -1));
+  };
   const [activeTab, setActiveTab] = useState<'dashboard' | 'teams' | 'gallery' | 'stage' | 'media'>('dashboard');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -846,6 +871,34 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
             {error && <p className="error-text-elite"><AlertTriangle size={14} /> {error}</p>}
             <button type="submit" className="htu-button w-full login-btn-elite">{t[lang].init}</button>
           </form>
+        </motion.div>
+      </div>
+    );
+  }
+
+  if (isLocked) {
+    return (
+      <div className="admin-login-container vault-bg">
+        <div className="background-wrapper"><div className="bg-grid" /><div className="bg-mesh" /></div>
+        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className={`vault-lock-container ${pinError ? 'shake-animation' : ''}`}>
+           <Lock size={48} className="vault-icon" />
+           <h2>SECURE VAULT</h2>
+           <p className="vault-subtitle">Enter 4-Digit Master PIN</p>
+           
+           <div className="pin-dots">
+              {[0,1,2,3].map(i => (
+                 <div key={i} className={`pin-dot ${pin.length > i ? 'filled' : ''} ${pinError ? 'error-dot' : ''}`} />
+              ))}
+           </div>
+           
+           <div className="numpad-grid">
+              {['1','2','3','4','5','6','7','8','9'].map(d => (
+                 <button key={d} onClick={() => handlePinPress(d)} className="numpad-btn">{d}</button>
+              ))}
+              <button onClick={() => { auth.signOut(); setIsLocked(true); }} className="numpad-btn action-btn"><LogOut size={24}/></button>
+              <button onClick={() => handlePinPress('0')} className="numpad-btn">0</button>
+              <button onClick={handlePinDelete} className="numpad-btn action-btn"><Delete size={24}/></button>
+           </div>
         </motion.div>
       </div>
     );
