@@ -870,7 +870,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     return (
       <div className="admin-login-container" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
         <div className="background-wrapper"><div className="bg-grid" /><div className="bg-mesh" /></div>
-        <button className="back-to-site-inline" onClick={onBack}><ArrowLeft size={18} className={lang === 'ar' ? 'rotate-180' : ''} /> {t[lang].back}</button>
+        <button className="back-to-site-inline" onClick={() => { auth.signOut(); onBack(); }}><ArrowLeft size={18} className={lang === 'ar' ? 'rotate-180' : ''} /> {t[lang].back}</button>
         <motion.div className="glass-card login-portal-card" initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
           <div className="login-header-elite">
             <div className="security-icon-wrapper"><ShieldCheck size={60} color="#E8343F" className="pulsing-icon" /></div>
@@ -965,7 +965,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
 
       <nav className="admin-nav-elite">
         <div className="nav-left">
-            <button className="back-btn-elite" onClick={onBack}><ArrowLeft size={18} className={lang === 'ar' ? 'rotate-180' : ''} /> {t[lang].back}</button>
+            <button className="back-btn-elite" onClick={() => { auth.signOut(); onBack(); }}><ArrowLeft size={18} className={lang === 'ar' ? 'rotate-180' : ''} /> {t[lang].back}</button>
             <div className="lang-toggle-container admin-lang-fix">
                 <button className={`lang-btn ${lang === 'en' ? 'active' : ''}`} onClick={() => setLang('en')}>EN</button>
                 <button className={`lang-btn ${lang === 'ar' ? 'active' : ''}`} onClick={() => setLang('ar')}>العربية</button>
