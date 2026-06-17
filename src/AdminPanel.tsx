@@ -430,6 +430,38 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     };
   }, []);
 
+  // 5-Minute Auto-Logout (Inactivity)
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    
+    const resetTimer = () => {
+      clearTimeout(timeoutId);
+      // 5 minutes = 300,000 ms
+      timeoutId = setTimeout(() => {
+        if (user) {
+          auth.signOut();
+          setIsLocked(true);
+        }
+      }, 300000);
+    };
+
+    if (user) {
+      window.addEventListener('mousemove', resetTimer);
+      window.addEventListener('keydown', resetTimer);
+      window.addEventListener('click', resetTimer);
+      window.addEventListener('scroll', resetTimer);
+      resetTimer(); 
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('mousemove', resetTimer);
+      window.removeEventListener('keydown', resetTimer);
+      window.removeEventListener('click', resetTimer);
+      window.removeEventListener('scroll', resetTimer);
+    };
+  }, [user]);
+
   useEffect(() => {
     let unsubResults = () => {};
     let unsubConfig = () => {};
