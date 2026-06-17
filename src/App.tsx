@@ -283,7 +283,7 @@ function App() {
         
         if (!user.email?.includes('@htu.local')) {
           const voterRef = doc(db, 'voters', user.uid);
-          unsubscribeVoter = onSnapshot(voterRef, (doc) => { if (doc.exists()) setVoterData(doc.data() as any); });
+          unsubscribeVoter = onSnapshot(voterRef, (doc) => { if (doc.exists()) setVoterData(doc.data() as any); }, (e) => console.warn("Voter listener:", e));
         }
 
         const projectsQuery = query(collection(db, 'projects'), orderBy('title', 'asc'));
@@ -297,21 +297,21 @@ function App() {
             return [...updated, ...newOnes];
           });
           setTimeout(() => setInitialSplash(false), 3500);
-        });
+        }, (e) => console.warn("Projects listener:", e));
 
         const galleryQuery = query(collection(db, 'gallery'), orderBy('timestamp', 'desc'));
         unsubscribeGallery = onSnapshot(galleryQuery, (snapshot) => {
           setGalleryImages(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as GalleryImage[]);
-        });
+        }, (e) => console.warn("Gallery listener:", e));
 
-        unsubStats = onSnapshot(doc(db, 'stats', 'global'), (doc) => { if (doc.exists()) { setGlobalVotes(doc.data().total || 0); setGlobalVisits(doc.data().visits || 0); setGlobalProfileVisits(doc.data().profileVisits || 0); } });
+        unsubStats = onSnapshot(doc(db, 'stats', 'global'), (doc) => { if (doc.exists()) { setGlobalVotes(doc.data().total || 0); setGlobalVisits(doc.data().visits || 0); setGlobalProfileVisits(doc.data().profileVisits || 0); } }, (e) => console.warn("Stats listener:", e));
         
         if (user.email?.includes('@htu.local')) {
           unsubscribeResults = onSnapshot(collection(db, 'results'), (snapshot) => {
               const resMap: Record<string, number> = {};
               snapshot.docs.forEach(doc => { resMap[doc.id] = doc.data().votes || 0; });
               setResults(resMap);
-          });
+          }, (e) => console.warn("Results listener:", e));
         }
 
         unsubConfig = onSnapshot(doc(db, 'config', 'voting'), (doc) => { 
@@ -320,14 +320,14 @@ function App() {
                 setArchiveMode(doc.data().archiveMode || false);
                 setHofSelection(doc.data().hofSelection || ['', '', '', '', '']);
             }
-        });
+        }, (e) => console.warn("Config listener:", e));
 
         unsubKiosk = onSnapshot(doc(db, 'config', 'kiosk'), (doc) => { 
             if (doc.exists()) {
                 const data = doc.data() as any;
                 setKioskConfig(prev => ({ ...prev, ...data }));
             }
-        });
+        }, (e) => console.warn("Kiosk listener:", e));
       } else {
         setUserId(null); 
         setVoterData({ voteCount: 0, votedProjectIds: [] }); 

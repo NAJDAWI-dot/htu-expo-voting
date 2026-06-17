@@ -112,7 +112,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       const data: Record<string, Record<string, boolean>> = {};
       snap.forEach(d => { data[d.id] = d.data() as Record<string, boolean>; });
       setAttendance(data);
-    });
+    }, (e) => console.warn("Admin Attendance listener:", e));
     return () => unsub();
   }, []);
 
@@ -374,16 +374,16 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     const qProjects = query(collection(db, 'projects'), orderBy('title', 'asc'));
     const unsubProjects = onSnapshot(qProjects, (snapshot) => {
       setProjects(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Project[]);
-    });
+    }, (e) => console.warn("Admin Projects listener:", e));
 
     const qGallery = query(collection(db, 'gallery'), orderBy('timestamp', 'desc'));
     const unsubGallery = onSnapshot(qGallery, (snapshot) => {
       setGalleryImages(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as any[]);
-    });
+    }, (e) => console.warn("Admin Gallery listener:", e));
 
     const unsubKiosk = onSnapshot(doc(db, 'config', 'kiosk'), (doc) => {
         if (doc.exists()) setKioskConfig(prev => ({ ...prev, ...doc.data() as any }));
-    });
+    }, (e) => console.warn("Admin Kiosk listener:", e));
 
     return () => {
       unsubAuth();
@@ -434,14 +434,14 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
 
         newResults.forEach(r => { prevResultsRef.current[r.id] = r.votes; });
         setResults(newResults);
-      });
+      }, (e) => console.warn("Admin Results listener:", e));
 
       unsubConfig = onSnapshot(doc(db, 'config', 'voting'), (doc) => {
         if (doc.exists()) {
             setIsVotingOpen(doc.data().isOpen);
             setArchiveMode(doc.data().archiveMode || false);
         }
-      });
+      }, (e) => console.warn("Admin Config listener:", e));
     }
     return () => {
         unsubResults();
