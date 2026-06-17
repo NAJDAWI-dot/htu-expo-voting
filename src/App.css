@@ -60,6 +60,21 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .shake-animation { animation: pinShake 0.4s ease-in-out; }
 @keyframes pinShake { 0% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-10px); } 80% { transform: translateX(10px); } 100% { transform: translateX(0); } }
 
+/* --- VAULT ALERTS --- */
+.emergency-lockdown { animation: redAlarmBg 0.5s infinite alternate; }
+.red-alert-overlay { position: absolute; inset: 0; background: rgba(255,0,0,0.15); z-index: 1; pointer-events: none; animation: redFlash 0.5s infinite alternate; }
+.violent-shake-animation { animation: violentShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+.funny-error-msg { position: absolute; bottom: -50px; width: 110%; text-align: center; background: rgba(232,52,63,0.9); color: white; padding: 10px 15px; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 5px 15px rgba(232,52,63,0.5); font-size: 0.85rem; }
+
+@keyframes redAlarmBg { from { box-shadow: inset 0 0 0 0 rgba(255,0,0,0); } to { box-shadow: inset 0 0 150px 30px rgba(255,0,0,0.4); } }
+@keyframes redFlash { from { opacity: 0.2; } to { opacity: 0.8; } }
+@keyframes violentShake { 
+  10%, 90% { transform: translate3d(-5px, 0, 0) rotate(-2deg); } 
+  20%, 80% { transform: translate3d(5px, 0, 0) rotate(2deg); } 
+  30%, 50%, 70% { transform: translate3d(-15px, 0, 0) rotate(-4deg); } 
+  40%, 60% { transform: translate3d(15px, 0, 0) rotate(4deg); } 
+}
+
 /* --- ARCHIVE BANNER --- */
 .voting-countdown-banner { width: 100%; background: linear-gradient(90deg, rgba(232,52,63,0.1), rgba(2,11,24,0.95), rgba(232,52,63,0.1)); border-bottom: 1px solid rgba(232,52,63,0.3); padding: 15px 0; display: flex; justify-content: center; position: sticky; top: 0; z-index: 2000; backdrop-filter: blur(10px); }
 .banner-content { display: flex; align-items: center; gap: 20px; max-width: 1200px; width: 100%; padding: 0 20px; flex-wrap: wrap; justify-content: center; }

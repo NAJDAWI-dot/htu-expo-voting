@@ -54,8 +54,18 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   // Vault PIN Security State
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState(false);
+  const [funnyError, setFunnyError] = useState<string | null>(null);
   const [isLocked, setIsLocked] = useState(true);
   const CORRECT_PIN = '2026';
+
+  const errorMessages = [
+    "Nice try. Maybe next year you'll gain access.",
+    "Access Denied. The cyber-police have been notified. (Just kidding)",
+    "Incorrect PIN. Are you sure you are an admin?",
+    "Wrong. Please step away from the keyboard.",
+    "Error 403: Hacker detected. Deploying countermeasures...",
+    "Nope. The vault remains sealed."
+  ];
 
   const handlePinPress = (digit: string) => {
     if (pin.length < 4) {
@@ -66,7 +76,9 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
           setIsLocked(false);
         } else {
           setPinError(true);
-          setTimeout(() => { setPin(''); setPinError(false); }, 500);
+          const randomMsg = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+          setFunnyError(randomMsg);
+          setTimeout(() => { setPin(''); setPinError(false); setFunnyError(null); }, 2500);
         }
       }
     }
@@ -878,9 +890,10 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
 
   if (isLocked) {
     return (
-      <div className="admin-login-container vault-bg">
+      <div className={`admin-login-container vault-bg ${pinError ? 'emergency-lockdown' : ''}`}>
+        {pinError && <div className="red-alert-overlay" />}
         <div className="background-wrapper"><div className="bg-grid" /><div className="bg-mesh" /></div>
-        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className={`vault-lock-container ${pinError ? 'shake-animation' : ''}`}>
+        <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className={`vault-lock-container ${pinError ? 'violent-shake-animation' : ''}`} style={{ position: 'relative' }}>
            <Lock size={48} className="vault-icon" />
            <h2>SECURE VAULT</h2>
            <p className="vault-subtitle">Enter 4-Digit Master PIN</p>
@@ -893,12 +906,20 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
            
            <div className="numpad-grid">
               {['1','2','3','4','5','6','7','8','9'].map(d => (
-                 <button key={d} onClick={() => handlePinPress(d)} className="numpad-btn">{d}</button>
+                 <button key={d} onClick={() => handlePinPress(d)} className="numpad-btn" disabled={pinError}>{d}</button>
               ))}
-              <button onClick={() => { auth.signOut(); setIsLocked(true); }} className="numpad-btn action-btn"><LogOut size={24}/></button>
-              <button onClick={() => handlePinPress('0')} className="numpad-btn">0</button>
-              <button onClick={handlePinDelete} className="numpad-btn action-btn"><Delete size={24}/></button>
+              <button onClick={() => { auth.signOut(); setIsLocked(true); }} className="numpad-btn action-btn" disabled={pinError}><LogOut size={24}/></button>
+              <button onClick={() => handlePinPress('0')} className="numpad-btn" disabled={pinError}>0</button>
+              <button onClick={handlePinDelete} className="numpad-btn action-btn" disabled={pinError}><Delete size={24}/></button>
            </div>
+
+           <AnimatePresence>
+             {funnyError && (
+               <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ opacity: 0 }} className="funny-error-msg">
+                 <AlertTriangle size={16} /> {funnyError}
+               </motion.div>
+             )}
+           </AnimatePresence>
         </motion.div>
       </div>
     );
