@@ -126,6 +126,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       headOrganizerNames: string;
       volunteerNames: string;
       instructorNamesExtra: string;
+      judgeNames: string;
       ceremonySelection?: string[];
       hofSelection?: string[];
   }>({
@@ -139,7 +140,8 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       headOrganizerNames: "",
       volunteerNames: "",
       instructorNamesExtra: "",
-      ceremonySelection: ['', '', '', '', '']
+      judgeNames: "",
+      ceremonySelection: ['', '', '', '', '', '', '']
   });
 
   const [newProject, setNewProject] = useState({
@@ -278,23 +280,28 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       ceremony_step_1: "SPECIAL THANKS",
       ceremony_step_2: "UNDER THE PATRONAGE OF UNIVERSITY PRESIDENCY",
       ceremony_step_3: "SPECIAL THANKS",
-      ceremony_step_4: "OUR INSTRUCTORS",
-      ceremony_step_5: "THE EXPO ORGANIZERS",
-      ceremony_step_6: "THE HEAD ORGANIZERS",
-      ceremony_step_7: "SPECIAL RECOGNITION",
-      ceremony_step_8: "OUR VOLUNTEERS",
-      ceremony_step_9: "THE 4TH PLACE - JUDGING AWARD",
-      ceremony_step_10: "THE 3RD PLACE - JUDGING AWARD",
-      ceremony_step_11: "THE 2ND PLACE - JUDGING AWARD",
-      ceremony_step_12: "THE GRAND CHAMPION 2026",
-      ceremony_step_13: "VOTING PLATFORM ANALYTICS",
-      ceremony_step_14: "FAN FAVORITE",
+      ceremony_step_4: "Instructors & Academics",
+      ceremony_step_5: "Special Thanks",
+      ceremony_step_6: "Judging Committee",
+      ceremony_step_7: "Special Thanks",
+      ceremony_step_8: "Organizing Committee",
+      ceremony_step_9: "Special Thanks",
+      ceremony_step_10: "Volunteers",
+      ceremony_step_11: "6th Place - Jury Selection",
+      ceremony_step_12: "5th Place - Jury Selection",
+      ceremony_step_13: "4th Place - Jury Selection",
+      ceremony_step_14: "3rd Place - Jury Selection",
+      ceremony_step_15: "2nd Place - Jury Selection",
+      ceremony_step_16: "1st Place - Champion",
+      ceremony_step_17: "Voting Platform Analytics",
+      ceremony_step_18: "Fan Favorite Project",
       auto_rotate_on: "Auto-Rotate Active",
       auto_rotate_off: "Static Display",
       ticker_label: "Live News Ticker Announcement",
       ticker_placeholder: "Type a public announcement...",
-      inst_extra_label: "Extra Instructor Names (Comma separated)",
-      head_org_names_label: "Head Organizers (e.g. John, Jane)",
+      inst_extra_label: "Additional Instructor Names (comma separated)",
+      head_org_names_label: "Head Organizers (e.g. Ahmad, Sarah)",
+      judge_names_label: "Judging Committee Names (comma separated)",
       org_names_label: "Organizers Names (Comma separated)",
       org_names_placeholder: "John Doe, Jane Doe, etc...",
       vol_names_label: "Volunteer Names (Comma separated)",
@@ -404,22 +411,27 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       ceremony_step_2: "تحت رعاية رئاسة الجامعة",
       ceremony_step_3: "شكر خاص",
       ceremony_step_4: "المدربين والأكاديميين",
-      ceremony_step_5: "اللجنة المنظمة",
-      ceremony_step_6: "رؤساء اللجنة المنظمة",
+      ceremony_step_5: "شكر خاص",
+      ceremony_step_6: "لجنة التحكيم",
       ceremony_step_7: "شكر خاص",
-      ceremony_step_8: "شكر للمتطوعين",
-      ceremony_step_9: "المركز الرابع - اختيار التحكيم",
-      ceremony_step_10: "المركز الثالث - اختيار التحكيم",
-      ceremony_step_11: "المركز الثاني - اختيار التحكيم",
-      ceremony_step_12: "المركز الأول - بطل المعرض",
-      ceremony_step_13: "إحصائيات منصة التصويت",
-      ceremony_step_14: "المشروع المفضل للجمهور",
+      ceremony_step_8: "اللجنة المنظمة",
+      ceremony_step_9: "شكر خاص",
+      ceremony_step_10: "المتطوعين",
+      ceremony_step_11: "المركز السادس - اختيار التحكيم",
+      ceremony_step_12: "المركز الخامس - اختيار التحكيم",
+      ceremony_step_13: "المركز الرابع - اختيار التحكيم",
+      ceremony_step_14: "المركز الثالث - اختيار التحكيم",
+      ceremony_step_15: "المركز الثاني - اختيار التحكيم",
+      ceremony_step_16: "المركز الأول - بطل المعرض",
+      ceremony_step_17: "إحصائيات منصة التصويت",
+      ceremony_step_18: "المشروع المفضل للجمهور",
       auto_rotate_on: "التدوير التلقائي مفعّل",
       auto_rotate_off: "عرض ثابت",
       ticker_label: "شريط الأخبار المباشر",
       ticker_placeholder: "اكتب إعلاناً عاماً للجمهور...",
       inst_extra_label: "أسماء المشرفين الإضافيين (مفصولين بفاصلة)",
       head_org_names_label: "رؤساء التنظيم (مثال: أحمد، سارة)",
+      judge_names_label: "أسماء لجنة التحكيم (مفصولين بفاصلة)",
       org_names_label: "أسماء المنظمين (مفصولين بفاصلة)",
       org_names_placeholder: "أحمد، سارة، إلخ...",
       vol_names_label: "أسماء المتطوعين (مفصولين بفاصلة)",
@@ -1450,6 +1462,10 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
 
                             <div className="item-label" style={{ marginTop: '15px' }}><Users size={20} /> <span>{t[lang].inst_extra_label}</span></div>
                             <div className="ticker-input-wrapper"><input type="text" placeholder={t[lang].org_names_placeholder} value={kioskConfig.instructorNamesExtra || ""} onChange={(e) => updateKiosk({ instructorNamesExtra: e.target.value })} className="ticker-admin-input" /></div>
+                            
+                            <div className="item-label" style={{ marginTop: '15px' }}><Users size={20} /> <span>{t[lang].judge_names_label}</span></div>
+                            <div className="ticker-input-wrapper"><input type="text" placeholder={t[lang].org_names_placeholder} value={kioskConfig.judgeNames || ""} onChange={(e) => updateKiosk({ judgeNames: e.target.value })} className="ticker-admin-input" /></div>
+                            
                             <div className="item-label" style={{ marginTop: '15px' }}><Users size={20} /> <span>{t[lang].vol_names_label}</span></div>
                             <div className="ticker-input-wrapper"><input type="text" placeholder={t[lang].org_names_placeholder} value={kioskConfig.volunteerNames || ""} onChange={(e) => updateKiosk({ volunteerNames: e.target.value })} className="ticker-admin-input" /></div>
                         </div>
@@ -1457,17 +1473,17 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                         <div className="stage-control-item glass-card" style={{ gridColumn: 'span 2' }}>
                             <div className="item-label"><Trophy size={20} color="#FFD700" /> <span>Hall of Fame & Ceremony Selection</span></div>
                             <div className="ceremony-selection-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginTop: '15px' }}>
-                                {[0, 1, 2, 3, 4].map(idx => (
+                                {[0, 1, 2, 3, 4, 5, 6].map(idx => (
                                     <div key={idx}>
                                         <label style={{ fontSize: '0.7rem', fontWeight: 800, color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', marginBottom: '5px', display: 'block' }}>
-                                            {idx === 0 ? '1st Place (Champion)' : idx === 1 ? '2nd Place' : idx === 2 ? '3rd Place' : idx === 3 ? '4th Place' : 'Fan Favorite'}
+                                            {idx === 0 ? '1st Place' : idx === 1 ? '2nd Place' : idx === 2 ? '3rd Place' : idx === 3 ? '4th Place' : idx === 4 ? '5th Place' : idx === 5 ? '6th Place' : 'Fan Favorite'}
                                         </label>
                                         <select
                                             value={(kioskConfig.hofSelection || [])[idx] || ""}
                                             onChange={(e) => {
-                                                const current = [...(kioskConfig.hofSelection || ['', '', '', '', ''])];
+                                                const current = [...(kioskConfig.hofSelection || ['', '', '', '', '', '', ''])];
                                                 current[idx] = e.target.value;
-                                                const cleanHof = [0, 1, 2, 3, 4].map(i => current[i] || '');
+                                                const cleanHof = [0, 1, 2, 3, 4, 5, 6].map(i => current[i] || '');
                                                 updateKiosk({ hofSelection: cleanHof, ceremonySelection: cleanHof });
                                                 // Sync to voting config as well for the public display
                                                 setDoc(doc(db, 'config', 'voting'), { hofSelection: cleanHof }, { merge: true }).catch(err => alert("Failed to save selection: " + err.message));
@@ -1500,7 +1516,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                             </div>
 
                             <div className="scene-selector-grid">
-                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(step => (
+                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(step => (
                                     <button key={step} onClick={() => updateKiosk({ revealStep: step, isPaused: false })} className={`scene-btn ${kioskConfig.revealStep === step ? 'active' : ''}`}>
                                         <div className="scene-number">{step}</div>
                                         <div className="scene-name">{t[lang][`ceremony_step_${step}` as keyof typeof t['ar']] as string}</div>
@@ -1510,7 +1526,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
 
                             <div className="ceremony-actions" style={{ marginTop: '20px' }}>
                                 <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.max(0, kioskConfig.revealStep - 1), isPaused: false })}><Rewind size={24} /></button>
-                                <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.min(14, kioskConfig.revealStep + 1), isPaused: false })}><SkipForward size={24} /></button>
+                                <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.min(18, kioskConfig.revealStep + 1), isPaused: false })}><SkipForward size={24} /></button>
                                 <button className="stage-reset-btn" onClick={() => updateKiosk({ revealStep: 0, isPaused: true })}><RotateCcw size={20} /> <span>{t[lang].reveal_reset}</span></button>
                             </div>
                         </motion.div>
