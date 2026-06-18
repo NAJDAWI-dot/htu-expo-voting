@@ -730,8 +730,8 @@ function App() {
                                 </motion.div>
                             ) : null}
 
-                            {/* Slides 1-8: Pristine Typographic Credits */}
-                            {!kioskConfig.isPaused && kioskConfig.revealStep >= 1 && kioskConfig.revealStep <= 8 && (
+                            {/* Slides 1-9: Pristine Typographic Credits */}
+                            {!kioskConfig.isPaused && kioskConfig.revealStep >= 1 && kioskConfig.revealStep <= 9 && (
                                 <motion.div 
                                     key={`credit-min-${kioskConfig.revealStep}`}
                                     initial={{ opacity: 0, y: 50 }}
@@ -742,7 +742,7 @@ function App() {
                                 >
                                     <motion.span 
                                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 1 }}
-                                        className={`credits-subtitle-ultimate ${kioskConfig.revealStep === 4 || kioskConfig.revealStep === 8 ? 'title-huge' : ''}`}
+                                        className={`credits-subtitle-ultimate ${[4, 5, 7, 9].includes(kioskConfig.revealStep) ? 'title-huge' : ''}`}
                                     >
                                         {t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] as string}
                                     </motion.span>
@@ -802,7 +802,7 @@ function App() {
                                                 </motion.div>
                                             </motion.div>
                                         </div>
-                                    ) : kioskConfig.revealStep === 8 ? (
+                                    ) : kioskConfig.revealStep === 7 ? (
                                         <div className="organizer-cloud-ultimate">
                                             {kioskConfig.headOrganizerNames && (
                                                 <div className="head-org-grid-ultimate">
@@ -820,12 +820,12 @@ function App() {
                                                 </div>
                                             )}
                                         </div>
-                                    ) : [4, 6, 10].includes(kioskConfig.revealStep) ? (
-                                        /* ── Slide 4 (Judges), 6 (Instructors), 10 (Volunteers): Matrix name backdrop ── */
+                                    ) : [4, 5, 9].includes(kioskConfig.revealStep) ? (
+                                        /* ── Slide 4 (Instructors), 5 (Judges), 9 (Volunteers): Matrix name backdrop ── */
                                         <div className="instructor-matrix-bg">
                                             {(() => {
-                                                const sourceStr = kioskConfig.revealStep === 4 ? kioskConfig.judgeNames :
-                                                                  kioskConfig.revealStep === 6 ? kioskConfig.instructorNamesExtra :
+                                                const sourceStr = kioskConfig.revealStep === 5 ? kioskConfig.judgeNames :
+                                                                  kioskConfig.revealStep === 4 ? kioskConfig.instructorNamesExtra :
                                                                   kioskConfig.volunteerNames;
                                                 const names = (sourceStr || '')
                                                     .split(',').map((n: string) => n.trim()).filter(Boolean);
@@ -852,15 +852,18 @@ function App() {
                                             className="credits-main-ultimate"
                                             style={{ textShadow: '0 0 30px rgba(255,215,0,0.9), 0 0 60px rgba(255,215,0,0.5)' }}
                                         >
-                                            {t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] as string}
+                                            {kioskConfig.revealStep === 1 ? 'Al Hussein Technical University' :
+                                             kioskConfig.revealStep === 3 ? 'Our Instructors & Students' :
+                                             kioskConfig.revealStep === 6 ? 'The Organizing Committee' :
+                                             kioskConfig.revealStep === 8 ? 'Our Volunteers' : ''}
                                             <div className="god-line-ultimate" />
                                         </motion.div>
                                     )}
                                 </motion.div>
                             )}
 
-                            {/* Slides 11-16, 18: Borderless Cinematic Winner Moments */}
-                            {!kioskConfig.isPaused && (kioskConfig.revealStep >= 11 && kioskConfig.revealStep !== 17) && (
+                            {/* Slides 10-15, 17: Borderless Cinematic Winner Moments */}
+                            {!kioskConfig.isPaused && ((kioskConfig.revealStep >= 10 && kioskConfig.revealStep <= 15) || kioskConfig.revealStep === 17) && (
                                 <motion.div 
                                     key={`winner-min-${kioskConfig.revealStep}`}
                                     initial={{ opacity: 0 }}
@@ -872,7 +875,7 @@ function App() {
                                         {t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] as string}
                                     </div>
 
-                                    {revealProjects[kioskConfig.revealStep === 18 ? 6 : 16 - kioskConfig.revealStep] && (
+                                    {revealProjects[kioskConfig.revealStep === 17 ? 6 : 15 - kioskConfig.revealStep] && (
                                         <>
                                             <motion.div 
                                                 initial={{ scale: 0.9, opacity: 0 }} 
@@ -883,24 +886,24 @@ function App() {
                                                 <motion.img 
                                                     animate={{ scale: [1, 1.05, 1] }}
                                                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                                    src={revealProjects[kioskConfig.revealStep === 18 ? 6 : 16 - kioskConfig.revealStep]?.imageUrl || 'hero.png'} alt="Winner" 
+                                                    src={revealProjects[kioskConfig.revealStep === 17 ? 6 : 15 - kioskConfig.revealStep]?.imageUrl || 'hero.png'} alt="Winner" 
                                                 />
                                             </motion.div>
 
                                             <div className="winner-details-ultimate">
-                                                <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 0.6 }} transition={{ delay: 1.2, duration: 1.5 }} className="winner-rank-hologram">
-                                                    {kioskConfig.revealStep === 18 ? (
+                                                <motion.div initial={{ x: 50, opacity: 0 }} animate={{ x: 0, opacity: 0.6 }} transition={{ delay: 1.2, duration: 1.5 }} className="winner-rank-h hologram">
+                                                    {kioskConfig.revealStep === 17 ? (
                                                         <span style={{ fontSize: '0.4em', whiteSpace: 'nowrap' }}>FAN FAV</span>
                                                     ) : (
-                                                        <span>#{17 - kioskConfig.revealStep}</span>
+                                                        <span>#{16 - kioskConfig.revealStep}</span>
                                                     )}
                                                 </motion.div>
-                                                <motion.h3 initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 1.5 }} className="winner-name-ultimate">{revealProjects[kioskConfig.revealStep === 18 ? 6 : 16 - kioskConfig.revealStep]?.title}</motion.h3>
-                                                <motion.p initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 0.9 }} transition={{ delay: 1.8, duration: 1.5 }} className="winner-instructor-ultimate">{revealProjects[kioskConfig.revealStep === 18 ? 6 : 16 - kioskConfig.revealStep]?.team_members}</motion.p>
+                                                <motion.h3 initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 1.5 }} className="winner-name-ultimate">{revealProjects[kioskConfig.revealStep === 17 ? 6 : 15 - kioskConfig.revealStep]?.title}</motion.h3>
+                                                <motion.p initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 0.9 }} transition={{ delay: 1.8, duration: 1.5 }} className="winner-instructor-ultimate">{revealProjects[kioskConfig.revealStep === 17 ? 6 : 15 - kioskConfig.revealStep]?.team_members}</motion.p>
 
                                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5, duration: 1.5 }} className="winner-votes-ultimate">
-                                                    <strong>{kioskConfig.revealStep === 18 ? 'FAN FAV PROJECT' : 'JUDGING AWARD'}</strong>
-                                                    {kioskConfig.revealStep === 18 ? (
+                                                    <strong>{kioskConfig.revealStep === 17 ? 'FAN FAV PROJECT' : 'JUDGING AWARD'}</strong>
+                                                    {kioskConfig.revealStep === 17 ? (
                                                         <span style={{ color: '#FFD700', textShadow: '0 0 10px rgba(255,215,0,0.4)' }}>
                                                             {revealProjects[6]?.votes || 0} VOTES VERIFIED
                                                         </span>
@@ -914,8 +917,8 @@ function App() {
                                 </motion.div>
                             )}
 
-                            {/* Slide 17: Voting Platform Analytics */}
-                            {!kioskConfig.isPaused && kioskConfig.revealStep === 17 && (
+                            {/* Slide 16: Voting Platform Analytics */}
+                            {!kioskConfig.isPaused && kioskConfig.revealStep === 16 && (
                                 <motion.div 
                                     key="analytics-slide"
                                     initial={{ opacity: 0 }}
@@ -924,7 +927,7 @@ function App() {
                                     className="winner-reveal-ultimate-moment"
                                 >
                                     <div className="winner-title-ultimate" style={{ textShadow: '0 0 30px rgba(255,215,0,0.9), 0 0 60px rgba(255,215,0,0.5)' }}>
-                                        {t[lang][`ceremony_step_17` as keyof typeof t['en']] as string}
+                                        {t[lang][`ceremony_step_16` as keyof typeof t['en']] as string}
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6vh', marginTop: '5vh', width: '100%', maxWidth: '1400px', zIndex: 10, position: 'relative', gridColumn: '1 / -1', margin: '0 auto' }}>
                                         

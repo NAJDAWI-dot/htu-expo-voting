@@ -277,24 +277,23 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       reveal_next: "Next Reveal Step",
       reveal_reset: "Reset Reveal",
       ceremony_step_0: "INTRO COUNTDOWN",
-      ceremony_step_1: "SPECIAL THANKS",
+      ceremony_step_1: "SPECIAL THANKS TO",
       ceremony_step_2: "UNDER THE PATRONAGE OF UNIVERSITY PRESIDENCY",
-      ceremony_step_3: "SPECIAL THANKS",
-      ceremony_step_4: "Instructors & Academics",
-      ceremony_step_5: "Special Thanks",
-      ceremony_step_6: "Judging Committee",
-      ceremony_step_7: "Special Thanks",
-      ceremony_step_8: "Organizing Committee",
-      ceremony_step_9: "Special Thanks",
-      ceremony_step_10: "Volunteers",
-      ceremony_step_11: "6th Place - Jury Selection",
-      ceremony_step_12: "5th Place - Jury Selection",
-      ceremony_step_13: "4th Place - Jury Selection",
-      ceremony_step_14: "3rd Place - Jury Selection",
-      ceremony_step_15: "2nd Place - Jury Selection",
-      ceremony_step_16: "1st Place - Champion",
-      ceremony_step_17: "Voting Platform Analytics",
-      ceremony_step_18: "Fan Favorite Project",
+      ceremony_step_3: "SPECIAL THANKS TO",
+      ceremony_step_4: "OUR INSTRUCTORS & STUDENTS",
+      ceremony_step_5: "THE JUDGING COMMITTEE",
+      ceremony_step_6: "SPECIAL THANKS TO",
+      ceremony_step_7: "THE ORGANIZING COMMITTEE",
+      ceremony_step_8: "SPECIAL RECOGNITION",
+      ceremony_step_9: "OUR VOLUNTEERS",
+      ceremony_step_10: "6th Place - Jury Selection",
+      ceremony_step_11: "5th Place - Jury Selection",
+      ceremony_step_12: "4th Place - Jury Selection",
+      ceremony_step_13: "3rd Place - Jury Selection",
+      ceremony_step_14: "2nd Place - Jury Selection",
+      ceremony_step_15: "1st Place - Champion",
+      ceremony_step_16: "Voting Platform Analytics",
+      ceremony_step_17: "Fan Favorite Project",
       auto_rotate_on: "Auto-Rotate Active",
       auto_rotate_off: "Static Display",
       ticker_label: "Live News Ticker Announcement",
@@ -407,24 +406,23 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       reveal_next: "كشف المركز التالي",
       reveal_reset: "إعادة ضبط الكشف",
       ceremony_step_0: "عد تنازلي للافتتاح",
-      ceremony_step_1: "شكر خاص",
+      ceremony_step_1: "شكر خاص إلى",
       ceremony_step_2: "تحت رعاية رئاسة الجامعة",
-      ceremony_step_3: "شكر خاص",
-      ceremony_step_4: "المدربين والأكاديميين",
-      ceremony_step_5: "شكر خاص",
-      ceremony_step_6: "لجنة التحكيم",
-      ceremony_step_7: "شكر خاص",
-      ceremony_step_8: "اللجنة المنظمة",
-      ceremony_step_9: "شكر خاص",
-      ceremony_step_10: "المتطوعين",
-      ceremony_step_11: "المركز السادس - اختيار التحكيم",
-      ceremony_step_12: "المركز الخامس - اختيار التحكيم",
-      ceremony_step_13: "المركز الرابع - اختيار التحكيم",
-      ceremony_step_14: "المركز الثالث - اختيار التحكيم",
-      ceremony_step_15: "المركز الثاني - اختيار التحكيم",
-      ceremony_step_16: "المركز الأول - بطل المعرض",
-      ceremony_step_17: "إحصائيات منصة التصويت",
-      ceremony_step_18: "المشروع المفضل للجمهور",
+      ceremony_step_3: "شكر خاص إلى",
+      ceremony_step_4: "المدربين والطلاب",
+      ceremony_step_5: "لجنة التحكيم",
+      ceremony_step_6: "شكر خاص إلى",
+      ceremony_step_7: "اللجنة المنظمة",
+      ceremony_step_8: "تقدير خاص",
+      ceremony_step_9: "فريق المتطوعين",
+      ceremony_step_10: "المركز السادس - اختيار التحكيم",
+      ceremony_step_11: "المركز الخامس - اختيار التحكيم",
+      ceremony_step_12: "المركز الرابع - اختيار التحكيم",
+      ceremony_step_13: "المركز الثالث - اختيار التحكيم",
+      ceremony_step_14: "المركز الثاني - اختيار التحكيم",
+      ceremony_step_15: "المركز الأول - بطل المعرض",
+      ceremony_step_16: "إحصائيات منصة التصويت",
+      ceremony_step_17: "المشروع المفضل للجمهور",
       auto_rotate_on: "التدوير التلقائي مفعّل",
       auto_rotate_off: "عرض ثابت",
       ticker_label: "شريط الأخبار المباشر",
@@ -1512,21 +1510,21 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="ceremony-orchestrator glass-card mt-8">
                             <div className="ceremony-status" style={{ marginBottom: '20px' }}>
                                 <span className="status-label">Live Scene:</span>
-                                <strong className="phase-name">{t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['ar']] as string}</strong>
+                                <strong className="phase-name">{t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] as string}</strong>
                             </div>
 
                             <div className="scene-selector-grid">
-                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18].map(step => (
+                                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17].map(step => (
                                     <button key={step} onClick={() => updateKiosk({ revealStep: step, isPaused: false })} className={`scene-btn ${kioskConfig.revealStep === step ? 'active' : ''}`}>
                                         <div className="scene-number">{step}</div>
-                                        <div className="scene-name">{t[lang][`ceremony_step_${step}` as keyof typeof t['ar']] as string}</div>
+                                        <div className="scene-name">{t[lang][`ceremony_step_${step}` as keyof typeof t['en']] as string}</div>
                                     </button>
                                 ))}
                             </div>
 
                             <div className="ceremony-actions" style={{ marginTop: '20px' }}>
                                 <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.max(0, kioskConfig.revealStep - 1), isPaused: false })}><Rewind size={24} /></button>
-                                <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.min(18, kioskConfig.revealStep + 1), isPaused: false })}><SkipForward size={24} /></button>
+                                <button className="stage-icon-btn" onClick={() => updateKiosk({ revealStep: Math.min(17, kioskConfig.revealStep + 1), isPaused: false })}><SkipForward size={24} /></button>
                                 <button className="stage-reset-btn" onClick={() => updateKiosk({ revealStep: 0, isPaused: true })}><RotateCcw size={20} /> <span>{t[lang].reveal_reset}</span></button>
                             </div>
                         </motion.div>
