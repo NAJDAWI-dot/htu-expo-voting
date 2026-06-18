@@ -742,7 +742,7 @@ function App() {
                                 >
                                     <motion.span 
                                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 1 }}
-                                        className={`credits-subtitle-ultimate ${[4, 5, 7, 9].includes(kioskConfig.revealStep) ? 'title-huge' : ''}`}
+                                        className={`credits-subtitle-ultimate ${[4, 6, 8, 9].includes(kioskConfig.revealStep) ? 'title-huge' : ''}`}
                                     >
                                         {t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] as string}
                                     </motion.span>
@@ -802,7 +802,7 @@ function App() {
                                                 </motion.div>
                                             </motion.div>
                                         </div>
-                                    ) : kioskConfig.revealStep === 7 ? (
+                                    ) : kioskConfig.revealStep === 6 ? (
                                         <div className="organizer-cloud-ultimate">
                                             {kioskConfig.headOrganizerNames && (
                                                 <div className="head-org-grid-ultimate">
@@ -820,11 +820,11 @@ function App() {
                                                 </div>
                                             )}
                                         </div>
-                                    ) : [4, 5, 9].includes(kioskConfig.revealStep) ? (
-                                        /* ── Slide 4 (Instructors), 5 (Judges), 9 (Volunteers): Matrix name backdrop ── */
+                                    ) : [4, 8, 9].includes(kioskConfig.revealStep) ? (
+                                        /* ── Slide 4 (Instructors), 8 (Volunteers), 9 (Judges): Matrix name backdrop ── */
                                         <div className="instructor-matrix-bg">
                                             {(() => {
-                                                const sourceStr = kioskConfig.revealStep === 5 ? kioskConfig.judgeNames :
+                                                const sourceStr = kioskConfig.revealStep === 9 ? kioskConfig.judgeNames :
                                                                   kioskConfig.revealStep === 4 ? kioskConfig.instructorNamesExtra :
                                                                   kioskConfig.volunteerNames;
                                                 const names = (sourceStr || '')
@@ -854,8 +854,8 @@ function App() {
                                         >
                                             {kioskConfig.revealStep === 1 ? 'Al Hussein Technical University' :
                                              kioskConfig.revealStep === 3 ? 'Our Instructors & Students' :
-                                             kioskConfig.revealStep === 6 ? 'The Organizing Committee' :
-                                             kioskConfig.revealStep === 8 ? 'Our Volunteers' : ''}
+                                             kioskConfig.revealStep === 5 ? 'The Organizing Committee' :
+                                             kioskConfig.revealStep === 7 ? 'Our Volunteers' : ''}
                                             <div className="god-line-ultimate" />
                                         </motion.div>
                                     )}
