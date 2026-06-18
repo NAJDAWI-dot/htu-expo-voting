@@ -892,13 +892,11 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       }
   }, [selectedPlacard]);
 
-  const downloadPlacardNative = async () => {
-    if (!selectedPlacard) return;
-    
+  const generatePlacardBlob = async (p: Project): Promise<Blob> => {
     const qrCode = new QRCodeStyling({
         width: 500,
         height: 500,
-        data: `${window.location.origin}${window.location.pathname}?project=${selectedPlacard.id}`,
+        data: `${window.location.origin}${window.location.pathname}?project=${p.id}`,
         image: `${window.location.origin}${import.meta.env.BASE_URL}htu-logo.png`,
         dotsOptions: { color: "#E8343F", type: "rounded" },
         cornersSquareOptions: { type: "extra-rounded", color: "#01060D" },
@@ -908,7 +906,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     });
 
     const qrBlob = await qrCode.getRawData("png");
-    if (!qrBlob) return;
+    if (!qrBlob) throw new Error("QR Blob failed");
 
     const qrImage = new Image();
     qrImage.src = URL.createObjectURL(qrBlob as Blob);
@@ -918,7 +916,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     canvas.width = 1080;
     canvas.height = 1920;
     const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) throw new Error("No canvas context");
 
     // Background
     ctx.fillStyle = '#FFFFFF';
@@ -963,40 +961,47 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
         return currentY + lineHeight;
     };
 
-    // Clean up team members string for better wrapping (add space after commas)
-    const safeTeamMembers = selectedPlacard.team_members.replace(/,/g, ', ').replace(/\s+/g, ' ').trim();
+    const safeTeamMembers = (p.team_members || '').replace(/,/g, ', ').replace(/\s+/g, ' ').trim();
 
-    // 1. Draw Title
     ctx.fillStyle = '#E8343F';
     ctx.font = '900 70px Montserrat, Tajawal, sans-serif';
-    let currentY = wrapText(selectedPlacard.title.toUpperCase(), 520, 900, 80);
+    let currentY = wrapText((p.title || '').toUpperCase(), 520, 900, 80);
 
-    // 2. Draw Team Members
     currentY += 20;
     ctx.fillStyle = '#222';
     ctx.font = '700 45px Montserrat, Tajawal, sans-serif';
     currentY = wrapText(safeTeamMembers, currentY, 900, 60);
     
-    // 3. Draw Instructor
     currentY += 10;
     ctx.fillStyle = '#555';
     ctx.font = '600 35px Montserrat, Tajawal, sans-serif';
-    currentY = wrapText(`Instructor: ${selectedPlacard.instructor}`, currentY, 900, 45);
+    currentY = wrapText(`Instructor: ${p.instructor}`, currentY, 900, 45);
 
-    // 4. Draw QR Code (Dynamic Y-Position based on text block height)
-    const qrStartY = Math.max(currentY + 50, 750); // Ensure minimal spacing, but keep it balanced
+    const qrStartY = Math.max(currentY + 50, 750);
     ctx.drawImage(qrImage, 1080 / 2 - 250, qrStartY, 500, 500);
 
-    // 5. Draw Scan Prompt
     ctx.fillStyle = '#01060D';
     ctx.font = '900 50px Montserrat, Tajawal, sans-serif';
     ctx.fillText('SCAN TO VOTE FOR THIS TEAM', 1080 / 2, qrStartY + 580);
 
+    return new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob((b) => {
+            if (b) resolve(b); else reject(new Error("Blob failed"));
+        }, 'image/png');
+    });
+  };
 
-    const link = document.createElement('a');
-    link.download = `HTU_Placard_${selectedPlacard.title.replace(/\s+/g, '_')}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+  const downloadPlacardNative = async () => {
+    if (!selectedPlacard) return;
+    try {
+        const blob = await generatePlacardBlob(selectedPlacard);
+        const link = document.createElement('a');
+        link.download = `HTU_Placard_${selectedPlacard.title.replace(/[^a-zA-Z0-9]/g, '_')}.png`;
+        link.href = URL.createObjectURL(blob);
+        link.click();
+    } catch(err) {
+        alert("Failed to generate placard");
+    }
   };
 
   const downloadAllQRCodes = async () => {
@@ -1004,30 +1009,17 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     try {
       const JSZip = (await import('jszip')).default;
       const zip = new JSZip();
-      const qrFolder = zip.folder('Teams_QRCodes');
+      const qrFolder = zip.folder('Teams_Placards');
 
       for (const p of projects) {
-        const qrCode = new QRCodeStyling({
-            width: 500,
-            height: 500,
-            data: `${window.location.origin}${window.location.pathname}?project=${p.id}`,
-            image: `${window.location.origin}${import.meta.env.BASE_URL}htu-logo.png`,
-            dotsOptions: { color: "#E8343F", type: "rounded" },
-            cornersSquareOptions: { color: "#2E3192", type: "extra-rounded" },
-            cornersDotOptions: { color: "#2E3192" },
-            backgroundOptions: { color: "#ffffff" },
-            imageOptions: { crossOrigin: "anonymous", margin: 15 }
-        });
-        const blob = await qrCode.getRawData("png");
-        if (blob) {
-            qrFolder?.file(`${p.title.replace(/[^a-zA-Z0-9]/g, '_')} - ${p.id}.png`, blob as Blob);
-        }
+        const blob = await generatePlacardBlob(p);
+        qrFolder?.file(`${p.title.replace(/[^a-zA-Z0-9]/g, '_')} - ${p.id}.png`, blob);
       }
       
       const content = await zip.generateAsync({ type: "blob" });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(content);
-      link.download = `Teams_QRCodes.zip`;
+      link.download = `Teams_Placards.zip`;
       link.click();
     } catch (err) {
       console.error(err);
