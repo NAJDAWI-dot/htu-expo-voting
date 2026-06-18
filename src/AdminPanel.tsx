@@ -47,6 +47,7 @@ interface Judge {
   name: string;
   title: string;
   committee: string;
+  isLeader: boolean;
   verification: boolean;
   registeredAt: number;
 }
@@ -109,7 +110,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
 
   // Judges State
   const [judges, setJudges] = useState<Judge[]>([]);
-  const [newJudge, setNewJudge] = useState({ name: '', title: '', committee: '', verification: false });
+  const [newJudge, setNewJudge] = useState({ name: '', title: '', committee: '', isLeader: false, verification: false });
   const [addingJudge, setAddingJudge] = useState(false);
   const [judgeSearch, setJudgeSearch] = useState('');
   
@@ -308,6 +309,9 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       judge_name: "Full Name",
       judge_job_title: "Job Title / Position",
       judge_committee: "Judging Committee",
+      judge_role: "Committee Role",
+      role_member: "Member",
+      role_leader: "Leader",
       judge_verification: "Verification Code / ID",
       judge_register: "Register Judge",
       judge_search: "Search judges by name or committee...",
@@ -430,6 +434,9 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       judge_name: "الاسم الكامل",
       judge_job_title: "المسمى الوظيفي",
       judge_committee: "لجنة التحكيم",
+      judge_role: "الدور في اللجنة",
+      role_member: "عضو",
+      role_leader: "رئيس اللجنة",
       judge_verification: "كود التحقق / الهوية",
       judge_register: "تسجيل محكّم",
       judge_search: "ابحث بالاسم، أو اللجنة...",
@@ -681,7 +688,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     try {
       const judgeId = `${newJudge.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}-${Date.now()}`;
       await setDoc(doc(db, 'judges', judgeId), { ...newJudge, registeredAt: Date.now() });
-      setNewJudge({ name: '', title: '', committee: '', verification: false });
+      setNewJudge({ name: '', title: '', committee: '', isLeader: false, verification: false });
     } catch (err) {
       alert('Failed to register judge.');
     } finally {
@@ -705,9 +712,9 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   };
 
   const exportJudgesCSV = () => {
-    const headers = ['Name', 'Title', 'Committee', 'Verification', 'Registered'];
+    const headers = ['Name', 'Title', 'Committee', 'Role', 'Verification', 'Registered'];
     const rows = judges.map(j => [
-      `"${j.name}"`, `"${j.title}"`, `"${j.committee}"`, `"${j.verification ? 'Verified/Attended' : 'Pending'}"`,
+      `"${j.name}"`, `"${j.title}"`, `"${j.committee}"`, `"${j.isLeader ? 'Leader' : 'Member'}"`, `"${j.verification ? 'Verified/Attended' : 'Pending'}"`,
       `"${new Date(j.registeredAt).toLocaleDateString()}"`
     ]);
     const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
@@ -1488,6 +1495,12 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                       <input placeholder={t[lang].judge_job_title} value={newJudge.title} onChange={e => setNewJudge({ ...newJudge, title: e.target.value })} />
                       <input placeholder={t[lang].judge_committee} value={newJudge.committee} onChange={e => setNewJudge({ ...newJudge, committee: e.target.value })} />
                     </div>
+                    <div className="form-group-elite">
+                      <select className="ticker-admin-input" value={newJudge.isLeader ? 'true' : 'false'} onChange={e => setNewJudge({ ...newJudge, isLeader: e.target.value === 'true' })}>
+                        <option value="false">{t[lang].role_member}</option>
+                        <option value="true">{t[lang].role_leader}</option>
+                      </select>
+                    </div>
                     <button type="submit" className="htu-button" disabled={addingJudge}>
                       {addingJudge ? <Loader2 className="animate-spin" size={20} /> : <><Plus size={18} /> {t[lang].judge_register}</>}
                     </button>
@@ -1537,7 +1550,12 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                               <td><span className="section-badge">{idx + 1}</span></td>
                               <td><strong>{j.name}</strong></td>
                               <td>{j.title || '—'}</td>
-                              <td>{j.committee || '—'}</td>
+                              <td>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                  {j.committee || '—'}
+                                  {j.isLeader && <span className="badge-title-pill" style={{ background: 'rgba(255, 215, 0, 0.2)', color: '#FFD700', padding: '2px 6px', fontSize: '0.65rem' }}><Trophy size={10} style={{ display: 'inline', marginRight: '2px', verticalAlign: 'text-bottom' }} /> {t[lang].role_leader}</span>}
+                                </div>
+                              </td>
                               <td>
                                 <button 
                                   onClick={() => handleVerifyJudge(j.id, !!j.verification)}
