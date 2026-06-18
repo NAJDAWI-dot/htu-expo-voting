@@ -761,7 +761,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
               width: 450,
               height: 450,
               data: `${window.location.origin}${window.location.pathname}?project=${selectedPlacard.id}`,
-              image: "/htu-logo.png",
+              image: `${window.location.origin}${import.meta.env.BASE_URL}htu-logo.png`,
               dotsOptions: {
                   color: "#E8343F",
                   type: "rounded"
@@ -794,7 +794,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
         width: 500,
         height: 500,
         data: `${window.location.origin}${window.location.pathname}?project=${selectedPlacard.id}`,
-        image: "/htu-logo.png",
+        image: `${window.location.origin}${import.meta.env.BASE_URL}htu-logo.png`,
         dotsOptions: { color: "#E8343F", type: "rounded" },
         cornersSquareOptions: { type: "extra-rounded", color: "#01060D" },
         cornersDotOptions: { type: "dot", color: "#E8343F" },
@@ -828,7 +828,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     try {
         const img = new Image();
         img.crossOrigin = "anonymous";
-        img.src = 'favicon.png';
+        img.src = `${window.location.origin}${import.meta.env.BASE_URL}htu-logo.png`;
         await new Promise((res) => { img.onload = res; img.onerror = res; });
         ctx.drawImage(img, 1080 / 2 - 100, 120, 200, 200);
     } catch(e) {}
