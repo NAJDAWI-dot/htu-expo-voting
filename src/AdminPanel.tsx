@@ -761,7 +761,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
               width: 450,
               height: 450,
               data: `${window.location.origin}${window.location.pathname}?project=${selectedPlacard.id}`,
-              image: "favicon.png",
+              image: "/htu-logo.png",
               dotsOptions: {
                   color: "#E8343F",
                   type: "rounded"
@@ -794,7 +794,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
         width: 500,
         height: 500,
         data: `${window.location.origin}${window.location.pathname}?project=${selectedPlacard.id}`,
-        image: "favicon.png",
+        image: "/htu-logo.png",
         dotsOptions: { color: "#E8343F", type: "rounded" },
         cornersSquareOptions: { type: "extra-rounded", color: "#01060D" },
         cornersDotOptions: { type: "dot", color: "#E8343F" },
