@@ -290,7 +290,28 @@ function App() {
         unsubscribeProjects = onSnapshot(projectsQuery, (snapshot) => {
           const projectsList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Project[];
           setProjects(prev => {
-            if (prev.length === 0) return [...projectsList].sort(() => 0.5 - Math.random());
+            if (prev.length === 0) {
+              // Group by instructor, shuffle within each group, then interleave round-robin
+              const grouped: Record<string, Project[]> = {};
+              for (const p of projectsList) {
+                const key = (p.instructor || 'Unknown').trim();
+                if (!grouped[key]) grouped[key] = [];
+                grouped[key].push(p);
+              }
+              // Shuffle each group individually
+              const groups = Object.values(grouped).map(g => [...g].sort(() => 0.5 - Math.random()));
+              // Shuffle the group order itself
+              groups.sort(() => 0.5 - Math.random());
+              // Round-robin interleave: pick one from each group in turn
+              const interleaved: Project[] = [];
+              let i = 0;
+              while (groups.some(g => g.length > 0)) {
+                const group = groups[i % groups.length];
+                if (group.length > 0) interleaved.push(group.shift()!);
+                i++;
+              }
+              return interleaved;
+            }
             const updated = prev.map(p => { const fresh = projectsList.find(pl => pl.id === p.id); return fresh ? { ...p, ...fresh } : p; });
             const prevIds = prev.map(p => p.id);
             const newOnes = projectsList.filter(pl => !prevIds.includes(pl.id));
