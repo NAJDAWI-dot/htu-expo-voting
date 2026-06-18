@@ -46,8 +46,8 @@ interface Judge {
   id: string;
   name: string;
   title: string;
-  department: string;
-  email: string;
+  committee: string;
+  verification: string;
   registeredAt: number;
 }
 
@@ -109,7 +109,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
 
   // Judges State
   const [judges, setJudges] = useState<Judge[]>([]);
-  const [newJudge, setNewJudge] = useState({ name: '', title: '', department: '', email: '' });
+  const [newJudge, setNewJudge] = useState({ name: '', title: '', committee: '', verification: '' });
   const [addingJudge, setAddingJudge] = useState(false);
   const [judgeSearch, setJudgeSearch] = useState('');
   
@@ -307,15 +307,15 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       judge_title: "Judges Registration",
       judge_name: "Full Name",
       judge_job_title: "Job Title / Position",
-      judge_dept: "Department / Organization",
-      judge_email: "Email Address",
+      judge_committee: "Judging Committee",
+      judge_verification: "Verification Code / ID",
       judge_register: "Register Judge",
-      judge_search: "Search judges by name, department, or email...",
+      judge_search: "Search judges by name or committee...",
       judge_count: "Registered Judges",
       judge_th_name: "Name",
       judge_th_title: "Position",
-      judge_th_dept: "Department",
-      judge_th_email: "Email",
+      judge_th_committee: "Committee",
+      judge_th_verification: "Verification",
       judge_th_date: "Registered",
       judge_delete: "Remove",
       judge_empty: "No judges registered yet."
@@ -429,15 +429,15 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       judge_title: "تسجيل المحكّمين",
       judge_name: "الاسم الكامل",
       judge_job_title: "المسمى الوظيفي",
-      judge_dept: "القسم / المؤسسة",
-      judge_email: "البريد الإلكتروني",
+      judge_committee: "لجنة التحكيم",
+      judge_verification: "كود التحقق / الهوية",
       judge_register: "تسجيل محكّم",
-      judge_search: "ابحث بالاسم، القسم، أو البريد...",
+      judge_search: "ابحث بالاسم، أو اللجنة...",
       judge_count: "المحكّمون المسجلون",
       judge_th_name: "الاسم",
       judge_th_title: "المسمى",
-      judge_th_dept: "القسم",
-      judge_th_email: "البريد",
+      judge_th_committee: "اللجنة",
+      judge_th_verification: "التحقق",
       judge_th_date: "تاريخ التسجيل",
       judge_delete: "حذف",
       judge_empty: "لا يوجد محكّمون مسجلون بعد."
@@ -681,7 +681,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     try {
       const judgeId = `${newJudge.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}-${Date.now()}`;
       await setDoc(doc(db, 'judges', judgeId), { ...newJudge, registeredAt: Date.now() });
-      setNewJudge({ name: '', title: '', department: '', email: '' });
+      setNewJudge({ name: '', title: '', committee: '', verification: '' });
     } catch (err) {
       alert('Failed to register judge.');
     } finally {
@@ -697,9 +697,9 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   };
 
   const exportJudgesCSV = () => {
-    const headers = ['Name', 'Title', 'Department', 'Email', 'Registered'];
+    const headers = ['Name', 'Title', 'Committee', 'Verification', 'Registered'];
     const rows = judges.map(j => [
-      `"${j.name}"`, `"${j.title}"`, `"${j.department}"`, `"${j.email}"`,
+      `"${j.name}"`, `"${j.title}"`, `"${j.committee}"`, `"${j.verification}"`,
       `"${new Date(j.registeredAt).toLocaleDateString()}"`
     ]);
     const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
@@ -1478,10 +1478,10 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                     </div>
                     <div className="form-row-elite">
                       <input placeholder={t[lang].judge_job_title} value={newJudge.title} onChange={e => setNewJudge({ ...newJudge, title: e.target.value })} />
-                      <input placeholder={t[lang].judge_dept} value={newJudge.department} onChange={e => setNewJudge({ ...newJudge, department: e.target.value })} />
+                      <input placeholder={t[lang].judge_committee} value={newJudge.committee} onChange={e => setNewJudge({ ...newJudge, committee: e.target.value })} />
                     </div>
                     <div className="form-group-elite">
-                      <input type="email" placeholder={t[lang].judge_email} value={newJudge.email} onChange={e => setNewJudge({ ...newJudge, email: e.target.value })} />
+                      <input placeholder={t[lang].judge_verification} value={newJudge.verification} onChange={e => setNewJudge({ ...newJudge, verification: e.target.value })} />
                     </div>
                     <button type="submit" className="htu-button" disabled={addingJudge}>
                       {addingJudge ? <Loader2 className="animate-spin" size={20} /> : <><Plus size={18} /> {t[lang].judge_register}</>}
@@ -1515,8 +1515,8 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                           <th>#</th>
                           <th>{t[lang].judge_th_name}</th>
                           <th>{t[lang].judge_th_title}</th>
-                          <th>{t[lang].judge_th_dept}</th>
-                          <th>{t[lang].judge_th_email}</th>
+                          <th>{t[lang].judge_th_committee}</th>
+                          <th>{t[lang].judge_th_verification}</th>
                           <th>{t[lang].judge_th_date}</th>
                           <th>{t[lang].th_ops}</th>
                         </tr>
@@ -1525,15 +1525,15 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                         {judges
                           .filter(j => {
                             const s = judgeSearch.toLowerCase();
-                            return !s || j.name.toLowerCase().includes(s) || j.department.toLowerCase().includes(s) || j.email.toLowerCase().includes(s);
+                            return !s || j.name.toLowerCase().includes(s) || j.committee?.toLowerCase().includes(s) || j.verification?.toLowerCase().includes(s);
                           })
                           .map((j, idx) => (
                             <tr key={j.id}>
                               <td><span className="section-badge">{idx + 1}</span></td>
                               <td><strong>{j.name}</strong></td>
                               <td>{j.title || '—'}</td>
-                              <td>{j.department || '—'}</td>
-                              <td style={{ fontSize: '0.85rem', opacity: 0.8 }}>{j.email || '—'}</td>
+                              <td>{j.committee || '—'}</td>
+                              <td style={{ fontSize: '0.85rem', opacity: 0.8 }}>{j.verification || '—'}</td>
                               <td style={{ fontSize: '0.8rem', opacity: 0.7 }}>{j.registeredAt ? new Date(j.registeredAt).toLocaleDateString() : '—'}</td>
                               <td>
                                 <button className="action-btn-danger" onClick={() => handleDeleteJudge(j.id)}>
