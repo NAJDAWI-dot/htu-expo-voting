@@ -745,6 +745,17 @@ function App() {
                                         {t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] as string}
                                     </motion.span>
 
+                                    {kioskConfig.revealStep === 1 && (
+                                        <motion.div
+                                            initial={{ opacity: 0, scale: 0.8 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            transition={{ delay: 0.9, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+                                            style={{ display: 'flex', justifyContent: 'center', margin: '40px 0' }}
+                                        >
+                                            <img src={`${import.meta.env.BASE_URL}htu-logo.png`} alt="HTU Logo" style={{ height: '220px', filter: 'drop-shadow(0 0 30px rgba(255,255,255,0.3))' }} />
+                                        </motion.div>
+                                    )}
+
                                     {kioskConfig.revealStep === 6 ? (
                                         <div className="organizer-cloud-ultimate">
                                             {kioskConfig.headOrganizerNames && (
