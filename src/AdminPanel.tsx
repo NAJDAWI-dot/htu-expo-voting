@@ -986,7 +986,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
           <div className="placard-overlay">
               <div id="placard-preview-node" className="placard-preview elite-placard-v2">
                   <div className="placard-header-premium">
-                      <img src="favicon.png" alt="HTU Logo" className="placard-htu-logo-giant" />
+                      <img src="/htu-logo.png" alt="HTU Logo" className="placard-htu-logo-giant" />
                       <div className="placard-expo-badge">HTU ENGINEERING DESIGN EXPO 2026</div>
                   </div>
                   
