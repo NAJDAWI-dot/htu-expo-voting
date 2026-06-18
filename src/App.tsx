@@ -756,7 +756,41 @@ function App() {
                                         </motion.div>
                                     )}
 
-                                    {kioskConfig.revealStep === 6 ? (
+                                    {kioskConfig.revealStep === 2 ? (
+                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: '80px', marginTop: '40px' }}>
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 60 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: 0.8, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+                                                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}
+                                            >
+                                                <img
+                                                    src={`${import.meta.env.BASE_URL}president.avif`}
+                                                    alt="University President"
+                                                    style={{ width: '320px', height: '380px', objectFit: 'cover', borderRadius: '20px', border: '3px solid rgba(255,215,0,0.5)', boxShadow: '0 0 60px rgba(255,215,0,0.2), 0 30px 60px rgba(0,0,0,0.8)' }}
+                                                />
+                                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.6, duration: 1 }} style={{ textAlign: 'center', color: '#FFD700', fontFamily: 'Crimson Text, serif', fontSize: '1.6rem', fontWeight: 700, letterSpacing: '2px', textShadow: '0 0 20px rgba(255,215,0,0.4)' }}>
+                                                    University President
+                                                </motion.div>
+                                            </motion.div>
+
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 60 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: 1.2, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+                                                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}
+                                            >
+                                                <img
+                                                    src={`${import.meta.env.BASE_URL}Vice.avif`}
+                                                    alt="Vice President"
+                                                    style={{ width: '320px', height: '380px', objectFit: 'cover', borderRadius: '20px', border: '3px solid rgba(255,255,255,0.2)', boxShadow: '0 0 40px rgba(255,255,255,0.1), 0 30px 60px rgba(0,0,0,0.8)' }}
+                                                />
+                                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2, duration: 1 }} style={{ textAlign: 'center', color: 'rgba(255,255,255,0.9)', fontFamily: 'Crimson Text, serif', fontSize: '1.6rem', fontWeight: 700, letterSpacing: '2px' }}>
+                                                    Vice President
+                                                </motion.div>
+                                            </motion.div>
+                                        </div>
+                                    ) : kioskConfig.revealStep === 6 ? (
                                         <div className="organizer-cloud-ultimate">
                                             {kioskConfig.headOrganizerNames && (
                                                 <div className="head-org-grid-ultimate">
