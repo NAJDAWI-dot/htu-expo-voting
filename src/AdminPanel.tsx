@@ -12,6 +12,7 @@ import {
   orderBy,
   setDoc,
   writeBatch,
+  deleteDoc,
   ref,
   uploadBytes,
   getDownloadURL,
@@ -39,6 +40,15 @@ interface VoteResult {
   title: string;
   instructor: string;
   votes: number;
+}
+
+interface Judge {
+  id: string;
+  name: string;
+  title: string;
+  department: string;
+  email: string;
+  registeredAt: number;
 }
 
 interface AdminPanelProps {
@@ -87,7 +97,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   const handlePinDelete = () => {
     setPin(prev => prev.slice(0, -1));
   };
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'teams' | 'gallery' | 'stage' | 'media'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'teams' | 'judges' | 'gallery' | 'stage' | 'media'>('dashboard');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -96,6 +106,12 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   const [uploading, setUploading] = useState(false);
   const [isVotingOpen, setIsVotingOpen] = useState(true);
   const [archiveMode, setArchiveMode] = useState(false);
+
+  // Judges State
+  const [judges, setJudges] = useState<Judge[]>([]);
+  const [newJudge, setNewJudge] = useState({ name: '', title: '', department: '', email: '' });
+  const [addingJudge, setAddingJudge] = useState(false);
+  const [judgeSearch, setJudgeSearch] = useState('');
   
   // Kiosk Stage Controls
   const [kioskConfig, setKioskConfig] = useState<{
@@ -234,6 +250,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       delete: "Delete",
       tab_dashboard: "Dashboard",
       tab_teams: "Teams Management",
+      tab_judges: "Judges",
       tab_gallery: "Gallery",
       tab_stage: "Stage Control",
       tab_media: "Media Upload",
@@ -286,7 +303,22 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       drop_images: "Drop your masterpieces here or click to browse",
       files_selected: "Images ready for upload",
       upload_to_cloud: "Beam to Cloud",
-      recent_uploads: "Your Recent Captures"
+      recent_uploads: "Your Recent Captures",
+      judge_title: "Judges Registration",
+      judge_name: "Full Name",
+      judge_job_title: "Job Title / Position",
+      judge_dept: "Department / Organization",
+      judge_email: "Email Address",
+      judge_register: "Register Judge",
+      judge_search: "Search judges by name, department, or email...",
+      judge_count: "Registered Judges",
+      judge_th_name: "Name",
+      judge_th_title: "Position",
+      judge_th_dept: "Department",
+      judge_th_email: "Email",
+      judge_th_date: "Registered",
+      judge_delete: "Remove",
+      judge_empty: "No judges registered yet."
     },
     ar: {
       back: "العودة للمعرض",
@@ -340,6 +372,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       delete: "حذف",
       tab_dashboard: "لوحة التحكم",
       tab_teams: "إدارة الفرق",
+      tab_judges: "المحكّمون",
       tab_gallery: "المعرض",
       tab_stage: "التحكم بالمسرح",
       tab_media: "بوابة الفريق الإعلامي",
@@ -392,7 +425,22 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       drop_images: "اسحب روائعك هنا أو اضغط للتصفح",
       files_selected: "صور جاهزة للرفع",
       upload_to_cloud: "بث إلى السحابة",
-      recent_uploads: "آخر اللقطات المرفوعة"
+      recent_uploads: "آخر اللقطات المرفوعة",
+      judge_title: "تسجيل المحكّمين",
+      judge_name: "الاسم الكامل",
+      judge_job_title: "المسمى الوظيفي",
+      judge_dept: "القسم / المؤسسة",
+      judge_email: "البريد الإلكتروني",
+      judge_register: "تسجيل محكّم",
+      judge_search: "ابحث بالاسم، القسم، أو البريد...",
+      judge_count: "المحكّمون المسجلون",
+      judge_th_name: "الاسم",
+      judge_th_title: "المسمى",
+      judge_th_dept: "القسم",
+      judge_th_email: "البريد",
+      judge_th_date: "تاريخ التسجيل",
+      judge_delete: "حذف",
+      judge_empty: "لا يوجد محكّمون مسجلون بعد."
     }
   };
 
@@ -419,6 +467,11 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       setGalleryImages(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as any[]);
     }, (e) => console.warn("Admin Gallery listener:", e));
 
+    const qJudges = query(collection(db, 'judges'), orderBy('registeredAt', 'desc'));
+    const unsubJudges = onSnapshot(qJudges, (snapshot) => {
+      setJudges(snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as Judge[]);
+    }, (e) => console.warn("Judges listener:", e));
+
     const unsubKiosk = onSnapshot(doc(db, 'config', 'kiosk'), (doc) => {
         if (doc.exists()) setKioskConfig(prev => ({ ...prev, ...doc.data() as any }));
     }, (e) => console.warn("Admin Kiosk listener:", e));
@@ -427,6 +480,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       unsubAuth();
       unsubProjects();
       unsubGallery();
+      unsubJudges();
       unsubKiosk();
     };
   }, []);
@@ -618,6 +672,42 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleAddJudge = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newJudge.name.trim()) return;
+    setAddingJudge(true);
+    try {
+      const judgeId = `${newJudge.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}-${Date.now()}`;
+      await setDoc(doc(db, 'judges', judgeId), { ...newJudge, registeredAt: Date.now() });
+      setNewJudge({ name: '', title: '', department: '', email: '' });
+    } catch (err) {
+      alert('Failed to register judge.');
+    } finally {
+      setAddingJudge(false);
+    }
+  };
+
+  const handleDeleteJudge = async (id: string) => {
+    if (window.confirm('Remove this judge?')) {
+      try { await deleteDoc(doc(db, 'judges', id)); }
+      catch (err) { alert('Permission denied.'); }
+    }
+  };
+
+  const exportJudgesCSV = () => {
+    const headers = ['Name', 'Title', 'Department', 'Email', 'Registered'];
+    const rows = judges.map(j => [
+      `"${j.name}"`, `"${j.title}"`, `"${j.department}"`, `"${j.email}"`,
+      `"${new Date(j.registeredAt).toLocaleDateString()}"`
+    ]);
+    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `HTU_Judges_${new Date().toLocaleDateString()}.csv`;
+    link.click();
   };
 
   const handleDeleteProject = async (id: string) => {
@@ -1023,6 +1113,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                 <>
                     <button className={`admin-tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}><LayoutDashboard size={18} /><span>{t[lang].tab_dashboard}</span></button>
                     <button className={`admin-tab-btn ${activeTab === 'teams' ? 'active' : ''}`} onClick={() => setActiveTab('teams')}><ListChecks size={18} /><span>{t[lang].tab_teams}</span></button>
+                    <button className={`admin-tab-btn ${activeTab === 'judges' ? 'active' : ''}`} onClick={() => setActiveTab('judges')}><ShieldCheck size={18} /><span>{t[lang].tab_judges}</span></button>
                     <button className={`admin-tab-btn ${activeTab === 'gallery' ? 'active' : ''}`} onClick={() => setActiveTab('gallery')}><ImageIcon size={18} /><span>{t[lang].tab_gallery}</span></button>
                 </>
             )}
@@ -1372,6 +1463,95 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                         )}
                 </div>
             </motion.div>
+        )}
+
+        {activeTab === 'judges' && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="dashboard-layout">
+              {/* Registration Form */}
+              <section className="dashboard-column">
+                <div className="glass-card elite-admin-card">
+                  <div className="card-header-elite"><h3><Plus size={22} /> {t[lang].judge_title}</h3></div>
+                  <form onSubmit={handleAddJudge} className="elite-add-form">
+                    <div className="form-group-elite">
+                      <input placeholder={t[lang].judge_name} value={newJudge.name} onChange={e => setNewJudge({ ...newJudge, name: e.target.value })} required />
+                    </div>
+                    <div className="form-row-elite">
+                      <input placeholder={t[lang].judge_job_title} value={newJudge.title} onChange={e => setNewJudge({ ...newJudge, title: e.target.value })} />
+                      <input placeholder={t[lang].judge_dept} value={newJudge.department} onChange={e => setNewJudge({ ...newJudge, department: e.target.value })} />
+                    </div>
+                    <div className="form-group-elite">
+                      <input type="email" placeholder={t[lang].judge_email} value={newJudge.email} onChange={e => setNewJudge({ ...newJudge, email: e.target.value })} />
+                    </div>
+                    <button type="submit" className="htu-button" disabled={addingJudge}>
+                      {addingJudge ? <Loader2 className="animate-spin" size={20} /> : <><Plus size={18} /> {t[lang].judge_register}</>}
+                    </button>
+                  </form>
+                </div>
+              </section>
+
+              {/* Judge List */}
+              <section className="dashboard-column" style={{ flex: 2 }}>
+                <div className="glass-card elite-admin-card table-section-elite">
+                  <div className="card-header-elite" style={{ flexWrap: 'wrap', gap: '12px' }}>
+                    <h3><ShieldCheck size={22} /> {t[lang].judge_count}: <strong>{judges.length}</strong></h3>
+                    <div style={{ display: 'flex', gap: '10px', marginLeft: 'auto' }}>
+                      <input
+                        placeholder={t[lang].judge_search}
+                        value={judgeSearch}
+                        onChange={e => setJudgeSearch(e.target.value)}
+                        className="search-input-elite"
+                        style={{ minWidth: '220px' }}
+                      />
+                      <button className="htu-button outline-btn" onClick={exportJudgesCSV} title="Export CSV">
+                        <Download size={16} /> CSV
+                      </button>
+                    </div>
+                  </div>
+                  <div className="elite-table-wrapper">
+                    <table className="elite-table">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>{t[lang].judge_th_name}</th>
+                          <th>{t[lang].judge_th_title}</th>
+                          <th>{t[lang].judge_th_dept}</th>
+                          <th>{t[lang].judge_th_email}</th>
+                          <th>{t[lang].judge_th_date}</th>
+                          <th>{t[lang].th_ops}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {judges
+                          .filter(j => {
+                            const s = judgeSearch.toLowerCase();
+                            return !s || j.name.toLowerCase().includes(s) || j.department.toLowerCase().includes(s) || j.email.toLowerCase().includes(s);
+                          })
+                          .map((j, idx) => (
+                            <tr key={j.id}>
+                              <td><span className="section-badge">{idx + 1}</span></td>
+                              <td><strong>{j.name}</strong></td>
+                              <td>{j.title || '—'}</td>
+                              <td>{j.department || '—'}</td>
+                              <td style={{ fontSize: '0.85rem', opacity: 0.8 }}>{j.email || '—'}</td>
+                              <td style={{ fontSize: '0.8rem', opacity: 0.7 }}>{j.registeredAt ? new Date(j.registeredAt).toLocaleDateString() : '—'}</td>
+                              <td>
+                                <button className="action-btn-danger" onClick={() => handleDeleteJudge(j.id)}>
+                                  <Trash2 size={14} /> {t[lang].judge_delete}
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        {judges.length === 0 && (
+                          <tr><td colSpan={7} style={{ textAlign: 'center', opacity: 0.5, padding: '30px' }}>{t[lang].judge_empty}</td></tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </motion.div>
         )}
 
         {activeTab === 'gallery' && (
