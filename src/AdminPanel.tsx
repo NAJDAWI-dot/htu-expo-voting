@@ -156,6 +156,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   // Search and Sort State
   const [teamSearchTerm, setTeamSearchTerm] = useState('');
   const [teamSortBy, setTeamSortBy] = useState<'title' | 'instructor' | 'section' | 'status'>('title');
+  const [downloadingQRs, setDownloadingQRs] = useState(false);
 
   // Attendance State
   const [attendancePopout, setAttendancePopout] = useState<string | null>(null); // project id
@@ -894,7 +895,6 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   const downloadPlacardNative = async () => {
     if (!selectedPlacard) return;
     
-    // Create the QR Code blob natively
     const qrCode = new QRCodeStyling({
         width: 500,
         height: 500,
@@ -911,7 +911,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     if (!qrBlob) return;
 
     const qrImage = new Image();
-    qrImage.src = URL.createObjectURL(qrBlob);
+    qrImage.src = URL.createObjectURL(qrBlob as Blob);
     await new Promise((res) => { qrImage.onload = res; qrImage.onerror = res; });
 
     const canvas = document.createElement('canvas');
@@ -995,8 +995,46 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
 
     const link = document.createElement('a');
     link.download = `HTU_Placard_${selectedPlacard.title.replace(/\s+/g, '_')}.png`;
-    link.href = canvas.toDataURL('image/png', 1.0);
+    link.href = canvas.toDataURL('image/png');
     link.click();
+  };
+
+  const downloadAllQRCodes = async () => {
+    setDownloadingQRs(true);
+    try {
+      const JSZip = (await import('jszip')).default;
+      const zip = new JSZip();
+      const qrFolder = zip.folder('Teams_QRCodes');
+
+      for (const p of projects) {
+        const qrCode = new QRCodeStyling({
+            width: 500,
+            height: 500,
+            data: `${window.location.origin}${window.location.pathname}?project=${p.id}`,
+            image: `${window.location.origin}${import.meta.env.BASE_URL}htu-logo.png`,
+            dotsOptions: { color: "#E8343F", type: "rounded" },
+            cornersSquareOptions: { color: "#2E3192", type: "extra-rounded" },
+            cornersDotOptions: { color: "#2E3192" },
+            backgroundOptions: { color: "#ffffff" },
+            imageOptions: { crossOrigin: "anonymous", margin: 15 }
+        });
+        const blob = await qrCode.getRawData("png");
+        if (blob) {
+            qrFolder?.file(`${p.title.replace(/[^a-zA-Z0-9]/g, '_')} - ${p.id}.png`, blob as Blob);
+        }
+      }
+      
+      const content = await zip.generateAsync({ type: "blob" });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(content);
+      link.download = `Teams_QRCodes.zip`;
+      link.click();
+    } catch (err) {
+      console.error(err);
+      alert('Failed to generate ZIP file.');
+    } finally {
+      setDownloadingQRs(false);
+    }
   };
 
   const filteredAndSortedTeams = projects
@@ -1014,7 +1052,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
         if (teamSortBy === 'instructor') return (a.instructor || '').localeCompare(b.instructor || '');
         if (teamSortBy === 'section') return (a.section_number || '').localeCompare(b.section_number || '');
         if (teamSortBy === 'status') {
-            const statusOrder = { 'verified': 0, 'none': 1, 'rejected': 2 };
+            const statusOrder: Record<string, number> = { 'verified': 0, 'none': 1, 'rejected': 2 };
             return (statusOrder[a.status || 'none'] || 0) - (statusOrder[b.status || 'none'] || 0);
         }
         return 0;
@@ -1244,6 +1282,15 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                       <div className="teams-header-flex">
                           <h3><Users size={22} /> {t[lang].tab_teams}</h3>
                           <div className="teams-controls-grid">
+                              <button 
+                                onClick={downloadAllQRCodes} 
+                                className="htu-button outline-btn" 
+                                style={{ minWidth: '180px', height: '42px' }}
+                                disabled={downloadingQRs}
+                              >
+                                {downloadingQRs ? <Loader2 className="animate-spin" size={16} /> : <Download size={16} />}
+                                {downloadingQRs ? 'Zipping...' : 'Download All QRs'}
+                              </button>
                               <div className="input-wrapper teams-search-wrapper"><Search size={18} className="field-icon" /><input type="text" placeholder={t[lang].search_teams} value={teamSearchTerm} onChange={(e) => setTeamSearchTerm(e.target.value)} className="teams-search-input" /></div>
                               <div className="sort-wrapper"><Filter size={18} className="field-icon" /><select value={teamSortBy} onChange={(e) => setTeamSortBy(e.target.value as any)} className="teams-sort-select"><option value="title">{t[lang].sort_title}</option><option value="instructor">{t[lang].sort_instructor}</option><option value="section">{t[lang].sort_section}</option><option value="status">{t[lang].sort_status}</option></select></div>
                           </div>
