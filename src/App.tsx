@@ -788,10 +788,10 @@ function App() {
                                                 <img
                                                     src={`${import.meta.env.BASE_URL}Vice.avif`}
                                                     alt="Vice President"
-                                                    style={{ width: '320px', height: '380px', objectFit: 'cover', borderRadius: '20px', border: '3px solid rgba(255,255,255,0.2)', boxShadow: '0 0 40px rgba(255,255,255,0.1), 0 30px 60px rgba(0,0,0,0.8)' }}
+                                                    style={{ width: '320px', height: '380px', objectFit: 'cover', borderRadius: '20px', border: '3px solid rgba(255,215,0,0.5)', boxShadow: '0 0 60px rgba(255,215,0,0.2), 0 30px 60px rgba(0,0,0,0.8)' }}
                                                 />
                                                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2, duration: 1 }} style={{ textAlign: 'center' }}>
-                                                    <div style={{ color: 'rgba(255,255,255,0.9)', fontFamily: 'Crimson Text, serif', fontSize: '1.6rem', fontWeight: 700, letterSpacing: '2px', marginBottom: '8px' }}>
+                                                    <div style={{ color: '#FFD700', fontFamily: 'Crimson Text, serif', fontSize: '1.6rem', fontWeight: 700, letterSpacing: '2px', textShadow: '0 0 20px rgba(255,215,0,0.4)', marginBottom: '8px' }}>
                                                         Vice President
                                                     </div>
                                                     <div style={{ color: 'white', fontFamily: 'Montserrat, sans-serif', fontSize: '1.2rem', fontWeight: 500, letterSpacing: '1px', opacity: 0.9 }}>
