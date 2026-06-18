@@ -887,10 +887,6 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     ctx.font = '900 50px Montserrat, Tajawal, sans-serif';
     ctx.fillText('SCAN TO VOTE FOR THIS TEAM', 1080 / 2, qrStartY + 580);
 
-    // 6. Draw Footer
-    ctx.fillStyle = '#888';
-    ctx.font = '800 24px Montserrat, Tajawal, sans-serif';
-    ctx.fillText('MADE BY NAJDAWI • POWERED BY HTU', 1080 / 2, 1820);
 
     const link = document.createElement('a');
     link.download = `HTU_Placard_${selectedPlacard.title.replace(/\s+/g, '_')}.png`;
@@ -1005,9 +1001,6 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                       </div>
                   </div>
 
-                  <div className="placard-footer-branding">
-                      MADE BY NAJDAWI • POWERED BY HTU
-                  </div>
               </div>
               <div className="placard-controls">
                   <button className="htu-button print-action-btn" onClick={downloadPlacardNative}><Download size={20}/> Save as PNG</button>
