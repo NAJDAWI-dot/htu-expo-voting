@@ -47,7 +47,7 @@ interface Judge {
   name: string;
   title: string;
   committee: string;
-  verification: string;
+  verification: boolean;
   registeredAt: number;
 }
 
@@ -109,7 +109,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
 
   // Judges State
   const [judges, setJudges] = useState<Judge[]>([]);
-  const [newJudge, setNewJudge] = useState({ name: '', title: '', committee: '', verification: '' });
+  const [newJudge, setNewJudge] = useState({ name: '', title: '', committee: '', verification: false });
   const [addingJudge, setAddingJudge] = useState(false);
   const [judgeSearch, setJudgeSearch] = useState('');
   
@@ -681,7 +681,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     try {
       const judgeId = `${newJudge.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}-${Date.now()}`;
       await setDoc(doc(db, 'judges', judgeId), { ...newJudge, registeredAt: Date.now() });
-      setNewJudge({ name: '', title: '', committee: '', verification: '' });
+      setNewJudge({ name: '', title: '', committee: '', verification: false });
     } catch (err) {
       alert('Failed to register judge.');
     } finally {
@@ -696,10 +696,18 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     }
   };
 
+  const handleVerifyJudge = async (id: string, currentStatus: boolean) => {
+    try {
+      await updateDoc(doc(db, 'judges', id), { verification: !currentStatus });
+    } catch (err) {
+      alert('Failed to update verification status.');
+    }
+  };
+
   const exportJudgesCSV = () => {
     const headers = ['Name', 'Title', 'Committee', 'Verification', 'Registered'];
     const rows = judges.map(j => [
-      `"${j.name}"`, `"${j.title}"`, `"${j.committee}"`, `"${j.verification}"`,
+      `"${j.name}"`, `"${j.title}"`, `"${j.committee}"`, `"${j.verification ? 'Verified/Attended' : 'Pending'}"`,
       `"${new Date(j.registeredAt).toLocaleDateString()}"`
     ]);
     const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
@@ -1480,9 +1488,6 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                       <input placeholder={t[lang].judge_job_title} value={newJudge.title} onChange={e => setNewJudge({ ...newJudge, title: e.target.value })} />
                       <input placeholder={t[lang].judge_committee} value={newJudge.committee} onChange={e => setNewJudge({ ...newJudge, committee: e.target.value })} />
                     </div>
-                    <div className="form-group-elite">
-                      <input placeholder={t[lang].judge_verification} value={newJudge.verification} onChange={e => setNewJudge({ ...newJudge, verification: e.target.value })} />
-                    </div>
                     <button type="submit" className="htu-button" disabled={addingJudge}>
                       {addingJudge ? <Loader2 className="animate-spin" size={20} /> : <><Plus size={18} /> {t[lang].judge_register}</>}
                     </button>
@@ -1525,7 +1530,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                         {judges
                           .filter(j => {
                             const s = judgeSearch.toLowerCase();
-                            return !s || j.name.toLowerCase().includes(s) || j.committee?.toLowerCase().includes(s) || j.verification?.toLowerCase().includes(s);
+                            return !s || j.name.toLowerCase().includes(s) || j.committee?.toLowerCase().includes(s);
                           })
                           .map((j, idx) => (
                             <tr key={j.id}>
@@ -1533,7 +1538,16 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                               <td><strong>{j.name}</strong></td>
                               <td>{j.title || '—'}</td>
                               <td>{j.committee || '—'}</td>
-                              <td style={{ fontSize: '0.85rem', opacity: 0.8 }}>{j.verification || '—'}</td>
+                              <td>
+                                <button 
+                                  onClick={() => handleVerifyJudge(j.id, !!j.verification)}
+                                  className={`verify-btn ${j.verification ? 'active' : ''}`}
+                                  style={{ padding: '6px 12px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', background: j.verification ? 'rgba(46, 213, 115, 0.2)' : 'rgba(255,255,255,0.05)', color: j.verification ? '#2ed573' : '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                                >
+                                  {j.verification ? <ShieldCheck size={16} /> : <X size={16} opacity={0.5} />}
+                                  {j.verification ? 'Verified' : 'Pending'}
+                                </button>
+                              </td>
                               <td style={{ fontSize: '0.8rem', opacity: 0.7 }}>{j.registeredAt ? new Date(j.registeredAt).toLocaleDateString() : '—'}</td>
                               <td>
                                 <button className="action-btn-danger" onClick={() => handleDeleteJudge(j.id)}>
