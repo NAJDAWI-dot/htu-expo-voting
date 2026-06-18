@@ -654,21 +654,18 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
   transform: translateX(-50%);
   white-space: nowrap;
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1.4rem, 3.8vh, 3rem);
+  font-size: clamp(3rem, 6vh, 5rem);
   font-style: italic;
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: 0.1em;
-  background: linear-gradient(90deg, rgba(255,255,255,0.25), rgba(200,160,70,0.6), rgba(255,255,255,0.25));
-  background-size: 280% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: shimmer-gold 5s linear infinite;
+  color: #FFD700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 40px rgba(255, 215, 0, 0.8), 0 0 80px rgba(255, 215, 0, 0.6);
   text-align: center;
 }
 .title-huge {
-  font-size: clamp(3rem, 7.5vh, 6rem) !important;
+  font-size: clamp(4rem, 8.5vh, 7rem) !important;
   top: 5vh !important;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.8), 0 0 100px rgba(255, 215, 0, 0.6) !important;
 }
 
 /* ---- CREDITS SLIDES: MAIN DISPLAY NAME (Cinzel bold caps) ---- */
