@@ -861,7 +861,9 @@ function App() {
                                     className="winner-reveal-ultimate-moment"
                                 >
                                     <div className="winner-title-ultimate" style={{ textShadow: '0 0 30px rgba(255,215,0,0.9), 0 0 60px rgba(255,215,0,0.5)' }}>
-                                        {t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] as string}
+                                        {String(t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] || '').split('\n').map((line, i) => (
+                                            <span key={i} style={{ display: 'block', fontSize: i === 1 ? '1.2em' : '1em', marginTop: i === 1 ? '10px' : '0' }}>{line}</span>
+                                        ))}
                                     </div>
 
                                     {revealProjects[kioskConfig.revealStep === 17 ? 6 : 15 - kioskConfig.revealStep] && (
@@ -916,7 +918,9 @@ function App() {
                                     className="winner-reveal-ultimate-moment"
                                 >
                                     <div className="winner-title-ultimate" style={{ textShadow: '0 0 30px rgba(255,215,0,0.9), 0 0 60px rgba(255,215,0,0.5)' }}>
-                                        {t[lang][`ceremony_step_16` as keyof typeof t['en']] as string}
+                                        {String(t[lang][`ceremony_step_16` as keyof typeof t['en']] || '').split('\n').map((line, i) => (
+                                            <span key={i} style={{ display: 'block', fontSize: i === 1 ? '1.2em' : '1em', marginTop: i === 1 ? '10px' : '0' }}>{line}</span>
+                                        ))}
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6vh', marginTop: '5vh', width: '100%', maxWidth: '1400px', zIndex: 10, position: 'relative', gridColumn: '1 / -1', margin: '0 auto' }}>
                                         
@@ -947,10 +951,10 @@ function App() {
 
                                         {/* Bottom point of the diamond */}
                                         <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2.5, duration: 1.5 }} style={{ textAlign: 'center' }}>
-                                            <div style={{ fontSize: 'clamp(4rem, 8vh, 8rem)', color: '#2ecc71', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 20px rgba(46, 204, 113, 0.4)', lineHeight: 1 }}>
-                                                {globalVisits > 0 ? ((globalVotes / 3) / globalVisits * 100).toFixed(1) : 0}%
+                                            <div style={{ fontSize: 'clamp(4rem, 8vh, 8rem)', color: '#fff', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 20px rgba(255,255,255,0.3)', lineHeight: 1 }}>
+                                                {projects.length}
                                             </div>
-                                            <div style={{ fontSize: 'clamp(1rem, 2vh, 1.5rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>{lang === 'ar' ? 'معدل التصويت' : 'VOTING CONVERSION RATE'}</div>
+                                            <div style={{ fontSize: 'clamp(1rem, 2vh, 1.5rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>{lang === 'ar' ? 'المشاريع المتنافسة' : 'PROJECTS COMPETING'}</div>
                                         </motion.div>
                                         
                                     </div>
