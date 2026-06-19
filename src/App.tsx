@@ -613,7 +613,7 @@ function App() {
       <motion.div className="splash-screen" initial={{ opacity: 1 }} exit={{ opacity: 0, scale: 1.1, filter: 'blur(20px)' }} transition={{ duration: 1, ease: [0.43, 0.13, 0.23, 0.96] }}>
         <div className="splash-bg-anim" />
         <div className="splash-content">
-          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2, duration: 1.5 }} className="splash-branding-top">Reimagining HTU's EXPOs</motion.div>
+          <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2, duration: 1.5 }} className="splash-branding-top">Engineering Design Expo 2026</motion.div>
           <div className="logo-container-premium">
               <div className="splash-ring ring-1" /><div className="splash-ring ring-2" /><div className="splash-ring ring-3" />
               <motion.img initial={{ scale: 0.5, opacity: 0, rotate: -10 }} animate={{ scale: 1, opacity: 1, rotate: 0 }} transition={{ duration: 1.2, ease: "easeOut" }} src="htu-logo.png" alt="HTU Logo" className="splash-logo" />
@@ -621,7 +621,7 @@ function App() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="splash-loader-container">
             <motion.div className="splash-loader" initial={{ width: 0 }} animate={{ width: '100%' }} transition={{ duration: 3.5, ease: "easeInOut" }} />
           </motion.div>
-          <motion.p initial={{ opacity: 0, letterSpacing: '2px' }} animate={{ opacity: 0.8, letterSpacing: '12px' }} transition={{ delay: 0.8, duration: 1.5 }} className="splash-text">Engineering Design Expo 2026</motion.p>
+          <motion.p initial={{ opacity: 0, letterSpacing: '2px' }} animate={{ opacity: 0.8, letterSpacing: '12px' }} transition={{ delay: 0.8, duration: 1.5 }} className="splash-text">Reimagining HTU's EXPOs</motion.p>
         </div>
       </motion.div>
     );
