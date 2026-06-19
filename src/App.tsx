@@ -1002,9 +1002,8 @@ function App() {
                             >
                                 <motion.div initial="hidden" animate="visible" variants={{ visible: { transition: { staggerChildren: 0.08 } } }} className="kiosk-list">
                                     {top10.map((p, i) => {
-                                        const maxVotes = (top10[0] as any)?.votes || 1;
                                         const currentVotes = (p as any).votes || 0;
-                                        const barWidth = (currentVotes / maxVotes) * 100;
+                                        const barWidth = globalVotes > 0 ? (currentVotes / globalVotes) * 100 : 0;
 
                                         return (
                                             <motion.div
