@@ -496,6 +496,16 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .title-divider-ultimate { width: 400px; height: 5px; background: var(--htu-red); margin: 10px auto 20px; border-radius: 100px; box-shadow: 0 0 40px var(--htu-red); }
 .title-year { font-size: 2.5rem; letter-spacing: 15px; font-weight: 900; opacity: 1; color: #FFD700; text-shadow: 0 0 30px rgba(255, 215, 0, 0.8); position: relative; z-index: 20; display: block; margin-top: 10px; }
 
+.sponsors-showcase-v2 { margin-top: 80px; text-align: center; }
+.sponsors-title { font-size: 1.5rem; letter-spacing: 10px; font-weight: 800; color: rgba(255,255,255,0.4); margin-bottom: 40px; position: relative; display: inline-block; }
+.sponsors-title::before, .sponsors-title::after { content: ''; position: absolute; top: 50%; width: 100px; height: 1px; background: rgba(255,255,255,0.2); }
+.sponsors-title::before { right: 100%; margin-right: 20px; }
+.sponsors-title::after { left: 100%; margin-left: 20px; }
+.sponsors-grid-v2 { display: flex; justify-content: center; align-items: center; gap: 60px; }
+.sponsor-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 30px 50px; border-radius: 30px; backdrop-filter: blur(20px); transition: 0.5s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1); }
+.sponsor-card:hover { transform: translateY(-10px) scale(1.05); background: rgba(255,255,255,0.05); box-shadow: 0 20px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.15); }
+.sponsor-card img { height: 70px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255,255,255,0.1)) contrast(1.2); }
+
 /* --- CEREMONY SYSTEM: APPLE KEYNOTE MINIMALIST V6 --- */
 /* =============================================
    VICTORY REVEAL — PREMIUM CINEMATIC TYPOGRAPHY

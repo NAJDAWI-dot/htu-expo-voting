@@ -1084,6 +1084,21 @@ function App() {
                                         <div className="title-divider-ultimate" />
                                         <p className="title-year">SPRING 2026</p>
                                     </motion.div>
+
+                                    <motion.div 
+                                        initial={{ opacity: 0, y: 50 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 1.2, duration: 1 }}
+                                        className="sponsors-showcase-v2"
+                                    >
+                                        <h3 className="sponsors-title">OFFICIAL SPONSORS</h3>
+                                        <div className="sponsors-grid-v2">
+                                            <div className="sponsor-card"><img src="/kinza.png" alt="Kinza" /></div>
+                                            <div className="sponsor-card"><img src="/ameed.webp" alt="Ameed" /></div>
+                                            <div className="sponsor-card"><img src="/zeidan.png" alt="Zeidan" /></div>
+                                            <div className="sponsor-card"><img src="/snips.png" alt="Snips" /></div>
+                                        </div>
+                                    </motion.div>
                                 </div>
                             </motion.div>
                         )}
