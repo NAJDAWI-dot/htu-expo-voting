@@ -661,7 +661,8 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
   top: 8vh;
   left: 50%;
   transform: translateX(-50%);
-  white-space: nowrap;
+  white-space: normal;
+  text-align: center;
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(3rem, 6vh, 5rem);
   font-style: italic;
