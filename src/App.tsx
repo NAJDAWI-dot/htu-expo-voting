@@ -749,7 +749,9 @@ function App() {
                                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 1 }}
                                         className={`credits-subtitle-ultimate ${[4, 6, 8, 9].includes(kioskConfig.revealStep) ? 'title-huge' : ''}`}
                                     >
-                                        {t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] as string}
+                                        {String(t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] || '').split('\n').map((line, i) => (
+                                            <span key={i} style={{ display: 'block', fontSize: i === 1 ? '1.3em' : '1em', marginTop: i === 1 ? '15px' : '0' }}>{line}</span>
+                                        ))}
                                     </motion.span>
 
                                     {kioskConfig.revealStep === 1 && (
