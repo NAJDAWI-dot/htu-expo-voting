@@ -266,6 +266,8 @@ function App() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('admin') === 'true') setView('admin');
     if (params.get('kiosk') === 'true') setView('kiosk');
+    if (params.get('lang') === 'ar') setLang('ar');
+    if (params.get('lang') === 'en') setLang('en');
     const hasSeen = localStorage.getItem('htu_onboarding_seen');
     if (!hasSeen && params.get('kiosk') !== 'true') setTimeout(() => setShowOnboarding(true), 3500);
 
