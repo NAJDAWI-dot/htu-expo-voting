@@ -717,9 +717,11 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
   background: linear-gradient(160deg, #fff 20%, #e8d09a 60%, #c9a84c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
+  filter: drop-shadow(0 0 15px rgba(255,215,0,0.3));
   text-align: center;
 }
+.head-name-small { font-size: clamp(1.8rem, 3.5vh, 4rem) !important; }
+.head-name-micro { font-size: clamp(1.2rem, 2.5vh, 2.5rem) !important; letter-spacing: 0.05em; }
 
 /* ---- SLIDE 4: MATRIX NAME BACKDROP ---- */
 @keyframes matrix-flicker {

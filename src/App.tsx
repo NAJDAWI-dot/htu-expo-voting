@@ -179,11 +179,11 @@ function App() {
       ceremony_step_2: "UNDER THE PATRONAGE OF UNIVERSITY PRESIDENCY",
       ceremony_step_3: "SPECIAL THANKS",
       ceremony_step_4: "OUR INSTRUCTORS",
-      ceremony_step_5: "THE EXPO ORGANIZERS",
+      ceremony_step_5: "SPECIAL THANKS TO",
       ceremony_step_6: "THE HEAD ORGANIZERS",
       ceremony_step_7: "SPECIAL RECOGNITION",
       ceremony_step_8: "OUR VOLUNTEERS",
-      ceremony_step_9: "THE 4TH PLACE - JUDGING AWARD",
+      ceremony_step_9: "SPECIAL THANKS TO THE JUDGING COMMITTEE",
       ceremony_step_10: "THE 3RD PLACE - JUDGING AWARD",
       ceremony_step_11: "THE 2ND PLACE - JUDGING AWARD",
       ceremony_step_12: "THE GRAND CHAMPION 2026",
@@ -241,11 +241,11 @@ function App() {
       ceremony_step_2: "تحت رعاية رئاسة الجامعة",
       ceremony_step_3: "شكر خاص",
       ceremony_step_4: "المشرفين والأساتذة",
-      ceremony_step_5: "منظمي المعرض",
+      ceremony_step_5: "شكر خاص إلى",
       ceremony_step_6: "رؤساء اللجنة المنظمة",
       ceremony_step_7: "تقدير خاص",
       ceremony_step_8: "فريق المتطوعين",
-      ceremony_step_9: "المركز الخامس - تصويت الجمهور",
+      ceremony_step_9: "شكر خاص للجنة التحكيم",
       ceremony_step_10: "المركز الرابع - جائزة التحكيم",
       ceremony_step_11: "المركز الثالث - جائزة التحكيم",
       ceremony_step_12: "المركز الأول - بطل المعرض",
@@ -801,46 +801,30 @@ function App() {
                                                 </motion.div>
                                             </motion.div>
                                         </div>
-                                    ) : kioskConfig.revealStep === 6 ? (
+                                    ) : [4, 6, 8, 9].includes(kioskConfig.revealStep) ? (
                                         <div className="organizer-cloud-ultimate">
-                                            {kioskConfig.headOrganizerNames && (
-                                                <div className="head-org-grid-ultimate">
-                                                    {kioskConfig.headOrganizerNames.split(',').map((name: string, i: number) => (
-                                                        <motion.div 
-                                                            key={name} 
-                                                            initial={{ opacity: 0, y: 30 }} 
-                                                            animate={{ opacity: 1, y: 0 }}
-                                                            transition={{ delay: 0.8 + (i * 0.2), duration: 1 }}
-                                                            className="head-name-ultimate head-name-small"
-                                                        >
-                                                            {name.trim()}
-                                                        </motion.div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    ) : [4, 8, 9].includes(kioskConfig.revealStep) ? (
-                                        /* ── Slide 4 (Instructors), 8 (Volunteers), 9 (Judges): Matrix name backdrop ── */
-                                        <div className="instructor-matrix-bg">
                                             {(() => {
                                                 const sourceStr = kioskConfig.revealStep === 9 ? kioskConfig.judgeNames :
+                                                                  kioskConfig.revealStep === 6 ? kioskConfig.headOrganizerNames :
                                                                   kioskConfig.revealStep === 4 ? kioskConfig.instructorNamesExtra :
                                                                   kioskConfig.volunteerNames;
-                                                const names = (sourceStr || '')
-                                                    .split(',').map((n: string) => n.trim()).filter(Boolean);
+                                                const names = (sourceStr || '').split(',').map((n: string) => n.trim()).filter(Boolean);
                                                 if (!names.length) return null;
-                                                return Array.from({ length: 130 }, (_, i) => (
-                                                    <span
-                                                        key={i}
-                                                        className="instructor-matrix-name"
-                                                        style={{
-                                                            animationDelay: `${(i * 0.23) % 7}s`,
-                                                            animationDuration: `${2.8 + (i % 6) * 0.4}s`,
-                                                        }}
-                                                    >
-                                                        {names[i % names.length]}
-                                                    </span>
-                                                ));
+                                                return (
+                                                    <div className="head-org-grid-ultimate" style={{ gap: names.length > 20 ? '20px 40px' : '50px 90px' }}>
+                                                        {names.map((name: string, i: number) => (
+                                                            <motion.div 
+                                                                key={name + i} 
+                                                                initial={{ opacity: 0, y: 30 }} 
+                                                                animate={{ opacity: 1, y: 0 }}
+                                                                transition={{ delay: 0.8 + (i * 0.05), duration: 1 }}
+                                                                className={`head-name-ultimate ${names.length > 20 ? 'head-name-micro' : 'head-name-small'}`}
+                                                            >
+                                                                {name}
+                                                            </motion.div>
+                                                        ))}
+                                                    </div>
+                                                );
                                             })()}
                                         </div>
                                     ) : (
@@ -853,7 +837,7 @@ function App() {
                                         >
                                             {kioskConfig.revealStep === 1 ? 'Al Hussein Technical University' :
                                              kioskConfig.revealStep === 3 ? 'Our Instructors & Students' :
-                                             kioskConfig.revealStep === 5 ? 'The Organizing Committee' :
+                                             kioskConfig.revealStep === 5 ? 'The Expo Organizers' :
                                              kioskConfig.revealStep === 7 ? 'Our Volunteers' : ''}
                                             <div className="god-line-ultimate" />
                                         </motion.div>
