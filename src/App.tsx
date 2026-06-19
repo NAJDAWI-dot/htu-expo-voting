@@ -379,12 +379,9 @@ function App() {
     };
   }, [view]);
 
-  // Track Unique Platform Visits
+  // Track All Platform Visits
   useEffect(() => {
-    if (!localStorage.getItem('expo_visited')) {
-      localStorage.setItem('expo_visited', 'true');
-      setDoc(doc(db, 'stats', 'global'), { visits: increment(1) }, { merge: true }).catch(console.error);
-    }
+    setDoc(doc(db, 'stats', 'global'), { visits: increment(1) }, { merge: true }).catch(console.error);
   }, []);
 
   // Helper to log all platform interactions to make the real database grow massive
