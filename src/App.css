@@ -1006,39 +1006,50 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
     [dir="rtl"] .input-wrapper input { padding: 14px 45px 14px 15px; }
 
     /* SCALE DOWN DASHBOARDS */
-    .admin-nav-elite { flex-direction: column; gap: 15px; height: auto; position: relative; padding: 15px !important; }
-    .nav-left, .nav-right { width: 100%; justify-content: center; flex-wrap: wrap; gap: 10px; }
-    .admin-tabs { width: 100%; overflow-x: auto; justify-content: flex-start; border-radius: 12px; padding: 4px; }
-    .admin-tab-btn { padding: 10px 15px !important; font-size: 0.7rem !important; }
-    .admin-main-elite { padding: 20px 10px; }
+    .admin-nav-elite { flex-direction: column; gap: 10px; height: auto; position: relative; padding: 10px !important; }
+    .nav-left, .nav-right { width: 100%; justify-content: center; flex-wrap: wrap; gap: 5px; }
+    .nav-icon-btn, .logout-btn-elite { padding: 8px 12px !important; font-size: 0.75rem !important; border-radius: 8px !important; }
+    .admin-tabs { width: 100%; overflow-x: auto; justify-content: flex-start; border-radius: 8px; padding: 2px; }
+    .admin-tab-btn { padding: 8px 12px !important; font-size: 0.65rem !important; }
+    .admin-main-elite { padding: 15px 5px; }
     
-    .dashboard-summary { grid-template-columns: 1fr; gap: 15px; margin-bottom: 30px; }
-    .stat-pill { padding: 25px !important; flex-direction: column; text-align: center; gap: 10px; border-radius: 16px; }
-    .stat-pill strong { font-size: 2.5rem !important; }
-    .stat-pill span { font-size: 0.8rem; letter-spacing: 1px; }
+    .dashboard-summary { grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
+    .stat-pill { padding: 15px !important; flex-direction: column; text-align: center; gap: 5px; border-radius: 12px; }
+    .stat-pill strong { font-size: 2.0rem !important; }
+    .stat-pill span { font-size: 0.7rem; letter-spacing: 0.5px; }
     
-    .elite-admin-card { padding: 20px !important; border-radius: 20px !important; }
-    .card-header-elite { margin-bottom: 20px; padding-bottom: 15px; }
-    .card-header-elite h3 { font-size: 1.2rem; }
+    .elite-admin-card { padding: 15px !important; border-radius: 16px !important; }
+    .card-header-elite { margin-bottom: 15px; padding-bottom: 10px; }
+    .card-header-elite h3 { font-size: 1.0rem; }
     
-    .elite-add-form { gap: 15px; }
-    .form-row-elite { grid-template-columns: 1fr; gap: 15px; }
-    .form-group-elite input, .form-row-elite input { padding: 14px 15px; font-size: 0.9rem; }
+    .elite-add-form { gap: 10px; }
+    .form-row-elite { grid-template-columns: 1fr; gap: 10px; }
+    .form-group-elite input, .form-row-elite input, .form-group-elite select, .form-group-elite textarea { padding: 12px 10px; font-size: 0.85rem; }
     
-    .teams-header-flex { flex-direction: column; gap: 15px; }
+    .teams-header-flex { flex-direction: column; gap: 10px; }
     .teams-controls-grid { flex-direction: column; gap: 10px; }
     .teams-search-wrapper, .sort-wrapper { max-width: 100%; }
 
     /* SCALE DOWN TEAM MANAGEMENT TABLE */
-    .elite-table th, .elite-table td { padding: 10px 8px !important; font-size: 0.75rem !important; white-space: nowrap; }
-    .elite-table td img { width: 30px !important; height: 30px !important; border-radius: 6px !important; }
-    .elite-table td strong { font-size: 0.8rem !important; }
+    .elite-table-wrapper { border-radius: 12px !important; }
+    .elite-table th, .elite-table td { padding: 8px 6px !important; font-size: 0.7rem !important; white-space: nowrap; }
+    .elite-table td img { width: 24px !important; height: 24px !important; border-radius: 4px !important; }
+    .elite-table td strong { font-size: 0.75rem !important; }
     .admin-project-actions { gap: 4px; }
-    .admin-project-actions button, .action-pill-btn { padding: 6px !important; font-size: 0.7rem !important; min-width: 0 !important; }
-    .admin-project-actions svg { width: 14px; height: 14px; }
-    .table-dept-tag { font-size: 0.65rem !important; padding: 4px 8px !important; }
-    .badge-title-pill { font-size: 0.65rem !important; padding: 4px 8px !important; }
-    .print-btn { padding: 4px 8px !important; font-size: 0.65rem !important; }
+    .admin-project-actions button, .action-pill-btn { padding: 5px !important; font-size: 0.65rem !important; min-width: 0 !important; }
+    .admin-project-actions svg { width: 12px; height: 12px; }
+    .table-dept-tag { font-size: 0.6rem !important; padding: 3px 6px !important; }
+    .badge-title-pill { font-size: 0.6rem !important; padding: 3px 6px !important; }
+    .print-btn { padding: 4px 6px !important; font-size: 0.6rem !important; }
+
+    /* SCALE DOWN ATTENDANCE & STAGE CONTROLS */
+    .stage-control-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+    .stage-control-item { padding: 15px !important; grid-column: span 1 !important; }
+    .ceremony-selection-grid { grid-template-columns: 1fr 1fr !important; }
+    .scene-selector-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 5px !important; }
+    .scene-btn { padding: 8px !important; }
+    .scene-number { font-size: 0.9rem !important; }
+    .scene-name { font-size: 0.6rem !important; }
 
     /* SCALE DOWN ATTENDANCE SYSTEM */
     .attendance-btn { padding: 12px 15px; font-size: 0.8rem; width: 100%; justify-content: center; margin-top: 10px; }
