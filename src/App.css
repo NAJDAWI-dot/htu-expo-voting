@@ -472,11 +472,11 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .branding-container-ultimate { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; width: 100%; }
 .logo-container-ultimate { position: relative; width: 350px; height: 350px; display: flex; align-items: center; justify-content: center; transform-style: preserve-3d; }
 .intro-logo-ultimate { height: 200px; filter: drop-shadow(0 0 60px rgba(255,255,255,0.3)); }
-.branding-text-ultimate { margin-top: 60px; text-align: center; }
-.branding-text-ultimate .title-top { font-size: 3.5rem; letter-spacing: 20px; font-weight: 900; color: rgba(255,255,255,0.3); }
-.branding-text-ultimate .title-main { font-size: 6.5rem; letter-spacing: -2px; font-weight: 1000; background: linear-gradient(#fff, #E8343F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; padding-bottom: 20px; }
-.title-divider-ultimate { width: 400px; height: 5px; background: var(--htu-red); margin: 10px auto 30px; border-radius: 100px; box-shadow: 0 0 40px var(--htu-red); }
-.title-year { font-size: 2rem; letter-spacing: 15px; font-weight: 900; opacity: 1; color: #FFD700; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+.branding-text-ultimate { margin-top: 20px; text-align: center; position: relative; z-index: 10; }
+.branding-text-ultimate .title-top { font-size: 3.5rem; letter-spacing: 20px; font-weight: 900; color: rgba(255,255,255,0.8); }
+.branding-text-ultimate .title-main { font-size: 6.5rem; letter-spacing: -2px; font-weight: 1000; background: linear-gradient(#fff, #E8343F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; padding-bottom: 10px; margin-bottom: 0; }
+.title-divider-ultimate { width: 400px; height: 5px; background: var(--htu-red); margin: 10px auto 20px; border-radius: 100px; box-shadow: 0 0 40px var(--htu-red); }
+.title-year { font-size: 2.5rem; letter-spacing: 15px; font-weight: 900; opacity: 1; color: #FFD700; text-shadow: 0 0 30px rgba(255, 215, 0, 0.8); position: relative; z-index: 20; display: block; margin-top: 10px; }
 
 /* --- CEREMONY SYSTEM: APPLE KEYNOTE MINIMALIST V6 --- */
 /* =============================================
