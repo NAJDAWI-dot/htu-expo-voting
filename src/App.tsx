@@ -1093,10 +1093,10 @@ function App() {
                                     >
                                         <h3 className="sponsors-title">OFFICIAL SPONSORS</h3>
                                         <div className="sponsors-grid-v2">
-                                            <div className="sponsor-card"><img src="/kinza.png" alt="Kinza" /></div>
-                                            <div className="sponsor-card"><img src="/ameed.webp" alt="Ameed" /></div>
-                                            <div className="sponsor-card"><img src="/zeidan.png" alt="Zeidan" /></div>
-                                            <div className="sponsor-card"><img src="/snips.png" alt="Snips" /></div>
+                                            <div className="sponsor-card"><img src={`${import.meta.env.BASE_URL}kinza.png`} alt="Kinza" /></div>
+                                            <div className="sponsor-card"><img src={`${import.meta.env.BASE_URL}ameed.webp`} alt="Ameed" /></div>
+                                            <div className="sponsor-card"><img src={`${import.meta.env.BASE_URL}zeidan.png`} alt="Zeidan" /></div>
+                                            <div className="sponsor-card"><img src={`${import.meta.env.BASE_URL}SNIPS.png`} alt="Snips" /></div>
                                         </div>
                                     </motion.div>
                                 </div>
