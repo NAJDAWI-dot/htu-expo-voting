@@ -35,11 +35,16 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
+import { getAnalytics, isSupported } from "firebase/analytics";
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
+
+// Initialize Analytics conditionally (it can fail if adblockers are active or environments don't support it)
+export const analytics = typeof window !== 'undefined' ? isSupported().then(yes => yes ? getAnalytics(app) : null) : null;
 
 export { 
   signInWithEmailAndPassword, 

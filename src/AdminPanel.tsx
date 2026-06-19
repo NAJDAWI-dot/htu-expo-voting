@@ -98,7 +98,10 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   const handlePinDelete = () => {
     setPin(prev => prev.slice(0, -1));
   };
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'teams' | 'judges' | 'gallery' | 'stage' | 'media'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'analytics' | 'teams' | 'judges' | 'gallery' | 'stage' | 'media'>('dashboard');
+  const [globalVotes, setGlobalVotes] = useState<number>(0);
+  const [globalVisits, setGlobalVisits] = useState<number>(0);
+  const [globalProfileVisits, setGlobalProfileVisits] = useState<number>(0);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -538,8 +541,16 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   useEffect(() => {
     let unsubResults = () => {};
     let unsubConfig = () => {};
+    let unsubStats = () => {};
 
     if (role === 'master') {
+      unsubStats = onSnapshot(doc(db, 'stats', 'global'), (doc) => {
+        if (doc.exists()) {
+          setGlobalVotes(doc.data().total || 0);
+          setGlobalVisits(doc.data().visits || 0);
+          setGlobalProfileVisits(doc.data().profileVisits || 0);
+        }
+      });
       const qResults = query(collection(db, 'results'), orderBy('votes', 'desc'));
       unsubResults = onSnapshot(qResults, (snapshot) => {
         const newResults = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as VoteResult[];
@@ -586,8 +597,9 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       }, (e) => console.warn("Admin Config listener:", e));
     }
     return () => {
-        unsubResults();
-        unsubConfig();
+      unsubResults();
+      unsubConfig();
+      unsubStats();
     };
   }, [role]);
 
@@ -1167,6 +1179,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
             {role !== 'media' && (
                 <>
                     <button className={`admin-tab-btn ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}><LayoutDashboard size={18} /><span>{t[lang].tab_dashboard}</span></button>
+                    <button className={`admin-tab-btn ${activeTab === 'analytics' ? 'active' : ''}`} onClick={() => setActiveTab('analytics')}><Activity size={18} /><span>{lang === 'ar' ? 'التحليلات المباشرة' : 'Live Analytics'}</span></button>
                     <button className={`admin-tab-btn ${activeTab === 'teams' ? 'active' : ''}`} onClick={() => setActiveTab('teams')}><ListChecks size={18} /><span>{t[lang].tab_teams}</span></button>
                     <button className={`admin-tab-btn ${activeTab === 'judges' ? 'active' : ''}`} onClick={() => setActiveTab('judges')}><ShieldCheck size={18} /><span>{t[lang].tab_judges}</span></button>
                     <button className={`admin-tab-btn ${activeTab === 'gallery' ? 'active' : ''}`} onClick={() => setActiveTab('gallery')}><ImageIcon size={18} /><span>{t[lang].tab_gallery}</span></button>
@@ -1189,6 +1202,63 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       </nav>
 
       <main className="admin-main-elite">
+        {activeTab === 'analytics' && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="analytics-dashboard">
+            <div className="elite-dashboard-grid" style={{ marginBottom: '30px' }}>
+                <div className="glass-card elite-stat-card">
+                    <div className="stat-icon-wrapper"><Users size={24} color="#3498db" /></div>
+                    <div className="stat-content">
+                        <p className="stat-label">{lang === 'ar' ? 'إجمالي الزيارات' : 'Total Unique Visits'}</p>
+                        <h3 className="stat-value">{globalVisits.toLocaleString()}</h3>
+                    </div>
+                </div>
+                <div className="glass-card elite-stat-card">
+                    <div className="stat-icon-wrapper"><BarChart3 size={24} color="#e74c3c" /></div>
+                    <div className="stat-content">
+                        <p className="stat-label">{lang === 'ar' ? 'إجمالي التفاعلات' : 'Total Platform Interactions'}</p>
+                        <h3 className="stat-value">{globalProfileVisits.toLocaleString()}</h3>
+                    </div>
+                </div>
+                <div className="glass-card elite-stat-card">
+                    <div className="stat-icon-wrapper"><Trophy size={24} color="#f1c40f" /></div>
+                    <div className="stat-content">
+                        <p className="stat-label">{lang === 'ar' ? 'إجمالي الأصوات المحتسبة' : 'Total Votes Cast'}</p>
+                        <h3 className="stat-value">{globalVotes.toLocaleString()}</h3>
+                    </div>
+                </div>
+                <div className="glass-card elite-stat-card">
+                    <div className="stat-icon-wrapper"><Activity size={24} color="#2ecc71" /></div>
+                    <div className="stat-content">
+                        <p className="stat-label">{lang === 'ar' ? 'معدل التصويت' : 'Voting Conversion Rate'}</p>
+                        <h3 className="stat-value">{globalVisits > 0 ? ((globalVotes / 3) / globalVisits * 100).toFixed(1) : 0}%</h3>
+                    </div>
+                </div>
+            </div>
+            {role === 'master' && (
+                <section className="security-dashboard">
+                    <div className="security-header"><Activity size={24} /> {lang === 'ar' ? 'مراقبة سرعة التصويت الحية' : 'Live Voting Velocity Tracker'}</div>
+                    <div className="security-grid">
+                        {Object.entries(velocityMap).map(([id, velocity]) => {
+                            const p = projects.find(proj => proj.id === id);
+                            if (!p) return null;
+                            const isHigh = velocity > 3;
+                            return (
+                                <div key={id} className={`security-card ${isHigh ? 'flagged' : ''}`}>
+                                    <div className="sec-team">
+                                        {p.title}
+                                        <span>ID: {p.id}</span>
+                                    </div>
+                                    <div className={`sec-velocity ${isHigh ? 'high' : ''}`}>+{velocity} / 15s</div>
+                                </div>
+                            )
+                        })}
+                        {Object.keys(velocityMap).length === 0 && <div style={{ color: 'rgba(255,255,255,0.4)' }}>{lang === 'ar' ? 'لا يوجد نشاط تصويت حالي.' : 'No active voting velocity detected at this exact moment.'}</div>}
+                    </div>
+                </section>
+            )}
+          </motion.div>
+        )}
+
         {activeTab === 'dashboard' && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div className="dashboard-summary">
@@ -1226,29 +1296,6 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                 </section>
               )}
             </div>
-
-            {role === 'master' && (
-                <section className="security-dashboard">
-                    <div className="security-header"><Activity size={24} /> {t[lang].security_title}</div>
-                    <div className="security-grid">
-                        {Object.entries(velocityMap).map(([id, velocity]) => {
-                            const p = projects.find(proj => proj.id === id);
-                            if (!p) return null;
-                            const isHigh = velocity > 3;
-                            return (
-                                <div key={id} className={`security-card ${isHigh ? 'flagged' : ''}`}>
-                                    <div className="sec-team">
-                                        {p.title}
-                                        <span>ID: {p.id}</span>
-                                    </div>
-                                    <div className={`sec-velocity ${isHigh ? 'high' : ''}`}>+{velocity} / 15s</div>
-                                </div>
-                            )
-                        })}
-                        {Object.keys(velocityMap).length === 0 && <div style={{ color: 'rgba(255,255,255,0.4)' }}>No significant voting velocity detected.</div>}
-                    </div>
-                </section>
-            )}
 
             {role === 'master' && (
               <>
