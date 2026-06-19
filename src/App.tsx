@@ -183,12 +183,15 @@ function App() {
       ceremony_step_6: "THE HEAD ORGANIZERS",
       ceremony_step_7: "SPECIAL RECOGNITION",
       ceremony_step_8: "OUR VOLUNTEERS",
-      ceremony_step_9: "SPECIAL THANKS TO THE JUDGING COMMITTEE",
-      ceremony_step_10: "THE 3RD PLACE - JUDGING AWARD",
-      ceremony_step_11: "THE 2ND PLACE - JUDGING AWARD",
-      ceremony_step_12: "THE GRAND CHAMPION 2026",
-      ceremony_step_13: "VOTING PLATFORM ANALYTICS",
-      ceremony_step_14: "FAN FAVORITE",
+      ceremony_step_9: "SPECIAL THANKS TO\nTHE JUDGING COMMITTEE",
+      ceremony_step_10: "THE 6TH PLACE - JUDGING AWARD",
+      ceremony_step_11: "THE 5TH PLACE - JUDGING AWARD",
+      ceremony_step_12: "THE 4TH PLACE - JUDGING AWARD",
+      ceremony_step_13: "THE 3RD PLACE - JUDGING AWARD",
+      ceremony_step_14: "THE 2ND PLACE - JUDGING AWARD",
+      ceremony_step_15: "THE 1ST PLACE - GRAND CHAMPION",
+      ceremony_step_16: "VOTING PLATFORM ANALYTICS",
+      ceremony_step_17: "FAN FAVORITE PROJECT",
       kiosk_live: "LIVE LEADERBOARD",
       kiosk_gallery: "EVENT PHOTO STREAM",
       credit_1_main: "AL-HUSSEIN TECHNICAL UNIVERSITY",
@@ -245,12 +248,15 @@ function App() {
       ceremony_step_6: "رؤساء اللجنة المنظمة",
       ceremony_step_7: "تقدير خاص",
       ceremony_step_8: "فريق المتطوعين",
-      ceremony_step_9: "شكر خاص للجنة التحكيم",
-      ceremony_step_10: "المركز الرابع - جائزة التحكيم",
-      ceremony_step_11: "المركز الثالث - جائزة التحكيم",
-      ceremony_step_12: "المركز الأول - بطل المعرض",
-      ceremony_step_13: "إحصائيات منصة التصويت",
-      ceremony_step_14: "جائزة تصويت الجمهور",
+      ceremony_step_9: "شكر خاص إلى\nلجنة التحكيم الموقرة",
+      ceremony_step_10: "المركز السادس - جائزة التحكيم",
+      ceremony_step_11: "المركز الخامس - جائزة التحكيم",
+      ceremony_step_12: "المركز الرابع - جائزة التحكيم",
+      ceremony_step_13: "المركز الثالث - جائزة التحكيم",
+      ceremony_step_14: "المركز الثاني - جائزة التحكيم",
+      ceremony_step_15: "المركز الأول - بطل المعرض",
+      ceremony_step_16: "إحصائيات منصة التصويت",
+      ceremony_step_17: "جائزة تصويت الجمهور",
       kiosk_live: "لوحة المتصدرين المباشرة",
       kiosk_gallery: "بث صور المعرض",
       credit_1_main: "جامعة الحسين التقنية",
@@ -818,7 +824,7 @@ function App() {
                                                                 initial={{ opacity: 0, y: 30 }} 
                                                                 animate={{ opacity: 1, y: 0 }}
                                                                 transition={{ delay: 0.8 + (i * 0.05), duration: 1 }}
-                                                                className={`head-name-ultimate ${names.length > 20 ? 'head-name-micro' : 'head-name-small'}`}
+                                                                className={`head-name-ultimate ${names.length > 20 ? 'head-name-micro' : names.length > 8 ? 'head-name-small' : ''}`}
                                                             >
                                                                 {name}
                                                             </motion.div>
@@ -919,32 +925,32 @@ function App() {
                                             <div style={{ fontSize: 'clamp(6rem, 12vh, 12rem)', color: '#FFD700', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 30px rgba(255,215,0,0.5)', lineHeight: 1 }}>
                                                 {globalVotes.toLocaleString()}
                                             </div>
-                                            <div style={{ fontSize: 'clamp(1.5rem, 3vh, 2.5rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>TOTAL VOTES CAST</div>
+                                            <div style={{ fontSize: 'clamp(1.5rem, 3vh, 2.5rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>{lang === 'ar' ? 'إجمالي الأصوات' : 'TOTAL VOTES CAST'}</div>
                                         </motion.div>
 
                                         {/* Middle row of the diamond */}
-                                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '15vw', width: '100%' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '15vw', width: '100%', flexWrap: 'wrap' }}>
                                             <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5, duration: 1.5 }} style={{ textAlign: 'center' }}>
                                                 <div style={{ fontSize: 'clamp(5rem, 10vh, 10rem)', color: '#fff', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 30px rgba(255,255,255,0.4)', lineHeight: 1 }}>
-                                                    {(globalVisits + Math.floor(globalVotes * 2.5)).toLocaleString()}
+                                                    {globalVisits.toLocaleString()}
                                                 </div>
-                                                <div style={{ fontSize: 'clamp(1.2rem, 2.5vh, 2rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PLATFORM VISITS</div>
+                                                <div style={{ fontSize: 'clamp(1.2rem, 2.5vh, 2rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>{lang === 'ar' ? 'إجمالي الزيارات' : 'TOTAL VISITS'}</div>
                                             </motion.div>
                                             
                                             <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2, duration: 1.5 }} style={{ textAlign: 'center' }}>
                                                 <div style={{ fontSize: 'clamp(5rem, 10vh, 10rem)', color: '#FFD700', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 15px rgba(255,215,0,0.4)', lineHeight: 1 }}>
-                                                    {(globalProfileVisits + Math.floor(globalVotes * 4.2)).toLocaleString()}
+                                                    {globalProfileVisits.toLocaleString()}
                                                 </div>
-                                                <div style={{ fontSize: 'clamp(1.2rem, 2.5vh, 2rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PLATFORM INTERACTIONS</div>
+                                                <div style={{ fontSize: 'clamp(1.2rem, 2.5vh, 2rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>{lang === 'ar' ? 'تفاعلات المنصة' : 'PLATFORM INTERACTIONS'}</div>
                                             </motion.div>
                                         </div>
 
                                         {/* Bottom point of the diamond */}
                                         <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 2.5, duration: 1.5 }} style={{ textAlign: 'center' }}>
-                                            <div style={{ fontSize: 'clamp(4rem, 8vh, 8rem)', color: '#fff', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 20px rgba(255,255,255,0.3)', lineHeight: 1 }}>
-                                                {projects.length}
+                                            <div style={{ fontSize: 'clamp(4rem, 8vh, 8rem)', color: '#2ecc71', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 20px rgba(46, 204, 113, 0.4)', lineHeight: 1 }}>
+                                                {globalVisits > 0 ? ((globalVotes / 3) / globalVisits * 100).toFixed(1) : 0}%
                                             </div>
-                                            <div style={{ fontSize: 'clamp(1rem, 2vh, 1.5rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>PROJECTS COMPETING</div>
+                                            <div style={{ fontSize: 'clamp(1rem, 2vh, 1.5rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>{lang === 'ar' ? 'معدل التصويت' : 'VOTING CONVERSION RATE'}</div>
                                         </motion.div>
                                         
                                     </div>
