@@ -749,8 +749,8 @@ function App() {
                                         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 1 }}
                                         className={`credits-subtitle-ultimate ${[4, 6, 8, 9].includes(kioskConfig.revealStep) ? 'title-huge' : ''}`}
                                     >
-                                        {String(t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] || '').split('\n').map((line, i) => (
-                                            <span key={i} style={{ display: 'block', fontSize: i === 1 ? '1.3em' : '1em', marginTop: i === 1 ? '15px' : '0' }}>{line}</span>
+                                        {String(t[lang][`ceremony_step_${kioskConfig.revealStep}` as keyof typeof t['en']] || '').split('\n').map((line, i, arr) => (
+                                            <span key={i} style={{ display: 'block', fontSize: arr.length > 1 ? (i === 1 ? '1em' : '0.5em') : '1em', marginTop: i === 1 ? '5px' : '0', opacity: i === 0 && arr.length > 1 ? 0.8 : 1 }}>{line}</span>
                                         ))}
                                     </motion.span>
 
@@ -810,7 +810,7 @@ function App() {
                                             </motion.div>
                                         </div>
                                     ) : [4, 6, 8, 9].includes(kioskConfig.revealStep) ? (
-                                        <div className="organizer-cloud-ultimate" style={{ marginTop: kioskConfig.revealStep === 9 ? '12vh' : '0' }}>
+                                        <div className="organizer-cloud-ultimate" style={{ marginTop: kioskConfig.revealStep === 9 ? '5vh' : '0' }}>
                                             {(() => {
                                                 const sourceStr = kioskConfig.revealStep === 9 ? kioskConfig.judgeNames :
                                                                   kioskConfig.revealStep === 6 ? kioskConfig.headOrganizerNames :
