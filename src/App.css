@@ -34,11 +34,11 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .splash-branding-top { font-weight: 950; letter-spacing: 10px; text-transform: uppercase; color: white; font-size: 5rem; text-shadow: 0 0 40px var(--htu-red), 0 0 80px var(--htu-red); animation: splashGlow 3s ease-in-out infinite alternate; line-height: 1; margin-bottom: 20px; }
 @keyframes splashGlow { from { opacity: 0.8; transform: scale(0.98); } to { opacity: 1; transform: scale(1.02); } }
 .logo-container-premium { position: relative; width: 300px; height: 300px; display: flex; align-items: center; justify-content: center; }
-.splash-logo { width: 250px; height: 250px; border-radius: 50%; object-fit: cover; z-index: 2; box-shadow: 0 0 40px rgba(232, 52, 63, 0.5); border: 2px solid rgba(255, 215, 0, 0.5); }
-.splash-ring { position: absolute; border: 1px solid rgba(232, 52, 63, 0.1); border-radius: 50%; }
-.ring-1 { width: 300px; height: 300px; border-top-color: var(--htu-red); animation: splashRotate 3s linear infinite; }
-.ring-2 { width: 260px; height: 260px; border-bottom-color: var(--htu-red); animation: splashRotate 5s linear infinite reverse; opacity: 0.5; }
-.ring-3 { width: 340px; height: 340px; border-left-color: rgba(255,255,255,0.1); animation: splashRotate 8s linear infinite; opacity: 0.2; }
+.splash-logo { width: 240px; height: 240px; border-radius: 12px; object-fit: cover; z-index: 2; box-shadow: 0 0 40px rgba(232, 52, 63, 0.5); border: 2px solid rgba(255, 215, 0, 0.5); }
+.splash-ring { position: absolute; border: 2px solid rgba(232, 52, 63, 0.1); border-radius: 12px; }
+.ring-1 { width: 280px; height: 280px; border-top-color: var(--htu-red); border-right-color: var(--htu-red); animation: splashRotate 4s linear infinite; }
+.ring-2 { width: 320px; height: 320px; border-bottom-color: var(--htu-red); border-left-color: var(--htu-red); animation: splashRotate 6s linear infinite reverse; opacity: 0.6; }
+.ring-3 { width: 360px; height: 360px; border-left-color: rgba(255,255,255,0.2); border-top-color: rgba(255,255,255,0.2); animation: splashRotate 10s linear infinite; opacity: 0.3; }
 @keyframes splashRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 .splash-loader-container { width: 400px; height: 5px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; margin-top: 30px; }
 .splash-loader { height: 100%; background: var(--htu-red); box-shadow: 0 0 20px var(--htu-red); }
@@ -1089,11 +1089,11 @@ footer { padding: 80px 0; text-align: center; border-top: 1px solid var(--glass-
     .splash-content { gap: 20px !important; padding: 0 20px; width: 100%; }
     .splash-branding-top { font-size: 2.2rem !important; letter-spacing: 5px !important; margin-bottom: 10px !important; text-shadow: 0 0 20px var(--htu-red) !important; }
     .logo-container-premium { width: 180px !important; height: 180px !important; }
-    .splash-logo { width: 150px !important; height: 150px !important; }
+    .splash-logo { width: 150px !important; height: 150px !important; border-radius: 12px !important; }
     
-    /* Kill rotating animations for mobile FPS and scale rings */
-    .ring-1 { width: 180px !important; height: 180px !important; animation: none !important; border: 2px solid rgba(232, 52, 63, 0.5) !important; }
-    .ring-2 { width: 150px !important; height: 150px !important; animation: none !important; border: 2px solid rgba(232, 52, 63, 0.3) !important; }
+    /* Moving square lines for mobile */
+    .ring-1 { width: 170px !important; height: 170px !important; border-radius: 12px !important; border: 2px solid rgba(232, 52, 63, 0.5) !important; border-top-color: var(--htu-red) !important; animation: splashRotate 5s linear infinite !important; }
+    .ring-2 { width: 200px !important; height: 200px !important; border-radius: 12px !important; border: 2px solid rgba(232, 52, 63, 0.3) !important; border-bottom-color: var(--htu-red) !important; animation: splashRotate 7s linear infinite reverse !important; }
     .ring-3 { display: none !important; } /* Hide outer ring to save space */
     
     .splash-loader-container { width: 80vw !important; max-width: 250px !important; margin-top: 15px !important; }
