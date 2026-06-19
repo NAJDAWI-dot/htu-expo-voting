@@ -810,7 +810,7 @@ function App() {
                                             </motion.div>
                                         </div>
                                     ) : [4, 6, 8, 9].includes(kioskConfig.revealStep) ? (
-                                        <div className="organizer-cloud-ultimate">
+                                        <div className="organizer-cloud-ultimate" style={{ marginTop: kioskConfig.revealStep === 9 ? '12vh' : '0' }}>
                                             {(() => {
                                                 const sourceStr = kioskConfig.revealStep === 9 ? kioskConfig.judgeNames :
                                                                   kioskConfig.revealStep === 6 ? kioskConfig.headOrganizerNames :
