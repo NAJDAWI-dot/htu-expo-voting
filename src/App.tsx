@@ -1221,6 +1221,7 @@ function App() {
         <motion.div className="header-glass" initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.8 }}>
           <motion.img initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} src="htu-logo.png" alt="HTU Logo" className="htu-logo" onClick={handleLogoClick} />
           <motion.h1>{t[lang].title}</motion.h1>
+          <motion.p className="main-page-year" style={{ color: '#FFD700', fontWeight: '900', letterSpacing: '10px', fontSize: '1.4rem', marginTop: '-10px', marginBottom: '15px', textShadow: '0 0 15px rgba(255, 215, 0, 0.5)', textTransform: 'uppercase' }}>SPRING 2026</motion.p>
           <motion.p className="subtitle">{t[lang].subtitle(3 - voterData.voteCount)}</motion.p>
           {globalVotes >= 0 && <div className="global-counter-pill"><span className="pulse-dot"></span><strong>{globalVotes.toLocaleString()}</strong> {t[lang].votes_cast}</div>}
         </motion.div>
