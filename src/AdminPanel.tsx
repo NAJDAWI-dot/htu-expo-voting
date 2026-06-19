@@ -1072,7 +1072,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
             <p>Master / Organizer / Media Access</p>
           </div>
           <form onSubmit={handleLogin} className="elite-form">
-            <div className="input-group-elite"><label>{t[lang].sys_user}</label><div className="input-wrapper"><UserCog size={20} className="field-icon" /><input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required /></div></div>
+            <div className="input-group-elite"><label>{t[lang].sys_user}</label><div className="input-wrapper"><UserCog size={20} className="field-icon" /><input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required autoComplete="username" /></div></div>
             <div className="input-group-elite"><label>{t[lang].sys_pass}</label><div className="input-wrapper"><BarChart3 size={20} className="field-icon" /><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required /></div></div>
             {error && <p className="error-text-elite"><AlertTriangle size={14} /> {error}</p>}
             <button type="submit" className="htu-button w-full login-btn-elite">{t[lang].init}</button>
