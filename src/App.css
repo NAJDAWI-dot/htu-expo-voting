@@ -264,6 +264,15 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 [dir="rtl"] .field-icon { left: auto; right: 22px; }
 .input-wrapper input:focus + .field-icon { color: var(--htu-red); transform: translateY(-50%) scale(1.1); }     
 
+/* --- ANALYTICS DASHBOARD --- */
+.elite-dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; width: 100%; }
+.elite-stat-card { display: flex; align-items: center; gap: 20px; padding: 25px; transition: 0.3s; }
+.elite-stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.stat-icon-wrapper { width: 60px; height: 60px; border-radius: 15px; background: rgba(255,255,255,0.05); display: flex; justify-content: center; align-items: center; }
+.stat-content { display: flex; flex-direction: column; gap: 5px; }
+.stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; margin: 0; font-weight: 700; }
+.stat-value { font-size: 2rem; color: #fff; margin: 0; font-weight: 800; line-height: 1; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
+
 /* --- ADMIN DASHBOARD: MISSION CONTROL --- */
 .admin-dashboard-elite { background: var(--htu-navy-deep); min-height: 100vh; position: relative; z-index: 100; overflow-x: hidden; }
 .admin-nav-elite { 
