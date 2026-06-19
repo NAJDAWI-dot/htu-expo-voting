@@ -1581,8 +1581,12 @@ footer { padding: 80px 0; text-align: center; border-top: 1px solid var(--glass-
 .segment-glow-node { position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 12px; height: 12px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px #FFD700, 0 0 40px #FFD700; }
 
 /* --- GLOBAL BROADCAST BANNER --- */
-.global-announcement-banner { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; display: flex; justify-content: center; pointer-events: none; }
-.global-announcement-banner .announcement-content { margin-top: 20px; background: linear-gradient(90deg, rgba(232,52,63,0.95), rgba(200,30,40,0.95)); border-radius: 50px; padding: 12px 30px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 40px rgba(232,52,63,0.5), inset 0 2px 10px rgba(255,255,255,0.2); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); pointer-events: auto; }
-.global-announcement-banner.kiosk-announcement .announcement-content { transform: scale(1.5); margin-top: 40px; }
-.announcement-badge { background: #FFD700; color: #000; font-weight: 900; font-size: 0.8rem; padding: 5px 12px; border-radius: 50px; letter-spacing: 1px; }
-.announcement-text { color: #fff; font-weight: 700; font-size: 1rem; letter-spacing: 0.5px; }
+.announcement-overlay-v2 { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); z-index: 1000; display: flex; align-items: center; justify-content: center; pointer-events: auto; }
+.global-announcement-banner { display: flex; justify-content: center; pointer-events: none; }
+.global-announcement-banner.kiosk-announcement { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; }
+.global-announcement-banner .announcement-content { background: linear-gradient(135deg, rgba(232,52,63,0.95), rgba(200,30,40,0.95)); border-radius: 30px; padding: 20px 40px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px; box-shadow: 0 20px 60px rgba(232,52,63,0.5), inset 0 2px 10px rgba(255,255,255,0.2); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); pointer-events: auto; max-width: 90vw; }
+.global-announcement-banner.kiosk-announcement .announcement-content { transform: scale(1.5); margin-top: 40px; flex-direction: row; border-radius: 50px; padding: 12px 30px; }
+.announcement-badge { background: #FFD700; color: #000; font-weight: 900; font-size: 0.9rem; padding: 6px 16px; border-radius: 50px; letter-spacing: 2px; }
+.announcement-text { color: #fff; font-weight: 800; font-size: 1.4rem; letter-spacing: 0.5px; }
+.dismiss-announcement-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 10px 30px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; overflow: hidden; }
+.dismiss-announcement-btn:hover { background: #fff; color: #E8343F; }

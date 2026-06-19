@@ -124,6 +124,20 @@ function App() {
 
   const [showBadge, setShowBadge] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  
+  const [dismissedAnnouncement, setDismissedAnnouncement] = useState('');
+  const [canDismissAnnouncement, setCanDismissAnnouncement] = useState(false);
+  
+  useEffect(() => {
+      if (kioskConfig.announcementText && kioskConfig.announcementText !== dismissedAnnouncement) {
+          setCanDismissAnnouncement(false);
+          const timer = setTimeout(() => {
+              setCanDismissAnnouncement(true);
+          }, 6000);
+          return () => clearTimeout(timer);
+      }
+  }, [kioskConfig.announcementText, dismissedAnnouncement]);
+
   const [voterName, setVoterName] = useState('');
   const [isNameSubmitted, setIsNameSubmitted] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -1163,19 +1177,34 @@ function App() {
 
   return (
     <div className="app-container" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-      {kioskConfig.announcementText && (
-          <motion.div 
-              initial={{ y: -100, opacity: 0 }} 
-              animate={{ y: 0, opacity: 1 }} 
-              exit={{ y: -100, opacity: 0 }} 
-              transition={{ type: "spring", stiffness: 200, damping: 20 }}
-              className="global-announcement-banner"
-          >
-              <div className="announcement-content">
-                  <span className="announcement-badge">BREAKING NEWS</span>
-                  <span className="announcement-text">{kioskConfig.announcementText}</span>
-              </div>
-          </motion.div>
+      {kioskConfig.announcementText && kioskConfig.announcementText !== dismissedAnnouncement && (
+          <div className="announcement-overlay-v2">
+              <motion.div 
+                  initial={{ y: -300, scale: 0.5, opacity: 0 }} 
+                  animate={{ y: 0, scale: 1, opacity: 1 }} 
+                  exit={{ scale: 0.8, opacity: 0 }} 
+                  transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                  className="global-announcement-banner centered-announcement"
+              >
+                  <div className="announcement-content">
+                      <span className="announcement-badge">BREAKING NEWS</span>
+                      <span className="announcement-text">{kioskConfig.announcementText}</span>
+                      
+                      <AnimatePresence>
+                          {canDismissAnnouncement && (
+                              <motion.button 
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: 'auto', marginTop: '20px' }}
+                                  className="dismiss-announcement-btn"
+                                  onClick={() => setDismissedAnnouncement(kioskConfig.announcementText!)}
+                              >
+                                  Dismiss & Continue
+                              </motion.button>
+                          )}
+                      </AnimatePresence>
+                  </div>
+              </motion.div>
+          </div>
       )}
       {!isVotingOpen && !archiveMode && <VotingCountdownBanner lang={lang as any} t={t} />}
       {archiveMode && (
