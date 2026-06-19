@@ -35,6 +35,7 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 @keyframes splashGlow { from { opacity: 0.8; transform: scale(0.98); } to { opacity: 1; transform: scale(1.02); } }
 .logo-container-premium { position: relative; width: 300px; height: 300px; display: flex; align-items: center; justify-content: center; }
 .splash-logo { height: 180px; z-index: 2; filter: drop-shadow(0 0 50px rgba(232, 52, 63, 0.4)); }
+.splash-design-main { width: 100%; max-width: 500px; max-height: 200px; object-fit: contain; border-radius: 12px; z-index: 2; filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.2)); }
 .splash-ring { position: absolute; border: 1px solid rgba(232, 52, 63, 0.1); border-radius: 50%; }
 .ring-1 { width: 300px; height: 300px; border-top-color: var(--htu-red); animation: splashRotate 3s linear infinite; }
 .ring-2 { width: 260px; height: 260px; border-bottom-color: var(--htu-red); animation: splashRotate 5s linear infinite reverse; opacity: 0.5; }
@@ -1090,6 +1091,7 @@ footer { padding: 80px 0; text-align: center; border-top: 1px solid var(--glass-
     .splash-branding-top { font-size: 2.2rem !important; letter-spacing: 5px !important; margin-bottom: 10px !important; text-shadow: 0 0 20px var(--htu-red) !important; }
     .logo-container-premium { width: 180px !important; height: 180px !important; }
     .splash-logo { height: 100px !important; }
+    .splash-design-main { max-width: 80% !important; max-height: 120px !important; }
     
     /* Kill rotating animations for mobile FPS and scale rings */
     .ring-1 { width: 180px !important; height: 180px !important; animation: none !important; border: 2px solid rgba(232, 52, 63, 0.5) !important; }

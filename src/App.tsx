@@ -618,6 +618,14 @@ function App() {
               <div className="splash-ring ring-1" /><div className="splash-ring ring-2" /><div className="splash-ring ring-3" />
               <motion.img initial={{ scale: 0.5, opacity: 0, rotate: -10 }} animate={{ scale: 1, opacity: 1, rotate: 0 }} transition={{ duration: 1.2, ease: "easeOut" }} src="htu-logo.png" alt="HTU Logo" className="splash-logo" />
           </div>
+          <motion.img 
+            initial={{ opacity: 0, y: 30 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.4, duration: 1.2, ease: "easeOut" }} 
+            src="designmain.jpeg" 
+            alt="Design Main Graphic" 
+            className="splash-design-main" 
+          />
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.8 }} className="splash-loader-container">
             <motion.div className="splash-loader" initial={{ width: 0 }} animate={{ width: '100%' }} transition={{ duration: 3.5, ease: "easeInOut" }} />
           </motion.div>
