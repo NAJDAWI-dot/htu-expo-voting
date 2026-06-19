@@ -103,6 +103,7 @@ function App() {
       volunteerNames: string;
       instructorNamesExtra: string;
       judgeNames: string;
+      announcementText?: string;
       ceremonySelection?: string[];
   }>({
       hideResults: false,
@@ -116,6 +117,7 @@ function App() {
       volunteerNames: "",
       instructorNamesExtra: "",
       judgeNames: "",
+      announcementText: "",
       ceremonySelection: ['', '', '', '', '', '', '']
   });
   const [kioskCycleIndex, setKioskCycleIndex] = useState(0); // 0=Leaderboard, 1=Gallery, 2=Branding
@@ -649,6 +651,21 @@ function App() {
         <div className={`kiosk-mode ${kioskConfig.revealStep === 13 ? 'champion-active' : ''}`}>
             <div className="background-wrapper"><div className="bg-grid" /><div className="bg-mesh" /></div>        
 
+            {kioskConfig.announcementText && (
+                <motion.div 
+                    initial={{ y: -100, opacity: 0 }} 
+                    animate={{ y: 0, opacity: 1 }} 
+                    exit={{ y: -100, opacity: 0 }} 
+                    transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                    className="global-announcement-banner kiosk-announcement"
+                >
+                    <div className="announcement-content">
+                        <span className="announcement-badge">BREAKING NEWS</span>
+                        <span className="announcement-text">{kioskConfig.announcementText}</span>
+                    </div>
+                </motion.div>
+            )}
+
             {kioskConfig.tickerText && (
                 <div className="kiosk-ticker">
                     <div className="ticker-wrapper">
@@ -1146,6 +1163,20 @@ function App() {
 
   return (
     <div className="app-container" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      {kioskConfig.announcementText && (
+          <motion.div 
+              initial={{ y: -100, opacity: 0 }} 
+              animate={{ y: 0, opacity: 1 }} 
+              exit={{ y: -100, opacity: 0 }} 
+              transition={{ type: "spring", stiffness: 200, damping: 20 }}
+              className="global-announcement-banner"
+          >
+              <div className="announcement-content">
+                  <span className="announcement-badge">BREAKING NEWS</span>
+                  <span className="announcement-text">{kioskConfig.announcementText}</span>
+              </div>
+          </motion.div>
+      )}
       {!isVotingOpen && !archiveMode && <VotingCountdownBanner lang={lang as any} t={t} />}
       {archiveMode && (
           <div className="archive-banner-premium">

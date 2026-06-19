@@ -130,6 +130,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       volunteerNames: string;
       instructorNamesExtra: string;
       judgeNames: string;
+      announcementText?: string;
       ceremonySelection?: string[];
       hofSelection?: string[];
   }>({
@@ -154,7 +155,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     section_number: ''
   });
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [selectedGalleryImages, setSelectedGalleryImages] = useState<FileList | null>(null);
+  const [selectedGalleryImages, setSelectedGalleryImages] = useState<File[]>([]);
   const [uploadingGallery, setUploadingGallery] = useState(false);
   const [galleryImages, setGalleryImages] = useState<{id: string, imageUrl: string, timestamp: number}[]>([]);
 
@@ -845,12 +846,12 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
   };
 
   const handleUploadGalleryImage = async () => {
-      if (!selectedGalleryImages || selectedGalleryImages.length === 0) return;
+      if (selectedGalleryImages.length === 0) return;
       setUploadingGallery(true);
       let successCount = 0;
       let errorMsgs: string[] = [];
       try {
-          const uploadPromises = Array.from(selectedGalleryImages).map(async (file) => {
+          const uploadPromises = selectedGalleryImages.map(async (file) => {
               try {
                   const formData = new FormData();
                   formData.append('file', file);
@@ -866,7 +867,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
               } catch (innerErr: any) { errorMsgs.push(innerErr.message || "Unknown error"); }
           });
           await Promise.all(uploadPromises);
-          if (successCount > 0) { setSelectedGalleryImages(null); }
+          if (successCount > 0) { setSelectedGalleryImages([]); }
       } catch (err: any) { alert(`Error: ${err.message}`); } finally { setUploadingGallery(false); }
   };
 
@@ -1516,6 +1517,16 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                         </div>
 
                         <div className="stage-control-item glass-card" style={{ gridColumn: 'span 2' }}>
+                            <div className="item-label"><Megaphone size={20} color="#FFD700" /> <span style={{ color: '#FFD700' }}>Global Broadcast / News Alert</span></div>
+                            <div className="ticker-input-wrapper">
+                                <input type="text" placeholder="Enter an urgent message to beam to all connected devices..." value={kioskConfig.announcementText || ""} onChange={(e) => updateKiosk({ announcementText: e.target.value })} className="ticker-admin-input" style={{ borderColor: 'rgba(255,215,0,0.3)', background: 'rgba(255,215,0,0.05)' }} />
+                            </div>
+                            <div style={{ marginTop: '10px', fontSize: '0.85rem', opacity: 0.6, letterSpacing: '1px' }}>
+                                This message will instantly drop down as a glowing banner on ALL connected public phones and the main Kiosk screens. Clear the text to dismiss it.
+                            </div>
+                        </div>
+
+                        <div className="stage-control-item glass-card" style={{ gridColumn: 'span 2' }}>
                             <div className="item-label"><Trophy size={20} color="#FFD700" /> <span>Hall of Fame & Ceremony Selection</span></div>
                             <div className="ceremony-selection-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginTop: '15px' }}>
                                 {[0, 1, 2, 3, 4, 5, 6].map(idx => (
@@ -1690,7 +1701,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
           <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }}>
             <section className="glass-card elite-admin-card table-section-elite">
               <div className="card-header-elite"><h3><ImageIcon size={22} /> {t[lang].gallery_mgmt}</h3></div>
-              <div className="file-upload-elite"><label className="file-label-elite">{selectedGalleryImages && selectedGalleryImages.length > 0 ? <ImageIcon size={22} color="#E8343F" /> : <Upload size={22} />}<span>{selectedGalleryImages && selectedGalleryImages.length > 0 ? `${selectedGalleryImages.length} files` : t[lang].upload_gallery}</span><input type="file" accept="image/*" multiple onChange={e => setSelectedGalleryImages(e.target.files)} className="hidden-file-input" /></label><button className="htu-button" onClick={handleUploadGalleryImage} disabled={!selectedGalleryImages || uploadingGallery} style={{ marginLeft: lang === 'ar' ? '0' : '15px', marginRight: lang === 'ar' ? '15px' : '0' }}>{uploadingGallery ? <Loader2 className="animate-spin" size={20} /> : t[lang].upload_gallery}</button></div>
+              <div className="file-upload-elite"><label className="file-label-elite">{selectedGalleryImages.length > 0 ? <ImageIcon size={22} color="#E8343F" /> : <Upload size={22} />}<span>{selectedGalleryImages.length > 0 ? `${selectedGalleryImages.length} files` : t[lang].upload_gallery}</span><input type="file" accept="image/*" multiple onChange={e => { if(e.target.files) setSelectedGalleryImages(prev => [...prev, ...Array.from(e.target.files!)]) }} className="hidden-file-input" /></label><button className="htu-button" onClick={handleUploadGalleryImage} disabled={selectedGalleryImages.length === 0 || uploadingGallery} style={{ marginLeft: lang === 'ar' ? '0' : '15px', marginRight: lang === 'ar' ? '15px' : '0' }}>{uploadingGallery ? <Loader2 className="animate-spin" size={20} /> : t[lang].upload_gallery}</button></div>
               <div className="elite-table-wrapper">
                 <table className="elite-table">
                     <thead><tr><th>{t[lang].th_visual}</th><th>ID</th><th className="text-right">{t[lang].th_ops}</th></tr></thead>
@@ -1717,24 +1728,51 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
                     </div>
 
                     <div style={{ marginTop: '50px' }}>
-                        <label className="file-label-elite" style={{ padding: '80px 40px', border: '3px dashed rgba(232, 52, 63, 0.3)', borderRadius: '40px', background: 'rgba(232, 52, 63, 0.03)', transition: '0.5s' }}>
+                        <label className="file-label-elite" style={{ padding: selectedGalleryImages.length > 0 ? '40px 20px' : '80px 40px', border: '3px dashed rgba(232, 52, 63, 0.3)', borderRadius: '40px', background: 'rgba(232, 52, 63, 0.03)', transition: 'all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
-                                <Upload size={60} color="#E8343F" />
-                                <span style={{ fontSize: '1.4rem', color: '#fff' }}>{t[lang].drop_images}</span>
-                                {selectedGalleryImages && selectedGalleryImages.length > 0 && (
-                                    <div style={{ background: '#10b981', color: '#fff', padding: '10px 25px', borderRadius: '50px', fontWeight: 900 }}>
-                                        {selectedGalleryImages.length} {t[lang].files_selected}
-                                    </div>
-                                )}
+                                <Upload size={selectedGalleryImages.length > 0 ? 40 : 60} color="#E8343F" style={{ transition: '0.3s' }} />
+                                <span style={{ fontSize: selectedGalleryImages.length > 0 ? '1.1rem' : '1.4rem', color: '#fff', transition: '0.3s' }}>
+                                    {selectedGalleryImages.length > 0 ? 'Add more images' : t[lang].drop_images}
+                                </span>
                             </div>
-                            <input type="file" accept="image/*" multiple onChange={e => setSelectedGalleryImages(e.target.files)} className="hidden-file-input" />
+                            <input type="file" accept="image/*" multiple onChange={e => { if (e.target.files) setSelectedGalleryImages(prev => [...prev, ...Array.from(e.target.files!)]) }} className="hidden-file-input" />
                         </label>
+
+                        {selectedGalleryImages.length > 0 && (
+                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="media-preview-area">
+                                <div className="media-preview-header">
+                                    <span>{selectedGalleryImages.length} {t[lang].files_selected}</span>
+                                    <button onClick={() => setSelectedGalleryImages([])} className="clear-all-btn"><Trash2 size={16} /> Clear All</button>
+                                </div>
+                                <div className="media-preview-grid">
+                                    <AnimatePresence>
+                                        {selectedGalleryImages.map((file, idx) => (
+                                            <motion.div 
+                                                key={file.name + idx}
+                                                initial={{ opacity: 0, scale: 0.8 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.5 }}
+                                                className="media-preview-item"
+                                            >
+                                                <img src={URL.createObjectURL(file)} alt="preview" />
+                                                <button 
+                                                    className="remove-media-btn"
+                                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedGalleryImages(prev => prev.filter((_, i) => i !== idx)); }}
+                                                >
+                                                    <X size={16} />
+                                                </button>
+                                            </motion.div>
+                                        ))}
+                                    </AnimatePresence>
+                                </div>
+                            </motion.div>
+                        )}
 
                         <button 
                             className="htu-button w-full" 
                             style={{ marginTop: '30px', padding: '30px', fontSize: '1.5rem', borderRadius: '24px', letterSpacing: '4px' }}
                             onClick={handleUploadGalleryImage} 
-                            disabled={!selectedGalleryImages || uploadingGallery}
+                            disabled={selectedGalleryImages.length === 0 || uploadingGallery}
                         >
                             {uploadingGallery ? (
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
