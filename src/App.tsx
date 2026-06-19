@@ -1091,6 +1091,32 @@ function App() {
                 </div>
             )}
 
+            {kioskConfig.autoRotate && !kioskConfig.victoryMode && (
+                <div className="kiosk-rotation-tracker-v2">
+                    <div className="rotation-tracker-track">
+                        {[0, 1, 2].map((idx) => (
+                            <div key={idx} className={`rotation-segment ${kioskCycleIndex === idx ? 'active' : ''} ${kioskCycleIndex > idx ? 'completed' : ''}`}>
+                                <div className="segment-label">
+                                    {idx === 0 ? 'LIVE VOTING' : idx === 1 ? 'EVENT GALLERY' : 'SPONSORS'}
+                                </div>
+                                <div className="segment-bar-bg">
+                                    {kioskCycleIndex === idx && (
+                                        <motion.div 
+                                            className="segment-bar-fill" 
+                                            initial={{ width: '0%' }}
+                                            animate={{ width: '100%' }}
+                                            transition={{ duration: 15, ease: 'linear' }}
+                                        />
+                                    )}
+                                    {kioskCycleIndex > idx && <div className="segment-bar-fill completed-fill" style={{ width: '100%' }} />}
+                                </div>
+                                {kioskCycleIndex === idx && <div className="segment-glow-node" />}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
             <button className="exit-kiosk" onClick={() => setView('public')}>Exit Kiosk</button>
         </div>
     );
