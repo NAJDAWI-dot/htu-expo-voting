@@ -1088,7 +1088,7 @@ function App() {
                                         <h2 className="title-top">HTU ENGINEERING</h2>
                                         <h2 className="title-main">DESIGN EXPO</h2>
                                         <div className="title-divider-ultimate" />
-                                        <p className="title-year">ESTABLISHED 2026</p>
+                                        <p className="title-year">SPRING 2026</p>
                                     </motion.div>
                                 </div>
                             </motion.div>

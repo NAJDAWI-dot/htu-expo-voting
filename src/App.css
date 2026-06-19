@@ -474,8 +474,8 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .intro-logo-ultimate { height: 200px; filter: drop-shadow(0 0 60px rgba(255,255,255,0.3)); }
 .branding-text-ultimate { margin-top: 60px; text-align: center; }
 .branding-text-ultimate .title-top { font-size: 3.5rem; letter-spacing: 20px; font-weight: 900; color: rgba(255,255,255,0.3); }
-.branding-text-ultimate .title-main { font-size: 8rem; letter-spacing: -4px; font-weight: 1000; background: linear-gradient(#fff, #E8343F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 0.9; }
-.title-divider-ultimate { width: 400px; height: 5px; background: var(--htu-red); margin: 30px auto; border-radius: 100px; box-shadow: 0 0 40px var(--htu-red); }
+.branding-text-ultimate .title-main { font-size: 6.5rem; letter-spacing: -2px; font-weight: 1000; background: linear-gradient(#fff, #E8343F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; padding-bottom: 20px; }
+.title-divider-ultimate { width: 400px; height: 5px; background: var(--htu-red); margin: 10px auto 30px; border-radius: 100px; box-shadow: 0 0 40px var(--htu-red); }
 .title-year { font-size: 1.8rem; letter-spacing: 15px; font-weight: 900; opacity: 0.2; }
 
 /* --- CEREMONY SYSTEM: APPLE KEYNOTE MINIMALIST V6 --- */
