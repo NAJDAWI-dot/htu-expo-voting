@@ -1064,9 +1064,9 @@ footer { padding: 80px 0; text-align: center; border-top: 1px solid var(--glass-
 .teams-header-flex { display: flex; justify-content: space-between; align-items: center; width: 100%; gap: 30px; }
 @media (max-width: 1000px) { .teams-header-flex { flex-direction: column; align-items: flex-start; } }
 .teams-controls-grid { display: flex; gap: 15px; flex: 1; justify-content: flex-end; width: 100%; }
-.teams-search-wrapper { position: relative; flex: 1; max-width: 400px; }
-.teams-search-input { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 16px 20px 16px 50px; color: white; font-size: 0.95rem; outline: none; transition: 0.3s; font-weight: 600; box-shadow: inset 0 2px 10px rgba(0,0,0,0.3); }
-[dir="rtl"] .teams-search-input { padding: 16px 50px 16px 20px; }
+.teams-search-wrapper { position: relative; flex: 1; min-width: 250px; max-width: 400px; }
+.teams-search-input { width: 100%; height: 50px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 0 20px 0 50px; color: white; font-size: 1rem; outline: none; transition: 0.3s; font-weight: 600; box-shadow: inset 0 2px 10px rgba(0,0,0,0.3); }
+[dir="rtl"] .teams-search-input { padding: 0 50px 0 20px; }
 .teams-search-input:focus { border-color: var(--htu-red); background: rgba(232, 52, 63, 0.05); box-shadow: 0 0 20px rgba(232, 52, 63, 0.2), inset 0 2px 10px rgba(0,0,0,0.3); }
 
 .sort-wrapper { position: relative; display: flex; align-items: center; width: 100%; max-width: 200px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 0 15px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.3); transition: 0.3s; }
