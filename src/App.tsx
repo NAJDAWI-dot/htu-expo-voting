@@ -1132,7 +1132,6 @@ function App() {
                 </div>
             )}
 
-            <button className="exit-kiosk" onClick={() => setView('public')}>Exit Kiosk</button>
         </div>
     );
   }
