@@ -943,10 +943,10 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
     .stat-pill::after { display: none !important; }
     
     /* SCALE DOWN PUBLIC PAGE & BENTO GRID */
-    .app-container { padding: 0 15px; }
-    .main-header { padding: 50px 0 20px; }
-    .header-glass h1 { font-size: 2.0rem !important; line-height: normal !important; letter-spacing: -1px !important; padding-bottom: 15px !important; }
-    .subtitle { font-size: 1rem; }
+    .app-container { padding: 0 10px; }
+    .main-header { padding: 30px 0 15px; }
+    .header-glass h1 { font-size: 1.6rem !important; line-height: 1.2 !important; letter-spacing: -1px !important; padding-bottom: 10px !important; }
+    .subtitle { font-size: 0.85rem; padding: 0 10px; }
     
     /* COUNTDOWN BANNER MOBILE */
     .banner-content { gap: 10px; flex-direction: column; text-align: center; }
@@ -963,12 +963,12 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
     .global-counter-pill { width: 100%; justify-content: center; font-size: 0.8rem; }
 
     /* ONBOARDING MODAL MOBILE */
-    .onboarding-card-premium { padding: 40px 20px !important; border-radius: 24px !important; margin: 15px !important; width: calc(100% - 30px) !important; }
-    .onboarding-card-premium h2 { font-size: 1.6rem !important; margin-bottom: 15px !important; }
-    .onboarding-card-premium p { font-size: 0.95rem !important; }
-    .onboarding-htu-logo { height: 70px !important; margin-bottom: 20px !important; }
+    .onboarding-card-premium { padding: 30px 15px !important; border-radius: 20px !important; margin: 10px !important; width: calc(100% - 20px) !important; }
+    .onboarding-card-premium h2 { font-size: 1.4rem !important; margin-bottom: 10px !important; }
+    .onboarding-card-premium p { font-size: 0.85rem !important; margin-bottom: 15px !important; }
+    .onboarding-htu-logo { height: 60px !important; margin-bottom: 15px !important; }
 
-    .search-input { padding: 15px 20px 15px 50px; font-size: 1rem; }
+    .search-input { padding: 12px 15px 12px 40px; font-size: 0.9rem; border-radius: 12px; }
     [dir="rtl"] .search-input { padding: 15px 50px 15px 20px; }
     .search-icon { left: 20px; }
     [dir="rtl"] .search-icon { right: 20px; }
@@ -976,15 +976,25 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
     .tab-btn { padding: 10px 20px; font-size: 0.8rem; flex: 1; }
     
     /* REVERT BENTO GRID FOR MOBILE */
-    .grid-container { display: flex !important; flex-direction: column !important; gap: 20px !important; padding: 20px 0 !important; }
-    .glass-card { border-radius: 24px !important; }
+    .grid-container { display: flex !important; flex-direction: column !important; gap: 15px !important; padding: 15px 0 !important; }
+    .glass-card { border-radius: 20px !important; }
     .project-card { padding: 0 !important; }
-    .project-image-container { min-height: 200px !important; height: 200px !important; width: 100% !important; margin: 0 !important; border-radius: 24px 24px 0 0 !important; }
-    .project-card:nth-child(5n+1) .project-image-container { min-height: 200px !important; height: 200px !important; }
-    .card-content { padding: 20px 20px 10px !important; }
-    .card-content h3 { font-size: 1.3rem !important; margin-bottom: 5px !important; }
-    .card-footer { padding: 0 20px 20px !important; }
-    .htu-button { padding: 14px !important; font-size: 0.95rem !important; width: 100% !important; }
+    .project-image-container { min-height: 160px !important; height: 160px !important; width: 100% !important; margin: 0 !important; border-radius: 20px 20px 0 0 !important; }
+    .project-card:nth-child(5n+1) .project-image-container { min-height: 160px !important; height: 160px !important; }
+    .card-content { padding: 15px 15px 10px !important; }
+    .card-content h3 { font-size: 1.1rem !important; margin-bottom: 5px !important; }
+    .card-footer { padding: 0 15px 15px !important; }
+    .htu-button { padding: 12px !important; font-size: 0.85rem !important; width: 100% !important; }
+
+    /* SCALE DOWN PROJECT MODAL */
+    .modal-card { padding: 20px !important; border-radius: 24px !important; }
+    .modal-image-container { margin: -20px -20px 20px !important; width: calc(100% + 40px) !important; height: 250px !important; border-radius: 24px 24px 0 0 !important; }
+    .modal-close { top: 15px !important; right: 15px !important; width: 40px !important; height: 40px !important; }
+    [dir="rtl"] .modal-close { left: 15px !important; right: auto !important; }
+    .modal-content h2 { font-size: 1.8rem !important; margin-bottom: 15px !important; }
+    .modal-footer { margin-top: 20px !important; padding-top: 20px !important; flex-direction: column !important; gap: 15px !important; align-items: stretch !important; }
+    .modal-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    .share-btn-elite { width: 100%; justify-content: center; }
 
     /* SCALE DOWN ADMIN LOGIN */
     .admin-login-container { padding: 20px 10px; }
