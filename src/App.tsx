@@ -299,7 +299,7 @@ function App() {
     const hasSeen = localStorage.getItem('htu_onboarding_seen');
     if (!hasSeen && params.get('kiosk') !== 'true') setTimeout(() => setShowOnboarding(true), 3500);
 
-    signInAnonymously(auth).catch(console.error);
+    // Wait for auth state before anonymous sign-in
     
     let unsubscribeVoter = () => {};
     let unsubscribeProjects = () => {};
@@ -359,11 +359,13 @@ function App() {
 
         unsubStats = onSnapshot(doc(db, 'stats', 'global'), (doc) => { if (doc.exists()) { setGlobalVotes(doc.data().total || 0); setGlobalVisits(doc.data().visits || 0); setGlobalProfileVisits(doc.data().profileVisits || 0); } }, (e) => console.warn("Stats listener:", e));
         
-        unsubscribeResults = onSnapshot(collection(db, 'results'), (snapshot) => {
-            const resMap: Record<string, number> = {};
-            snapshot.docs.forEach(doc => { resMap[doc.id] = doc.data().votes || 0; });
-            setResults(resMap);
-        }, (e) => console.warn("Results listener:", e));
+        if (user.email?.includes('@htu.local')) {
+            unsubscribeResults = onSnapshot(collection(db, 'results'), (snapshot) => {
+                const resMap: Record<string, number> = {};
+                snapshot.docs.forEach(doc => { resMap[doc.id] = doc.data().votes || 0; });
+                setResults(resMap);
+            }, (e) => console.warn("Results listener:", e));
+        }
 
         unsubConfig = onSnapshot(doc(db, 'config', 'voting'), (doc) => { 
             if (doc.exists()) {
@@ -380,6 +382,7 @@ function App() {
             }
         }, (e) => console.warn("Kiosk listener:", e));
       } else {
+        signInAnonymously(auth).catch(console.error);
         setUserId(null); 
         setVoterData({ voteCount: 0, votedProjectIds: [] }); 
         
