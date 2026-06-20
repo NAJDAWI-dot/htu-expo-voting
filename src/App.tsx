@@ -359,14 +359,11 @@ function App() {
 
         unsubStats = onSnapshot(doc(db, 'stats', 'global'), (doc) => { if (doc.exists()) { setGlobalVotes(doc.data().total || 0); setGlobalVisits(doc.data().visits || 0); setGlobalProfileVisits(doc.data().profileVisits || 0); } }, (e) => console.warn("Stats listener:", e));
         
-        const isKioskMode = new URLSearchParams(window.location.search).get('kiosk') === 'true';
-        if (user.email?.includes('@htu.local') || isKioskMode) {
-          unsubscribeResults = onSnapshot(collection(db, 'results'), (snapshot) => {
-              const resMap: Record<string, number> = {};
-              snapshot.docs.forEach(doc => { resMap[doc.id] = doc.data().votes || 0; });
-              setResults(resMap);
-          }, (e) => console.warn("Results listener:", e));
-        }
+        unsubscribeResults = onSnapshot(collection(db, 'results'), (snapshot) => {
+            const resMap: Record<string, number> = {};
+            snapshot.docs.forEach(doc => { resMap[doc.id] = doc.data().votes || 0; });
+            setResults(resMap);
+        }, (e) => console.warn("Results listener:", e));
 
         unsubConfig = onSnapshot(doc(db, 'config', 'voting'), (doc) => { 
             if (doc.exists()) {
