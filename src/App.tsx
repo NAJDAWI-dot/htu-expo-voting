@@ -1093,11 +1093,10 @@ function App() {
                                     {galleryImages.slice(0, 12).map((img) => (
                                         <motion.div
                                             key={img.id}
-                                            variants={{ hidden: { scale: 0.5, opacity: 0, rotate: -15 }, visible: { scale: 1, opacity: 1, rotate: 0 } }}
-                                            whileHover={{ scale: 1.1, zIndex: 10, rotate: 2 }}
+                                            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
                                             className="gallery-item-v2"
                                         >
-                                            <img src={img.imageUrl} alt="Event" />
+                                            <img src={img.imageUrl} alt="Event" loading="lazy" decoding="async" />
                                             <div className="img-overlay-v2" />
                                         </motion.div>
                                     ))}
@@ -1493,16 +1492,16 @@ function App() {
                 </div>
                 <div className="gallery-masonry">
                     <AnimatePresence mode="popLayout">
-                    {galleryImages.map((img, index) => (
+                    {galleryImages.map((img) => (
                         <motion.div
                             key={img.id}
                             initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.05 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "50px" }}
                             className="gallery-item"
                             onClick={() => { setLightboxImage(img.imageUrl); handleInteraction(); }}
                         >
-                            <img src={img.imageUrl} alt="Live Event" loading="lazy" />
+                            <img src={img.imageUrl} alt="Live Event" loading="lazy" decoding="async" />
                         </motion.div>
                     ))}
                     </AnimatePresence>
