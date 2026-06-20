@@ -359,7 +359,8 @@ function App() {
 
         unsubStats = onSnapshot(doc(db, 'stats', 'global'), (doc) => { if (doc.exists()) { setGlobalVotes(doc.data().total || 0); setGlobalVisits(doc.data().visits || 0); setGlobalProfileVisits(doc.data().profileVisits || 0); } }, (e) => console.warn("Stats listener:", e));
         
-        if (user.email?.includes('@htu.local')) {
+        const isKioskMode = new URLSearchParams(window.location.search).get('kiosk') === 'true';
+        if (user.email?.includes('@htu.local') || isKioskMode) {
           unsubscribeResults = onSnapshot(collection(db, 'results'), (snapshot) => {
               const resMap: Record<string, number> = {};
               snapshot.docs.forEach(doc => { resMap[doc.id] = doc.data().votes || 0; });
@@ -664,7 +665,7 @@ function App() {
     const currentSubView = kioskCycleIndex === 0 ? 'leaderboard' : kioskCycleIndex === 1 ? 'gallery' : 'branding';
 
     // Map Kiosk/Ceremony Selection Projects
-    const ceremonySelection = kioskConfig.ceremonySelection || ['', '', '', '', ''];
+    const ceremonySelection = kioskConfig.ceremonySelection || ['', '', '', '', '', '', ''];
     const revealProjects = ceremonySelection.map(id => topProjects.find(p => p.id === id) || null);
     
     return (
