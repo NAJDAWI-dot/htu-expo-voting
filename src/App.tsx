@@ -44,13 +44,15 @@ const VotingCountdownBanner = ({ lang, t }: { lang: 'en'|'ar', t: any }) => {
             <span className="banner-sub">{t[lang].opens_in}</span>
         </div>
         <div className="countdown-timer">
-            <div className="time-block"><span>{String(timeLeft.days).padStart(2, '0')}</span><small>D</small></div>
-            <span className="time-colon">:</span>
-            <div className="time-block"><span>{String(timeLeft.hours).padStart(2, '0')}</span><small>H</small></div>
-            <span className="time-colon">:</span>
-            <div className="time-block"><span>{String(timeLeft.minutes).padStart(2, '0')}</span><small>M</small></div>
-            <span className="time-colon">:</span>
-            <div className="time-block"><span>{String(timeLeft.seconds).padStart(2, '0')}</span><small>S</small></div>
+          <div className="time-block"><span>{timeLeft.days}</span><small>{t[lang].days}</small></div>
+          <div className="time-block"><span>{timeLeft.hours}</span><small>{t[lang].hours}</small></div>
+          <div className="time-block"><span>{timeLeft.minutes}</span><small>{t[lang].minutes}</small></div>
+          <div className="time-block"><span>{timeLeft.seconds}</span><small>{t[lang].seconds}</small></div>
+        </div>
+        <div className="exact-time-badge">
+            <span className="sparkle">✨</span>
+            {t[lang].opens_at}
+            <span className="sparkle">✨</span>
         </div>
       </div>
     </motion.div>
@@ -153,6 +155,7 @@ function App() {
 
   const t = {
     en: {
+      days: "D", hours: "H", minutes: "M", seconds: "S",
       title: "Engineering Design Expo",
       subtitle: (count: number) => `Choose your Fan Favorite projects. You have ${count} votes remaining.`,
       votes_cast: "TOTAL VOTES CAST",
@@ -162,6 +165,7 @@ function App() {
       expo_count: "Projects in the Expo",
       voting_disabled_banner: "Voting is currently disabled",
       opens_in: "Opens in:",
+      opens_at: "Voting opens strictly at 10:00 AM local time on June 21",
       vote: "Vote",
       voted: "Voted",
       cast_vote: "Cast Vote",
@@ -218,6 +222,7 @@ function App() {
       archived_title: "HTU EXPO 2026 - OFFICIAL HALL OF FAME"
     },
     ar: {
+      days: "يوم", hours: "ساعة", minutes: "دقيقة", seconds: "ثانية",
       title: "معرض التصميم الهندسي",
       subtitle: (count: number) => `اختر مشاريعك الهندسية المفضلة. متبقي لديك ${count} أصوات.`,
       votes_cast: "إجمالي الأصوات",
@@ -225,8 +230,9 @@ function App() {
       search: "ابحث عن المشاريع أو المشرفين...",
       gallery: "معرض المشاريع",
       expo_count: "مشروعاً في المعرض",
-      voting_disabled_banner: "التصويت معطل حالياً",
+      voting_disabled_banner: "التصويت مغلق حالياً",
       opens_in: "يفتح خلال:",
+      opens_at: "يفتح التصويت تمام الساعة 10:00 صباحاً يوم 21 يونيو",
       vote: "تصويت",
       voted: "تم التصويت",
       cast_vote: "تأكيد التصويت",

@@ -119,6 +119,7 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 .banner-sub { opacity: 0.8; font-size: 0.95rem; font-weight: 500; }
 .countdown-timer { display: flex; align-items: center; gap: 10px; }
 .time-block { display: flex; align-items: baseline; gap: 4px; background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+.exact-time-badge { font-size: 0.85rem; color: #FFD700; background: rgba(255,215,0,0.1); padding: 6px 15px; border-radius: 50px; border: 1px solid rgba(255,215,0,0.2); font-weight: 700; letter-spacing: 0.5px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 0 20px rgba(255,215,0,0.1); }
 .time-block span { font-size: 1.4rem; font-weight: 900; color: #fff; font-family: monospace; }
 .time-block small { font-size: 0.7rem; color: var(--htu-red); font-weight: 800; }
 .time-colon { font-size: 1.2rem; font-weight: 900; color: rgba(255,255,255,0.5); }
