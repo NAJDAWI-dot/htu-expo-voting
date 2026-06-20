@@ -1091,14 +1091,13 @@ function App() {
                                     className="gallery-masonry-v2"
                                 >
                                     {galleryImages.slice(0, 12).map((img) => (
-                                        <motion.div
+                                        <div
                                             key={img.id}
-                                            variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
                                             className="gallery-item-v2"
                                         >
                                             <img src={img.imageUrl} alt="Event" loading="lazy" decoding="async" />
                                             <div className="img-overlay-v2" />
-                                        </motion.div>
+                                        </div>
                                     ))}
                                 </motion.div>
                             </motion.div>
@@ -1491,20 +1490,15 @@ function App() {
                     <div className="gallery-title-wrapper"><h2>{t[lang].tab_gallery}</h2><div className="title-underline"></div></div>
                 </div>
                 <div className="gallery-masonry">
-                    <AnimatePresence mode="popLayout">
                     {galleryImages.map((img) => (
-                        <motion.div
+                        <div
                             key={img.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "50px" }}
                             className="gallery-item"
                             onClick={() => { setLightboxImage(img.imageUrl); handleInteraction(); }}
                         >
                             <img src={img.imageUrl} alt="Live Event" loading="lazy" decoding="async" />
-                        </motion.div>
+                        </div>
                     ))}
-                    </AnimatePresence>
                     {galleryImages.length === 0 && (
                         <p style={{ textAlign: 'center', width: '100%', opacity: 0.5, gridColumn: '1 / -1' }}>No photos uploaded yet.</p>
                     )}
