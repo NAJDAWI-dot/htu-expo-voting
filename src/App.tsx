@@ -12,7 +12,7 @@ const VotingCountdownBanner = ({ lang, t }: { lang: 'en'|'ar', t: any }) => {
   const [timeLeft, setTimeLeft] = useState<{days: number, hours: number, minutes: number, seconds: number} | null>(null);
 
   useEffect(() => {
-    const targetDate = new Date(2026, 5, 21, 0, 0, 0).getTime();
+    const targetDate = new Date(2026, 5, 21, 10, 0, 0).getTime();
     
     const interval = setInterval(() => {
       const now = new Date().getTime();
