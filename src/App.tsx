@@ -622,7 +622,7 @@ function App() {
   }
 
   if (view === 'kiosk') {
-    const topProjects = projects.map(p => ({
+    const topProjects = projects.filter(p => p.instructor !== "Committee").map(p => ({
         ...p,
         votes: results[p.id] || 0
     })).sort((a,b) => b.votes - a.votes);
@@ -632,7 +632,7 @@ function App() {
 
     // Map Kiosk/Ceremony Selection Projects
     const ceremonySelection = kioskConfig.ceremonySelection || ['', '', '', '', '', '', ''];
-    const revealProjects = ceremonySelection.map(id => topProjects.find(p => p.id === id) || null);
+    const revealProjects = ceremonySelection.map(id => displayProjects.find(p => p.id === id) || null);
     
     return (
         <div className={`kiosk-mode ${kioskConfig.revealStep === 13 ? 'champion-active' : ''}`}>
@@ -902,7 +902,7 @@ function App() {
                                                     <strong>{kioskConfig.revealStep === 17 ? 'FAN FAV PROJECT' : 'JUDGING AWARD'}</strong>
                                                     {kioskConfig.revealStep === 17 ? (
                                                         <span style={{ color: '#FFD700', textShadow: '0 0 10px rgba(255,215,0,0.4)' }}>
-                                                            {revealProjects[6]?.votes || 0} VOTES VERIFIED
+                                                            {(revealProjects[6] as any)?.votes || results[ceremonySelection[6]] || 0} VOTES VERIFIED
                                                         </span>
                                                     ) : (
                                                         <span>OFFICIAL JURY SELECTION</span>
@@ -933,9 +933,9 @@ function App() {
                                         {/* Top point of the diamond */}
                                         <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1, duration: 1.5 }} style={{ textAlign: 'center' }}>
                                             <div style={{ fontSize: 'clamp(6rem, 12vh, 12rem)', color: '#FFD700', fontFamily: 'Cinzel, serif', fontWeight: 'bold', textShadow: '0 0 30px rgba(255,215,0,0.5)', lineHeight: 1 }}>
-                                                {globalVotes.toLocaleString()}
+                                                {Object.values(results).reduce((sum, res) => sum + (res || 0), 0).toLocaleString()}
                                             </div>
-                                            <div style={{ fontSize: 'clamp(1.5rem, 3vh, 2.5rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>{lang === 'ar' ? 'إجمالي الأصوات' : 'TOTAL VOTES CAST'}</div>
+                                            <div style={{ fontSize: 'clamp(1.5rem, 3vh, 2.5rem)', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.8)', marginTop: '15px', fontFamily: 'DM Sans, sans-serif' }}>{lang === 'ar' ? 'إجمالي الأصوات (بالأوزان)' : 'TOTAL WEIGHTED VOTES'}</div>
                                         </motion.div>
 
                                         {/* Middle row of the diamond */}
