@@ -472,10 +472,10 @@ function App() {
   const handleVote = async (projectId: string) => {
     if (!isVotingOpen) { alert("Voting is currently closed by the organizers."); return; }
     
-    let currentUserId = userId;
+    let currentUserId = auth.currentUser?.uid || userId;
     if (!currentUserId) {
-        currentUserId = 'anon_' + Math.random().toString(36).substring(2);
-        setUserId(currentUserId);
+        alert("Connecting to voting server... Please try again in a moment.");
+        return;
     }
     
     if (voterData.voteCount >= 3) { alert("You have reached your limit of 3 votes."); return; }
