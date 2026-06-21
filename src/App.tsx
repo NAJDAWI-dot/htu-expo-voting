@@ -501,11 +501,6 @@ function App() {
         setUserId(currentUserId);
     }
     
-    if (voterData.voteCount >= 3) { alert("You have reached your limit of 3 votes."); return; }
-    if (voterData.votedProjectIds.includes(projectId)) return;
-
-
-
     const deviceDocId = await getDeviceFingerprint();
 
     const prevData = { ...voterData };
@@ -520,14 +515,11 @@ function App() {
       await runTransaction(db, async (transaction) => {
         const voterSnap = await transaction.get(voterRef);
         const currentVoterData = voterSnap.exists() ? voterSnap.data() : { voteCount: 0, votedProjectIds: [] };
-        if (currentVoterData.voteCount >= 3 || currentVoterData.votedProjectIds.includes(projectId)) throw "LIMIT_REACHED";
 
-        // Primary device check — always enforced
         const deviceSnap = await transaction.get(deviceRef);
         const currentDeviceVotes = deviceSnap.exists() ? deviceSnap.data().voteCount || 0 : 0;
-        if (currentDeviceVotes >= 3) throw "DEVICE_LIMIT_REACHED";
 
-        const voteWeight = 3 - currentVoterData.voteCount;
+        const voteWeight = 1;
         transaction.set(voterRef, { voteCount: currentVoterData.voteCount + 1, votedProjectIds: [...currentVoterData.votedProjectIds, projectId] }, { merge: true });
         transaction.set(resultRef, { votes: increment(voteWeight) }, { merge: true });
         transaction.set(statsRef, { total: increment(1) }, { merge: true });
