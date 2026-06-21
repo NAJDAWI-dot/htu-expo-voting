@@ -468,29 +468,6 @@ function App() {
 
   // Computes a stable device fingerprint using ONLY OS/hardware-level attributes.
   // These are IDENTICAL across ALL browsers (Chrome, Firefox, Edge, Safari)
-  // AND identical between normal and incognito/private mode on the same device.
-  // Excluded: userAgent (browser-specific), hardwareConcurrency (Firefox spoofs it),
-  //           platform (can differ), localStorage (empty in incognito).
-  const getDeviceFingerprint = async (): Promise<string> => {
-    const stable = [
-      screen.width,
-      screen.height,
-      screen.colorDepth,
-      navigator.language,
-      new Date().getTimezoneOffset(),
-      Intl.DateTimeFormat().resolvedOptions().timeZone,
-    ].join('||');
-
-    try {
-      const buf = new TextEncoder().encode('DEVICE||' + stable);
-      const hash = await crypto.subtle.digest('SHA-256', buf);
-      return 'dev_' + Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
-    } catch {
-      let h = 5381;
-      for (let i = 0; i < stable.length; i++) { h = ((h << 5) + h) + stable.charCodeAt(i); h |= 0; }
-      return 'devfb_' + Math.abs(h).toString(36);
-    }
-  };
 
   const handleVote = async (projectId: string) => {
     if (!isVotingOpen) { alert("Voting is currently closed by the organizers."); return; }
@@ -501,7 +478,10 @@ function App() {
         setUserId(currentUserId);
     }
     
-    const deviceDocId = await getDeviceFingerprint();
+    if (voterData.voteCount >= 3) { alert("You have reached your limit of 3 votes."); return; }
+    if (voterData.votedProjectIds.includes(projectId)) return;
+
+
 
     const prevData = { ...voterData };
     setVoterData(prev => ({ voteCount: prev.voteCount + 1, votedProjectIds: [...prev.votedProjectIds, projectId] }));
@@ -510,29 +490,23 @@ function App() {
       const voterRef = doc(db, 'voters', currentUserId);
       const resultRef = doc(db, 'results', projectId);
       const statsRef = doc(db, 'stats', 'global');
-      const deviceRef = doc(db, 'ips', deviceDocId);
 
       await runTransaction(db, async (transaction) => {
         const voterSnap = await transaction.get(voterRef);
         const currentVoterData = voterSnap.exists() ? voterSnap.data() : { voteCount: 0, votedProjectIds: [] };
+        if (currentVoterData.voteCount >= 3 || currentVoterData.votedProjectIds.includes(projectId)) throw "LIMIT_REACHED";
 
-        const deviceSnap = await transaction.get(deviceRef);
-        const currentDeviceVotes = deviceSnap.exists() ? deviceSnap.data().voteCount || 0 : 0;
-
-        const voteWeight = 1;
+        const voteWeight = 3 - currentVoterData.voteCount;
         transaction.set(voterRef, { voteCount: currentVoterData.voteCount + 1, votedProjectIds: [...currentVoterData.votedProjectIds, projectId] }, { merge: true });
         transaction.set(resultRef, { votes: increment(voteWeight) }, { merge: true });
         transaction.set(statsRef, { total: increment(1) }, { merge: true });
-        transaction.set(deviceRef, { voteCount: currentDeviceVotes + 1 }, { merge: true });
       });
 
       const isMobile = window.innerWidth <= 768;
       confetti({ particleCount: isMobile ? 50 : 150, spread: isMobile ? 50 : 80, origin: { y: 0.6 }, colors: ['#E8343F', '#FFFFFF', '#020B18', '#FFD700'] });
     } catch (error: any) {
       setVoterData(prevData);
-      if (error === "DEVICE_LIMIT_REACHED") {
-        alert("This device has already cast the maximum number of votes (3).");
-      } else if (error === "LIMIT_REACHED") {
+      if (error === "LIMIT_REACHED") {
         alert("You have already reached your maximum votes.");
       } else {
         console.error('Voting Error:', error);
