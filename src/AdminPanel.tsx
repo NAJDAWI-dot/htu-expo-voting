@@ -636,7 +636,7 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
       if (!archiveMode) {
         const batch = writeBatch(db);
         results.forEach(r => {
-           batch.update(doc(db, 'projects', r.id), { finalVotes: r.votes });
+           batch.set(doc(db, 'projects', r.id), { finalVotes: r.votes }, { merge: true });
         });
         await batch.commit();
       }
