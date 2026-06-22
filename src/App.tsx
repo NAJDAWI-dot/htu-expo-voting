@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { CheckCircle2, Users, Search, Loader2, Settings, X, Share2, Info, Download, Trophy, Trophy as TrophyIcon, Award, AlertTriangle } from 'lucide-react';
+import { CheckCircle2, Users, Search, Loader2, Settings, X, Share2, Info, Download, Trophy, Trophy as TrophyIcon, Award, AlertTriangle, Heart } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { auth, db } from './firebase';
 import { signInAnonymously, onAuthStateChanged } from 'firebase/auth';
@@ -1385,28 +1385,51 @@ function App() {
                         </div>
                         <div className="runners-up-grid">
                             {hofProjects[3] && (
-                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="runner-up-row glass-card" onClick={() => setSelectedProject(hofProjects[3]!)}>
-                                    <div className="runner-rank">4TH</div>
-                                    <img src={hofProjects[3].imageUrl} alt="4th" className="runner-image" />
-                                    <div className="runner-title-group">
-                                        <strong>{hofProjects[3].title}</strong>
-                                        <span style={{ fontSize: '1rem', textTransform: 'none', letterSpacing: '0', color: 'rgba(255,255,255,0.8)' }}>{hofProjects[3].team_members}</span>
-                                    </div>
-                                    <div className="runner-votes-badge" style={{ borderColor: '#FFD700', color: '#FFD700' }}>JUDGING AWARD</div>
+                                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="runner-up-card-elite" onClick={() => setSelectedProject(hofProjects[3]!)}>
+                                    <div className="runner-rank-badge">4TH PLACE</div>
+                                    <div className="runner-award-badge">JURY</div>
+                                    <img src={hofProjects[3].imageUrl} alt="4th" className="runner-img-elite" />
+                                    <h3 className="runner-title-elite">{hofProjects[3].title}</h3>
+                                    <span className="runner-team-elite">{hofProjects[3].team_members}</span>
                                 </motion.div>
                             )}
                             {hofProjects[4] && (
-                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="runner-up-row glass-card" onClick={() => setSelectedProject(hofProjects[4]!)}>
-                                    <div className="runner-rank">5TH</div>       
-                                    <img src={hofProjects[4].imageUrl} alt="5th" className="runner-image" />
-                                    <div className="runner-title-group">
-                                        <strong>{hofProjects[4].title}</strong>
-                                        <span style={{ fontSize: '1rem', textTransform: 'none', letterSpacing: '0', color: 'rgba(255,255,255,0.8)' }}>{hofProjects[4].team_members}</span>
-                                    </div>
-                                    <div className="runner-votes-badge" style={{ borderColor: '#E8343F', color: '#E8343F', background: 'rgba(232, 52, 63, 0.1)' }}>FAN FAV AWARD</div>
+                                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9 }} className="runner-up-card-elite" onClick={() => setSelectedProject(hofProjects[4]!)}>
+                                    <div className="runner-rank-badge">5TH PLACE</div>
+                                    <div className="runner-award-badge">JURY</div>
+                                    <img src={hofProjects[4].imageUrl} alt="5th" className="runner-img-elite" />
+                                    <h3 className="runner-title-elite">{hofProjects[4].title}</h3>
+                                    <span className="runner-team-elite">{hofProjects[4].team_members}</span>
+                                </motion.div>
+                            )}
+                            {hofProjects[5] && (
+                                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0 }} className="runner-up-card-elite" onClick={() => setSelectedProject(hofProjects[5]!)}>
+                                    <div className="runner-rank-badge">6TH PLACE</div>
+                                    <div className="runner-award-badge">JURY</div>
+                                    <img src={hofProjects[5].imageUrl} alt="6th" className="runner-img-elite" />
+                                    <h3 className="runner-title-elite">{hofProjects[5].title}</h3>
+                                    <span className="runner-team-elite">{hofProjects[5].team_members}</span>
                                 </motion.div>
                             )}
                         </div>
+
+                        {hofProjects[6] && (
+                            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.2, duration: 0.8 }} className="fan-fav-giant-card" onClick={() => setSelectedProject(hofProjects[6]!)}>
+                                <img src={hofProjects[6].imageUrl} alt="Fan Favorite" className="fan-fav-giant-img" />
+                                <div className="fan-fav-giant-info">
+                                    <div className="fan-fav-giant-badge">
+                                        <Heart size={16} fill="currentColor" /> FAN FAVORITE AWARD
+                                    </div>
+                                    <h2 className="fan-fav-giant-title">{hofProjects[6].title}</h2>
+                                    <span className="fan-fav-giant-team">{hofProjects[6].team_members}</span>
+                                    <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                        <div style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.3)', color: '#FFD700', padding: '10px 20px', borderRadius: '15px', fontWeight: 'bold' }}>
+                                            {hofProjects[6].finalVotes || 0} VERIFIED VOTES
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
                     </div>
 
                     <div className="runners-up-section" style={{ marginTop: '80px' }}>
