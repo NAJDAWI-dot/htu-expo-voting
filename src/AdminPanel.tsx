@@ -633,6 +633,14 @@ export default function AdminPanel({ onBack, lang, setLang }: AdminPanelProps) {
     
     setUploading(true);
     try {
+      if (!archiveMode) {
+        const batch = writeBatch(db);
+        results.forEach(r => {
+           batch.update(doc(db, 'projects', r.id), { finalVotes: r.votes });
+        });
+        await batch.commit();
+      }
+
       await setDoc(doc(db, 'config', 'voting'), { 
          isOpen: false,
          archiveMode: !archiveMode 
