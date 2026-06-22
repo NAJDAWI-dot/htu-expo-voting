@@ -1287,24 +1287,26 @@ function App() {
           <motion.img initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} src="htu-logo.png" alt="HTU Logo" className="htu-logo" onClick={handleLogoClick} />
           <motion.h1>{t[lang].title}</motion.h1>
           <motion.p className="main-page-year" style={{ color: '#FFD700', fontWeight: '900', letterSpacing: '10px', fontSize: '1.4rem', marginTop: '-10px', marginBottom: '15px', textShadow: '0 0 15px rgba(255, 215, 0, 0.5)', textTransform: 'uppercase' }}>SPRING 2026</motion.p>
-          <motion.p className="subtitle">{t[lang].subtitle(3 - voterData.voteCount)}</motion.p>
+          {!archiveMode && <motion.p className="subtitle">{t[lang].subtitle(3 - voterData.voteCount)}</motion.p>}
           {globalVotes >= 0 && <div className="global-counter-pill"><span className="pulse-dot"></span><strong>{globalVotes.toLocaleString()}</strong> {t[lang].votes_cast}</div>}
         </motion.div>
       </header>
 
-      <div className="sticky-vote-tracker">
-          <div className="header-controls-premium">
-              <div className="vote-progress-label-premium">{t[lang].your_votes}: <span style={{ color: '#fff' }}>{voterData.voteCount} / 3</span></div>
-              <div className="vote-progress-bar-premium">
-                  <div className="vote-progress-fill" style={{ width: `${(voterData.voteCount / 3) * 100}%` }} />
-                  <div className="vote-dots-premium">
-                      {[1, 2, 3].map(i => (
-                          <motion.div key={i} className={`vote-dot-premium ${i <= voterData.voteCount ? 'active' : ''}`} animate={i <= voterData.voteCount ? { scale: [1, 1.3, 1], boxShadow: "0 0 20px rgba(232,52,63,0.8)" } : {}} />
-                      ))}
+      {!archiveMode && (
+          <div className="sticky-vote-tracker">
+              <div className="header-controls-premium">
+                  <div className="vote-progress-label-premium">{t[lang].your_votes}: <span style={{ color: '#fff' }}>{voterData.voteCount} / 3</span></div>
+                  <div className="vote-progress-bar-premium">
+                      <div className="vote-progress-fill" style={{ width: `${(voterData.voteCount / 3) * 100}%` }} />
+                      <div className="vote-dots-premium">
+                          {[1, 2, 3].map(i => (
+                              <motion.div key={i} className={`vote-dot-premium ${i <= voterData.voteCount ? 'active' : ''}`} animate={i <= voterData.voteCount ? { scale: [1, 1.3, 1], boxShadow: "0 0 20px rgba(232,52,63,0.8)" } : {}} />
+                          ))}
+                      </div>
                   </div>
               </div>
           </div>
-      </div>
+      )}
 
       <main>
         <div className="tabs-container">
