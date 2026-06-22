@@ -200,6 +200,7 @@ body { font-family: 'Montserrat', 'Tajawal', sans-serif; background-color: var(-
 
 /* --- ARCHIVE BANNER --- */
 .team-info { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,0.6); font-weight: 600; font-size: 0.9rem; margin-top: 10px; }
+.project-votes-display { display: inline-flex; align-items: center; gap: 8px; color: #FFD700; font-weight: 800; font-size: 0.85rem; margin-top: 15px; padding: 6px 12px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.2); border-radius: 8px; letter-spacing: 1px; text-transform: uppercase; }
 
 .htu-button { background: var(--htu-red); color: white; border: none; padding: 16px 32px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background 0.2s ease-out; text-transform: uppercase; width: 100%; }
 .htu-button:hover:not(:disabled),

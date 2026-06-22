@@ -1202,6 +1202,7 @@ function App() {
                 <h2>{selectedProject.title}</h2>
                 <div className="modal-footer">
                   <div className="modal-team-info"><Users size={20} /><span>{t[lang].team_members}: {selectedProject.team_members}</span></div>
+                  <div className="modal-team-info" style={{ color: '#FFD700', marginTop: '10px' }}><Trophy size={20} /><span>{archiveMode ? selectedProject.finalVotes || 0 : (selectedProject as any).votes || 0} {lang === 'ar' ? 'صوت' : 'Votes'}</span></div>
                   <div className="modal-actions">
                     <button className="share-btn-elite" onClick={(e) => handleShare(e, selectedProject)}><Share2 size={20} /><span>{t[lang].share_team}</span></button>
                     {!archiveMode && (
@@ -1442,7 +1443,7 @@ function App() {
                             {unrankedProjects.map((project, index) => (
                                 <motion.div key={project.id} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: index * 0.05 }} className="glass-card project-card" onClick={() => setSelectedProject(project)}>
                                 <div className="project-image-container">{project.imageUrl ? <img src={project.imageUrl} alt={project.title} className="project-photo" loading="lazy" /> : <div className="image-placeholder"><Settings size={40} className="placeholder-icon" /></div>}<span className="dept-tag">{project.instructor}</span></div>
-                                <div className="card-content"><h3>{project.title}</h3><div className="team-info"><Users size={16} /><span>{project.team_members}</span></div></div>
+                                <div className="card-content"><h3>{project.title}</h3><div className="team-info"><Users size={16} /><span>{project.team_members}</span></div><div className="project-votes-display"><Trophy size={14} color="#FFD700" /><span>{archiveMode ? project.finalVotes || 0 : (project as any).votes || 0} {lang === 'ar' ? 'صوت' : 'Votes'}</span></div></div>
                                 </motion.div>
                             ))}
                         </div>
@@ -1461,7 +1462,7 @@ function App() {
                             <motion.div key={project.id} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ delay: index * 0.05 }} className="glass-card project-card" onClick={() => setSelectedProject(project)}>
                             {voterData.votedProjectIds.includes(project.id) && <div className="voted-overlay"><CheckCircle2 size={24} /></div>}
                             <div className="project-image-container">{project.imageUrl ? <img src={project.imageUrl} alt={project.title} className="project-photo" loading="lazy" /> : <div className="image-placeholder"><Settings size={40} className="placeholder-icon" /></div>}<span className="dept-tag">{project.instructor}</span></div>
-                            <div className="card-content"><h3>{project.title}</h3><div className="team-info"><Users size={16} /><span>{project.team_members}</span></div></div>
+                            <div className="card-content"><h3>{project.title}</h3><div className="team-info"><Users size={16} /><span>{project.team_members}</span></div><div className="project-votes-display"><Trophy size={14} color="#FFD700" /><span>{archiveMode ? project.finalVotes || 0 : (project as any).votes || 0} {lang === 'ar' ? 'صوت' : 'Votes'}</span></div></div>
                             <div className="card-footer">
                                 <button onClick={(e) => { e.stopPropagation(); handleVote(project.id); }} disabled={!isVotingOpen || voterData.voteCount >= 3 || voterData.votedProjectIds.includes(project.id) || votingId === project.id} className="htu-button">
                                 {votingId === project.id ? <Loader2 className="animate-spin" size={20} /> : voterData.votedProjectIds.includes(project.id) ? t[lang].voted : t[lang].vote}
