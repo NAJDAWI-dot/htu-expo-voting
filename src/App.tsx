@@ -1324,60 +1324,49 @@ function App() {
                         <p className="hof-subtitle">CELEBRATING THE PINNACLE OF ENGINEERING INNOVATION</p>
                     </motion.div>
 
-                    <div className="hof-podium-container">
-                        {/* 2nd Place */}
-                        {hofProjects[1] && (
-                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4, type: "spring", damping: 15 }} className="podium-item rank-2" onClick={() => setSelectedProject(hofProjects[1]!)}>
-                                <div className="podium-rank-label silver-text">2ND PLACE - SILVER</div>
-                                <div className="podium-card-elite silver-border">
-                                    <div className="podium-badge silver"><TrophyIcon size={18} /> JUDGING AWARD</div>
-                                    <div className="podium-image-wrapper">
-                                        <img src={hofProjects[1].imageUrl} alt="2nd" />
+                    <div className="hof-leaderboard-container">
+                        {/* 1st Place */}
+                        {hofProjects[0] && (
+                            <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }} className="leaderboard-champion-card" onClick={() => setSelectedProject(hofProjects[0]!)}>
+                                <div className="champion-badge-container">
+                                    <div className="champion-rank"><TrophyIcon size={24} /> 1ST PLACE - GRAND CHAMPION</div>
+                                    <div className="champion-award">JUDGING AWARD</div>
+                                </div>
+                                <div className="champion-content">
+                                    <img src={hofProjects[0].imageUrl} alt="1st" className="champion-img" />
+                                    <div className="champion-details">
+                                        <h2>{hofProjects[0].title}</h2>
+                                        <p>{hofProjects[0].team_members}</p>
                                     </div>
-                                    <div className="podium-info">
+                                </div>
+                            </motion.div>
+                        )}
+
+                        <div className="leaderboard-runner-up-row">
+                            {/* 2nd Place */}
+                            {hofProjects[1] && (
+                                <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }} className="leaderboard-card silver-card" onClick={() => setSelectedProject(hofProjects[1]!)}>
+                                    <div className="leaderboard-badge silver-badge">2ND PLACE - SILVER</div>
+                                    <img src={hofProjects[1].imageUrl} alt="2nd" className="leaderboard-img silver-border" />
+                                    <div className="leaderboard-details">
                                         <h3>{hofProjects[1].title}</h3>
                                         <p>{hofProjects[1].team_members}</p>
                                     </div>
-                                </div>
-                                <div className="podium-base base-silver" />
-                            </motion.div>
-                        )}
+                                </motion.div>
+                            )}
 
-                        {/* 1st Place */}
-                        {hofProjects[0] && (
-                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2, type: "spring", damping: 12 }} className="podium-item rank-1" onClick={() => setSelectedProject(hofProjects[0]!)}>
-                                <div className="podium-rank-label gold-text">1ST PLACE - GRAND CHAMPION</div>
-                                <div className="podium-card-elite">
-                                    <div className="podium-badge gold"><TrophyIcon size={18} /> JUDGING AWARD</div>   
-                                    <div className="podium-image-wrapper gold-border">
-                                        <img src={hofProjects[0].imageUrl} alt="1st" />
-                                    </div>
-                                    <div className="podium-info">
-                                        <h3>{hofProjects[0].title}</h3>
-                                        <p className="champion-team">{hofProjects[0].team_members}</p>
-                                    </div>
-                                </div>
-                                <div className="podium-base base-gold" />
-                            </motion.div>
-                        )}
-
-                        {/* 3rd Place */}
-                        {hofProjects[2] && (
-                            <motion.div initial={{ y: 100, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6, type: "spring", damping: 18 }} className="podium-item rank-3" onClick={() => setSelectedProject(hofProjects[2]!)}>
-                                <div className="podium-rank-label bronze-text">3RD PLACE - BRONZE</div>
-                                <div className="podium-card-elite bronze-border">
-                                    <div className="podium-badge bronze"><TrophyIcon size={18} /> JUDGING AWARD</div>
-                                    <div className="podium-image-wrapper">
-                                        <img src={hofProjects[2].imageUrl} alt="3rd" />
-                                    </div>
-                                    <div className="podium-info">
+                            {/* 3rd Place */}
+                            {hofProjects[2] && (
+                                <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.6 }} className="leaderboard-card bronze-card" onClick={() => setSelectedProject(hofProjects[2]!)}>
+                                    <div className="leaderboard-badge bronze-badge">3RD PLACE - BRONZE</div>
+                                    <img src={hofProjects[2].imageUrl} alt="3rd" className="leaderboard-img bronze-border" />
+                                    <div className="leaderboard-details">
                                         <h3>{hofProjects[2].title}</h3>
                                         <p>{hofProjects[2].team_members}</p>
                                     </div>
-                                </div>
-                                <div className="podium-base base-bronze" />
-                            </motion.div>
-                        )}
+                                </motion.div>
+                            )}
+                        </div>
                     </div>
 
                     <div className="runners-up-section">
