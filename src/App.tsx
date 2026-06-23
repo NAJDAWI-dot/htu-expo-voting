@@ -600,7 +600,7 @@ function App() {
     : filteredProjects;
 
   const unrankedProjects = displayProjects.filter(p => !hofSelection.includes(p.id));
-  const hofProjects = hofSelection.map(id => displayProjects.find(p => p.id === id) || null);
+  const hofProjects = hofSelection.map(id => projects.find(p => p.id === id) || null);
 
   if (initialSplash) {
     return (
